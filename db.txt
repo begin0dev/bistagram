@@ -1,0 +1,136 @@
+﻿mysql -u root --default-character-set=utf8
+
+create table member
+(
+id varchar(30) primary key not null,
+name varchar(20),
+nick varchar(20),
+pw varchar(15) not null,
+profileimgname varchar(30),
+intro text,
+state enum('all', 'follow')
+);
+
+
+delimiter //
+
+create trigger deletemember before delete on member
+for each row
+begin
+delete from article where memid=old.id;
+delete from follower where memid=old.id or followid=old.id;
+delete from following where memid=old.id or followingid=old.id;
+delete from atclike where memid=old.id;
+delete from reply where memid=old.id;
+end//
+
+delimiter ;
+
+
+create table article
+(
+atcnum int not null primary key auto_increment,
+memid varchar(25) not null,
+content text,
+registerday datetime default current_timestamp,
+foreign key (memid) references member(id)
+);
+
+create table media
+(
+medianum int not null auto_increment,
+atcnum int not null,
+medianame varchar(50) not null,
+mediatype varchar(10),
+primary key(medianum, atcnum),
+foreign key (atcnum) references article(atcnum)
+);
+
+create table hashtag
+(
+atcnum int not null,
+hashtag varchar(10) not null,
+foreign key (atcnum) references article(atcnum)
+);
+
+create table atclike
+(
+atcnum int not null,
+memid varchar(25) not null,
+primary key(atcnum, memid),
+foreign key (atcnum) references article(atcnum),
+foreign key (memid) references member(id)
+);
+
+create table reply
+(
+replynum int not null primary key auto_increment,
+atcnum int not null,
+memid varchar(25) not null,
+content text,
+foreign key (atcnum) references article(atcnum),
+foreign key (memid) references member(id)
+);
+
+
+게시물 트리거
+delimiter //
+
+create trigger updatepost before update on article
+for each row
+begin
+delete from hashtag where atcnum=old.atcnum;
+end//
+
+create trigger deletepost before delete on article
+for each row
+begin
+delete from media where atcnum=old.atcnum;
+delete from hashtag where atcnum=old.atcnum;
+delete from atclike where atcnum=old.atcnum;
+delete from reply where atcnum=old.atcnum;
+end//
+
+delimiter ;
+
+
+
+create table follower
+(
+memid varchar(25) not null,
+followid varchar(25) not null,
+primary key(memid, followid),
+foreign key (memid) references member(id)
+);
+
+create table following
+(
+memid varchar(25) not null,
+followingid varchar(25) not null,
+primary key(memid, followingid),
+foreign key (memid) references member(id)
+);
+
+팔로우 트리거
+delimiter //
+
+create trigger addfollow after insert on follower
+for each row
+begin
+insert into following(memid, followingid) values(new.followid, new.memid);
+end//
+
+create trigger removefollow after delete on follower
+for each row
+begin
+delete from following where memid=old.followid and  followingid=old.memid;
+end//
+
+delimiter ;
+
+
+insert into follower(memid, followid) values('zzz0711@naver.com', '01055551234');
+
+delete from follower where memid='prosonic1@naver.com' and followid='01021020330';
+
+

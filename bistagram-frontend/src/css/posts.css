@@ -1,0 +1,31 @@
+@CHARSET "UTF-8";
+a:active{opacity: 1;}
+button:active, button:disabled{opacity: 0.6;}
+.post_body{
+background-color: #fafafa;
+-webkit-box-flex: 1;
+-webkit-flex-grow: 1;
+-ms-flex-positive: 1;
+flex-grow: 1;
+-webkit-box-ordinal-group: 4;
+-webkit-order: 3;
+-ms-flex-order: 3;
+order: 3;
+}
+.h2_title{
+color: #999;
+font-size: 14px;
+font-weight: 600;
+text-transform: uppercase;
+}
+@media (min-width: 640px){
+	.post_wrapper{
+		padding-top: 60px;
+	}
+	.post_marginbt30px{
+		margin-bottom: 30px;
+	}
+	.post_marginbt30px{
+		margin-bottom: 30px;
+	}
+}
