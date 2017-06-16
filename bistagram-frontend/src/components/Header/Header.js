@@ -12,7 +12,7 @@ const Header = (props) => {
 					<div className="top_center">
 						<div className="top_titlewrapper">
 							<div className="top_title">
-								<Link to="/posts" className="top_titleimg imgblock" title="Bistagram">Bistagram</Link>
+								<Link to="/" className="top_titleimg imgblock" title="Bistagram">Bistagram</Link>
 							</div>
 						</div>
 						<ScInput />

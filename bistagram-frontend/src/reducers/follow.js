@@ -8,7 +8,9 @@ const request = {
 
 const initialState = {
   user: [],
-  expstart: 0,
+  index: -1,
+  start: 0,
+  pageload: false,
   isMore: true,
   request: {
     recommendFollow: {
@@ -30,21 +32,28 @@ const rejected = {fetching: false, fetched: false}
 function post(state=initialState, action) {
   const payload = action.payload;
   switch (action.type) {
+    case FOLLOW.SET_CLICK_INDEX:
+      return{
+        ...state,
+        index: payload
+      }
     case FOLLOW.RECOMMEND_FOLLOW + "_PENDING":
       return{
         ...state,
+        pageloa: true,
         requests: {
           ...state.requests,
           recommendFollow: { ...pending }
         }
       }
     case FOLLOW.RECOMMEND_FOLLOW + '_FULFILLED':
-    console.log(payload)
       return {
         ...state,
         user:[
           ...payload.data
         ],
+        pageload: false,
+        isMore: payload.data.length < 10?false:true,
         requests: {
           ...state.requests,
           recommendFollow: { ...fulfilled }
@@ -53,6 +62,7 @@ function post(state=initialState, action) {
     case FOLLOW.RECOMMEND_FOLLOW + '_REJECTED':
       return {
         ...state,
+        pageload: false,
         requests: {
           ...state.requests,
           recommendFollow: { ...rejected, error: payload }
@@ -71,8 +81,13 @@ function post(state=initialState, action) {
       return {
         ...state,
         user:[
-          ...state.user,
+          ...state.user.slice(0, state.index),
+          {...state.user[state.index],
+            follow: payload?1 : 0
+          },
+          ...state.user.slice(state.index+1, state.user.length),
         ],
+        index: -1,
         requests: {
           ...state.requests,
           following: { ...fulfilled }
@@ -81,12 +96,46 @@ function post(state=initialState, action) {
     case FOLLOW.FOLLOWING + '_REJECTED':
       return {
         ...state,
+        index: -1,
         requests: {
           ...state.requests,
           following: { ...rejected, error: payload }
         }
       };
 
+    case FOLLOW.UNFOLLOW + "_PENDING":
+      return{
+        ...state,
+        requests: {
+          ...state.requests,
+          following: { ...pending }
+        }
+      }
+    case FOLLOW.UNFOLLOW + '_FULFILLED':
+      return {
+        ...state,
+        user:[
+          ...state.user.slice(0, state.index),
+          {...state.user[state.index],
+            follow: payload?0 : 1
+          },
+          ...state.user.slice(state.index+1, state.user.length),
+        ],
+        index: -1,
+        requests: {
+          ...state.requests,
+          following: { ...fulfilled }
+        }
+      }
+    case FOLLOW.UNFOLLOW + '_REJECTED':
+      return {
+        ...state,
+        index: -1,
+        requests: {
+          ...state.requests,
+          following: { ...rejected, error: payload }
+        }
+      };
 
     default:
       return state;

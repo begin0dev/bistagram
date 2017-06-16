@@ -8,9 +8,9 @@ const imgsize ={
   height: '56px'
 }
 
-const FollowList = ({user, page, onClick}) => {
+const FollowList = ({follow, page, handleFollowClick}) => {
     return (
-      <ul className="border_gray2 post_marginbt30px">
+      <ul className={`border_gray2 ${page === 'mainpost' ?'post_marginbt30px':'post_marginbt60px'}`}>
 				{/*팔로우추천부분*/}
 					<li className="follow_recommend">
 						<div className="follow_li_titlediv">
@@ -20,8 +20,7 @@ const FollowList = ({user, page, onClick}) => {
               }
             </div>
 					</li>
-
-					{user.map((contact, i) => {
+					{follow.user.map((contact, i) => {
 						return(
 							<li className="follow_recommend" key={"flli"+i}>
 								<div className="li_wrap_div">
@@ -39,9 +38,19 @@ const FollowList = ({user, page, onClick}) => {
 									<div className="folloew_btn_div">
 										<span className="follow_btn_span">
 											{contact.follow === 1?
-											(<button className="whitebtn btnstyle point" >팔로잉</button>):
-											(<button className="bluebtn btnstyle point" >팔로우</button>)}
-											{/*<div className='loding_div loding_img'></div>*/}
+											(<button className="whitebtn btnstyle point"
+                      disabled={follow.index === i && true}
+                      onClick={(e) => handleFollowClick(i)}>
+                      팔로잉
+                      </button>):
+											(<button className={`bluebtn btnstyle point ${follow.index === i ? 'bluebtn_disable':''}`}
+                      disabled={follow.index === i && true}
+                      onClick={(e) => handleFollowClick(i)}>
+                      팔로우
+                      </button>)}
+                      {follow.index === i &&
+                        <div className='loding_div loding_img'></div>
+                      }
 										</span>
 									</div>
 								</div>

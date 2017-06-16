@@ -21,7 +21,7 @@ class Signin extends Component {
     await signIn(auth.login);
     if(this.props.auth.session.logged){
       storage.set('session', {...session, user: this.props.auth.session.user, logged: true});
-      document.location = "/posts"
+      document.location = "/"
     }
     else if(auth.login.id.length === 0){
       setErrorMessage({name: "login", msg:"입력한 사용자 이름이 계정과 일치하지 않습니다. 사용자 이름을 확인하고 다시 시도하세요."});

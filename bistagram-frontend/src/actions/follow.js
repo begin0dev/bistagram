@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions';
+
 import FOLLOW from './ActionTypes/follow';
 import * as service from '../services/follow';
 
@@ -7,6 +9,8 @@ export const recommendFollow = (params) => ({
     promise: service.recommendFollow(params)
   }
 })
+
+export const setClickIndex = createAction(FOLLOW.SET_CLICK_INDEX);
 
 export const following = (params) => ({
   type: FOLLOW.FOLLOWING,

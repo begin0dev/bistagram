@@ -48,7 +48,7 @@ router.post('/following', (req, res) => {
   });
 });
 
-router.post('/unfollow', (req, res) => {
+router.delete('/unfollow', (req, res) => {
   let sql = "delete from follower where memid=? and followid=?";
   let params = [req.body.id, req.body.followid];
   conn.query(sql, params, function(err, rows) {

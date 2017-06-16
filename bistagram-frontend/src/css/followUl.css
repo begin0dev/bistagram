@@ -1,4 +1,20 @@
 @CHARSET "UTF-8";
+.follow_ul{
+background: #fff;
+display: -webkit-box;
+display: -webkit-flex;
+display: -ms-flexbox;
+display: flex;
+-webkit-box-orient: vertical;
+-webkit-box-direction: normal;
+-webkit-flex-direction: column;
+-ms-flex-direction: column;
+flex-direction: column;
+-webkit-box-flex: 1;
+-webkit-flex-grow: 1;
+-ms-flex-positive: 1;
+flex-grow: 1;
+}
 .follow_recommend{
 border-bottom: solid 1px #efefef;
 display: -webkit-box;
@@ -11,6 +27,13 @@ display: flex;
 -ms-flex-direction: column;
 flex-direction: column;
 padding: 8px 16px;
+}
+.follow_recommend_loading{
+-webkit-box-flex: 1;
+-webkit-flex-grow: 1;
+-ms-flex-positive: 1;
+flex-grow: 1;
+position: relative;
 }
 .follow_recommend:last-child {
 border-bottom: none;

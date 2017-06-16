@@ -15,9 +15,9 @@ class PostView extends React.Component{
               <Header atc={contact} />
               <Mediapart atc={contact} />
               <Reply atc={contact} />
-              </article>
-            );
-          })}
+            </article>
+          );
+        })}
       </div>
 		);
 	}

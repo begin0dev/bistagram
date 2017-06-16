@@ -13,11 +13,5 @@ git config --global user.name "prosonic1"
 
 6. git push -u origin master :
 
-git add *
 git status
-
-git commit -m "이번 확정본에 대한 설명"
-
-git push
-
 

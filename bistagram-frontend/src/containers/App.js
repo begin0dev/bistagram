@@ -45,9 +45,6 @@ class App extends React.Component{
       if(!session.logged && (window.location.pathname === "/posts" || window.location.pathname === "/explore")){
          document.location = "/"
       }
-			if(session.logged && (window.location.pathname === "/")){
-				 document.location = "/posts"
-			}
     }
 		if(!this.props.auth.session){
 			storage.set('session', {
@@ -66,11 +63,11 @@ class App extends React.Component{
 		}
   }
 	render(){
+		let session = storage.get('session');
 		return(
 			<Router>
 				<Switch>
-					<Route exact path="/" component={Login}/>
-					<Route path="/posts" component={Posts}/>
+					<Route exact path="/" component={session.logged?Posts:Login}/>
 					<Route path="/explore" component={Explore}/>
 				</Switch>
 			</Router>

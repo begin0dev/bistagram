@@ -22,6 +22,9 @@ text-transform: uppercase;
 	.post_wrapper{
 		padding-top: 60px;
 	}
+	.post_marginbt60px{
+		margin-bottom: 60px;
+	}
 	.post_marginbt30px{
 		margin-bottom: 30px;
 	}

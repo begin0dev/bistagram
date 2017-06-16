@@ -109,7 +109,7 @@ class Register extends Component {
       await signUp(auth.register);
       await signIn({id:auth.register.id, pw:auth.register.pw});
       storage.set('session', {...session, user: auth.session.user, logged: true});
-      document.location = "/posts"
+      document.location = "/"
     }
     setSubmitStatus({name: 'signup', value: false});
   }
