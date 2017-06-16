@@ -10,7 +10,7 @@ class Explore extends Component {
   componentDidMount() {
     let session = storage.get('session');
     if (session.logged){
-      this.props.recommendMainFollow({id:session.user.id, start:0, count:10})
+      this.props.recommendFollow({id:session.user.id, start:0, count:10})
     }
   }
   render() {
@@ -35,7 +35,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	recommendMainFollow: (params) => dispatch(follow.recommendMainFollow(params))
+	recommendFollow: (params) => dispatch(follow.recommendFollow(params))
 });
 
 

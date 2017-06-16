@@ -6,7 +6,7 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-router.post('/RecMainFollow', (req, res) => {
+router.post('/RecommedFollow', (req, res) => {
   let sql = "select id, name, nick, profileimgname, state, false as follow, convert(recommend.type using utf8) as type from member join "+
 					  "(select * from ("+
 						"(select followingid as memid, '나를 팔로우중인 사람' as type, 1 as rank  from following where memid=?) "+

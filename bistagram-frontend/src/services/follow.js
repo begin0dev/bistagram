@@ -1,7 +1,7 @@
 import request from '../helpers/request';
 
-export const recommendMainFollow = ({id, start, count}) => request({
-    url: '/api/follow/RecMainFollow',
+export const recommendFollow = ({id, start, count}) => request({
+    url: '/api/follow/RecommedFollow',
     method: 'post',
     data: {
       id,

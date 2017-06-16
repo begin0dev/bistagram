@@ -20,10 +20,10 @@ class Post extends Component{
 		let session = storage.get('session');
 		if (session.logged) {
 			this.props.searchPosts({id:session.user.id, start:this.props.post.start});
-			this.props.recommendMainFollow({id:session.user.id, start:0, count:3})
+			this.props.recommendFollow({id:session.user.id, start:0, count:3})
 		}
 	}
-	handleFollowClick=()=>{
+	handleFollowClick=(num)=>{
 
 	}
 	render(){
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	searchPosts: (params) => dispatch(post.searchPosts(params)),
-	recommendMainFollow: (params) => dispatch(follow.recommendMainFollow(params))
+	recommendFollow: (params) => dispatch(follow.recommendFollow(params))
 });
 
 

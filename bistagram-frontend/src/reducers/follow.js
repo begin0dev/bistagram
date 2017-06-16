@@ -10,9 +10,8 @@ const initialState = {
   user: [],
   expstart: 0,
   isMore: true,
-  status: [],
   request: {
-    recommendMainFollow: {
+    recommendFollow: {
       ...request
     },
     following: {
@@ -31,15 +30,16 @@ const rejected = {fetching: false, fetched: false}
 function post(state=initialState, action) {
   const payload = action.payload;
   switch (action.type) {
-    case FOLLOW.RECOMMEND_MAINFOLLOW + "_PENDING":
+    case FOLLOW.RECOMMEND_FOLLOW + "_PENDING":
       return{
         ...state,
         requests: {
           ...state.requests,
-          recommendMainFollow: { ...pending }
+          recommendFollow: { ...pending }
         }
       }
-    case FOLLOW.RECOMMEND_MAINFOLLOW + '_FULFILLED':
+    case FOLLOW.RECOMMEND_FOLLOW + '_FULFILLED':
+    console.log(payload)
       return {
         ...state,
         user:[
@@ -47,15 +47,15 @@ function post(state=initialState, action) {
         ],
         requests: {
           ...state.requests,
-          recommendMainFollow: { ...fulfilled }
+          recommendFollow: { ...fulfilled }
         }
       }
-    case FOLLOW.RECOMMEND_MAINFOLLOW + '_REJECTED':
+    case FOLLOW.RECOMMEND_FOLLOW + '_REJECTED':
       return {
         ...state,
         requests: {
           ...state.requests,
-          recommendMainFollow: { ...rejected, error: payload }
+          recommendFollow: { ...rejected, error: payload }
         }
       };
 
@@ -72,7 +72,6 @@ function post(state=initialState, action) {
         ...state,
         user:[
           ...state.user,
-
         ],
         requests: {
           ...state.requests,

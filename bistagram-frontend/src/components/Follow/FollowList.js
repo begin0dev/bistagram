@@ -39,8 +39,8 @@ const FollowList = ({user, page, onClick}) => {
 									<div className="folloew_btn_div">
 										<span className="follow_btn_span">
 											{contact.follow === 1?
-											(<button className="whitebtn btnstyle point" onClick={()=>this.following(i)}>팔로잉</button>):
-											(<button className="bluebtn btnstyle point" onClick={()=>this.following(i)}>팔로우</button>)}
+											(<button className="whitebtn btnstyle point" >팔로잉</button>):
+											(<button className="bluebtn btnstyle point" >팔로우</button>)}
 											{/*<div className='loding_div loding_img'></div>*/}
 										</span>
 									</div>
