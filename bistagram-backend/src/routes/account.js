@@ -6,6 +6,10 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
+router.get('/', (req, res) => {
+    res.json({sessionID: req.sessionID, session: req.session});
+});
+
 router.get('/idCheck/:id', (req, res) => {
     let sql = "select id from member where id=?";
     let params = [req.params.id];
@@ -65,7 +69,8 @@ router.post('/signin', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-    return res.json({ success: true });
+    req.session.destroy();
+    res.json({success: true});
 });
 
 module.exports = router;

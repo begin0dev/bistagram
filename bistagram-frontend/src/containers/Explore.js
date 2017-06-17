@@ -31,6 +31,7 @@ class Explore extends Component {
   render() {
 		return(
       <section className="react-body">
+      {console.log("익스플")}
         <Header />
         <main className="post_body">
 			    <section className="post_wrapper">

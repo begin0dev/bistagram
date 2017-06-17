@@ -42,6 +42,7 @@
     "eslint-plugin-async-await": "0.0.0",
     "express": "^4.14.0",
     "express-graphql": "^0.5.4",
+    "express-session": "^1.15.3",
     "fb": "^1.1.1",
     "graphql": "^0.7.0",
     "gzip-js": "^0.3.2",

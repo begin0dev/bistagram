@@ -7,21 +7,28 @@ import { storage } from '../helpers';
 
 import Header from '../components/Header/Header';
 import FollowList from '../components/Follow/FollowList';
-import PostView from '../components/post/PostView';
+import PostView from '../components/Post/PostView';
 
 class Post extends Component{
 	constructor(props) {
 		super(props);
-		this.state = {
-			isMore: false
-		};
+		this.getPostData=this.getPostData.bind(this);
 	}
 
 	componentDidMount() {
 		let session = storage.get('session');
 		if (session.logged) {
-			this.props.searchPosts({id:session.user.id, start:this.props.post.start});
-			this.props.recommendFollow({id:session.user.id, start:0, count:3})
+			this.getPostData(session);
+		}
+	}
+
+	async getPostData (session){
+		const {searchPosts, recommendFollow} = this.props;
+		try {
+			await searchPosts({id:session.user.id, start:this.props.post.start});
+			await recommendFollow({id:session.user.id, start:0, count:3})
+		}
+		catch(e) {
 		}
 	}
 
@@ -51,9 +58,9 @@ class Post extends Component{
 						/>
 
 						<div className="post_marginbt30px">
-							//<PostView />
+							<PostView post={this.props.post}/>
 							<div className="scroll_lodingdiv">
-							{this.state.isMore && <div className="loding_div loding_lgimg"></div>}
+							{this.props.post.isMore && <div className="loding_div loding_lgimg"></div>}
 							</div>
 						</div>
 					</section>

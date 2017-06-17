@@ -13,12 +13,11 @@ router.post('/SearchPosts', (req, res) => {
             "(select y.*, count(reply.atcnum) as repliescount from "+
             "(select * from article where memid in "+
             "(select id from ("+
-            "(select followingid as id from following where memid=? and followingid in "+
-            "(select followid from follower where memid=?))"+
+            "(select followingid as id from following where memid=? and followingid in (select followid from follower where memid=?))"+
             "union (select member.id from follower join member on follower.memid=? and follower.followid=member.id and member.state='all')"+
-            "union (select id from member where id=?))x)"+
+            "union (select id from member where id=?))x) order by atcnum desc limit ?, ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
-            ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by z.registerday desc limit ?, ?";
+            ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
   let params = [req.body.id, req.body.id, req.body.id, req.body.id, req.body.start, 5];
   conn.query(sql, params, function(err, rows) {
     if(err) {
@@ -26,10 +25,12 @@ router.post('/SearchPosts', (req, res) => {
     }
     else{
       async.map(rows, selectUserInfo, function(err_map, result){
-        async.map(rows, checkLike, function(err_map, result){
-          async.map(rows, selectReplyLimitFour, function(err_map, posts){
+        async.map(rows, selectAtcMedia, function(err_map, result){
+          async.map(rows, checkLike, function(err_map, result){
+            async.map(rows, selectReplyLimitFour, function(err_map, posts){
 
-            return res.json(posts);
+              return res.json(posts);
+            })
           })
         })
       })
@@ -38,10 +39,19 @@ router.post('/SearchPosts', (req, res) => {
 });
 
 function selectUserInfo(row, callback){
-  let sql = "select name, nick, profileimgname from member where id = ?";
+  let sql = "select name, nick, profileimgname from member where id=?";
   let params = [row.memid];
   conn.query(sql, params, function(err, userinfo){
     row.userinfo=userinfo[0];
+    callback(null, row);
+  })
+}
+
+function selectAtcMedia(row, callback){
+  let sql = "select medianum, medianame, mediatype from media where atcnum=?";
+  let params = [row.atcnum];
+  conn.query(sql, params, function(err, media){
+    row.media=media;
     callback(null, row);
   })
 }

@@ -1,26 +1,24 @@
 import React from 'react';
 
 import Header from './Header';
-
+import MediaView from './MediaView';
 import Reply from './Reply';
 
-class PostView extends React.Component{
-
-  render(){
-		return(
+const PostView = ({post}) => {
+    return (
       <div>
-        {this.state.atcs.map((contact, i) => {
+        {post.posts.map((contact, i) => {
           return(
-            <article className="postview_wrapper postview_bt60px" key={"atc"+i}>
-              <Header atc={contact} />
-              <Mediapart atc={contact} />
-              <Reply atc={contact} />
+            <article className="postview_wrapper postview_bt60px" key={i}>
+              <Header post={contact}/>
+              {contact.media.length > 0 &&
+              <MediaView post={contact}/>
+              }
             </article>
           );
         })}
       </div>
-		);
-	}
-};
+    )
+}
 
 export default PostView;

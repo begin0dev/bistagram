@@ -28,7 +28,7 @@ class Reply extends React.Component {
 					{this.state.replies.map((contact, i) => {
 						return(
 							<li className="reply_li" key={"reply"+i}>
-								{contact.fromMem.id == '${sessionScope.loginmem.id}' &&
+								{contact.fromMem.id === '${sessionScope.loginmem.id}' &&
 								<button className="reply_delbtn" title="댓글 삭제" onClick={()=>this.handleRemove(i)} >댓글 삭제</button>
 								}
 								<a className="reply_li_id fontcolor_black">{contact.fromMem.nickName}</a>
