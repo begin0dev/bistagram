@@ -1,5 +1,4 @@
 @CHARSET "UTF-8";
-a:active{opacity: 1;}
 button:active, button:disabled{opacity: 0.6;}
 .post_body{
 background-color: #fafafa;

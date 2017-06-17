@@ -15,6 +15,12 @@ import path from 'path';
 const app = express();
 const port = process.env.PORT || 3000;
 
+/* SETUP MIDDLEWARE */
+app.use(bodyParser.json()); // parses json
+// SERVE STATIC FILES
+app.use('/', express.static(path.join(__dirname, '../../bistagram-frontend/public/')));
+app.use('/upload', express.static(__dirname + '/upload'));
+
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
@@ -23,14 +29,6 @@ app.use(session({
         maxAge: 14 * 24 * 60 * 60 * 1000
     }
 })); // setup session
-
-
-/* SETUP MIDDLEWARE */
-app.use(bodyParser.json()); // parses json
-
-// SERVE STATIC FILES
-app.use('/', express.static(path.join(__dirname, '../../bistagram-frontend/public/')));
-app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 
 // SETUP ROUTER
 app.use('/api', api);
@@ -46,7 +44,6 @@ app.use((err, req, res, next) => {
     });
     next();
 });
-
 
 // ENABLE DEBUG WHEN DEV ENVIRONMENT
 if(process.env.NODE_ENV === 'development') {

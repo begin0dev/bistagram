@@ -63,7 +63,6 @@ width: 100%;
 .postview_body{
 position: relative;
 overflow: hidden;
-padding-bottom: 100%;
 }
 .imgwrap_div{
 position: absolute;
@@ -184,6 +183,17 @@ background: #3897f0;
 .paging_color_gray{
 background: #dbdbdb;
 }
+.like_img_section{
+margin-top: 4px;
+-webkit-box-orient: horizontal;
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+.like_imgs_section{
+margin-top: -34px;
+}
 .like_countview{
 -webkit-box-orient: horizontal;
 -webkit-box-direction: normal;
@@ -194,9 +204,7 @@ flex-direction: row;
 -webkit-justify-content: flex-end;
 -ms-flex-pack: end;
 justify-content: flex-end;
-}
-.like_countview_media{
-margin-bottom: 7px;
+margin-bottom: 8px;
 }
 .like_countview_wrapper{
 -webkit-box-flex: 1;
@@ -245,22 +253,15 @@ flex-direction: row;
 -ms-flex-pack: center;
 justify-content: center;
 }
-.like_abtn{
--webkit-box-flex: 0;
--webkit-flex-grow: 0;
--ms-flex-positive: 0;
-flex-grow: 0;
--webkit-flex-shrink: 0;
--ms-flex-negative: 0;
-flex-shrink: 0;
-}
-.like_abtn_mgpd{
-margin-left: -9px;
-margin-right: 3px;
+.like_abtn, .reply_abtn{
+display: inline-block;
 background-color: transparent;
 border: none;
 cursor: pointer;
 padding: 8px;
+}
+.like_abtn_mgpd{
+margin-left: -8px;
 }
 .like_abtn_img{
 height: 24px;
@@ -271,6 +272,15 @@ background-position: -182px -322px;
 height: 24px;
 width: 24px;
 background-position: -208px -322px;
+}
+.reply_abtn_img{
+display: block;
+overflow: hidden;
+text-indent: 110%;
+white-space: nowrap;
+height: 24px;
+width: 24px;
+background-position: -103px -322px;
 }
 .like_abtn_onoffimg{
 display: block;
@@ -366,9 +376,6 @@ margin-bottom: 0;
 	.replybody_div{
 		padding: 0 24px;
     	line-height: 18px;
-	}
-	.like_countview_media{
-	    margin-top: 20px;
 	}
 	.reply_ul_mgpd{
 	    margin-left: -24px;

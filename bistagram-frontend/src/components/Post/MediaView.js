@@ -9,7 +9,8 @@ class MediaView extends Component {
     constructor(props) {
         super(props);
         this.state={
-          index: 0
+          index: 0,
+          style: {paddingBottom : '100%'}
         }
     }
     playVideo = () => {
@@ -19,14 +20,30 @@ class MediaView extends Component {
     handleAftBfClick = (e) => {
       if(e.target === this.bfbtn){
         this.setState(prevState => ({
+          ...this.state,
       		index:prevState.index-1
     	  }));
       }
       if(e.target === this.aftbtn){
         this.setState(prevState => ({
+          ...this.state,
       		index:prevState.index+1
     	  }));
       }
+    }
+    handleImgLoad = ({target:img}) =>{
+			let width = img.naturalWidth;
+			let height = img.naturalHeight;
+			let heightper = height*100/width;
+			if(heightper<75){	heightper ='75'	}
+			else if(heightper>123){	heightper ='123'}
+      this.setState({
+        ...this.state,
+        style:{
+          ...this.state.style,
+          paddingBottom:`${heightper}%`
+        }
+      });
     }
     render() {
       const { post } = this.props;
@@ -34,10 +51,11 @@ class MediaView extends Component {
         return(
           <div className="mediaview">
           <div className="postview_bodywraper">
-            <div className="postview_body" ref="mediadiv">
+            <div className="postview_body" style={this.state.style} ref="mediadiv">
               {post.media[this.state.index].mediatype === "image" ?
               <Imgview
-                media={post.media[index]}/> :
+                media={post.media[index]}
+                handleImgLoad={this.handleImgLoad}/> :
               <Videoview
                 media={post.media[index]}/>}
             </div>

@@ -18,7 +18,7 @@ router.post('/SearchPosts', (req, res) => {
             "union (select id from member where id=?))x) order by atcnum desc limit ?, ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
             ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
-  let params = [req.body.id, req.body.id, req.body.id, req.body.id, req.body.start, 5];
+  let params = [req.body.id, req.body.id, req.body.id, req.body.id, req.body.start, 10];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -58,7 +58,7 @@ function selectAtcMedia(row, callback){
 
 
 function selectReplyLimitFour(row, callback){
-  let sql = "select * from (select replynum, memid, content from reply where atcnum=? order by replynum desc limit ?) as a order by replynum asc";
+  let sql = "select replynum, memid, nick, content from (select * from reply join member on reply.memid = member.id where atcnum=? order by replynum desc limit ?) as a order by replynum asc";
   let params = [row.atcnum, 4];
   conn.query(sql, params, function(err, replies){
     row.replies=replies;

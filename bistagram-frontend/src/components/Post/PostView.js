@@ -2,7 +2,7 @@ import React from 'react';
 
 import Header from './Header';
 import MediaView from './MediaView';
-import Reply from './Reply';
+import Footer from './Footer';
 
 const PostView = ({post}) => {
     return (
@@ -14,6 +14,9 @@ const PostView = ({post}) => {
               {contact.media.length > 0 &&
               <MediaView post={contact}/>
               }
+              <Footer
+                post={contact}
+              />
             </article>
           );
         })}
