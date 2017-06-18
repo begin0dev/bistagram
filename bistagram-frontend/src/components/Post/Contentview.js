@@ -4,7 +4,7 @@ const Contentview = ({post}) => {
     return (
       <ul className="reply_ul_mgpd">
         <li className="reply_li">
-            <a className="reply_li_id fontcolor_black">{post.userinfo.nick}</a>
+            <a className="reply_li_id fontcolor_black">{post.userinfo.nickname}</a>
             <span>
             <span dangerouslySetInnerHTML={{__html: post.content}}></span>
             </span>
@@ -20,7 +20,7 @@ const Contentview = ({post}) => {
               {/*contact.memid === '${sessionScope.loginmem.id}' &&
               <button className="reply_delbtn" title="댓글 삭제" onClick={()=>this.handleRemove(i)} >댓글 삭제</button>
               */}
-              <a className="reply_li_id fontcolor_black">{contact.nick}</a>
+              <a className="reply_li_id fontcolor_black">{contact.nickname}</a>
               <span>
                 <span dangerouslySetInnerHTML={{__html: contact.content.replace(/@(\S*)/g,'<a href="search/@$1">@$1</a>')}}></span>
               </span>

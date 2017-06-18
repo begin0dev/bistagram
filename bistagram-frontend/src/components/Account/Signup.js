@@ -4,8 +4,8 @@ import { storage } from '../../helpers';
 const regex ={
   regemail: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
   regphone: /^(?:(010\d{4})|(01[1|6|7|8|9]\d{3,4}))(\d{4})$/,
-  regnick: /^[0-9a-z_]{5,20}$/,
-  regpw: /^.{6,20}$/,
+  regnickname: /^[0-9a-z_]{5,20}$/,
+  regpassword: /^.{6,20}$/,
   regnum: /^[0-9]+$/
 }
 
@@ -21,7 +21,7 @@ class Register extends Component {
   }
 
   handleBlur = (e) => {
-    const {changeCheck, checkUserId, checkUserNick} = this.props;
+    const {changeCheck, checkUserName, checkNickName} = this.props;
 
     let target=e.target.name;
     let value=e.target.value;
@@ -32,28 +32,28 @@ class Register extends Component {
     }
 
     //id check
-    if(target === 'id'){
+    if(target === 'username'){
       if(!regex.regemail.test(value) && !regex.regphone.test(value)){
         changeCheck({name:target, value:false});
       }
       else{
-        checkUserId(value);
+        checkUserName(value);
       }
     }
 
     //nick check
-    else if(target === "nick"){
-      if(!regex.regnick.test(value)){
+    else if(target === "nickname"){
+      if(!regex.regnickname.test(value)){
         changeCheck({name:target, value:false});
       }
       else{
-        checkUserNick(value);
+        checkNickName(value);
       }
     }
 
     //pw check
-    else if(target === "pw"){
-      if(!regex.regpw.test(value)){
+    else if(target === "password"){
+      if(!regex.regpassword.test(value)){
         changeCheck({name:target, value:false});
       }
       else{
@@ -69,47 +69,45 @@ class Register extends Component {
 
     setSubmitStatus({name: 'signup', value: true});
 
-    let id_val=auth.register.id;
-    let nick_val=auth.register.nick;
-    let pw_val=auth.register.pw;
+    let username_val=auth.register.username;
+    let nickname_val=auth.register.nickname;
+    let password_val=auth.register.password;
 
-    if(auth.register.checked.id === undefined){
-      changeCheck({name: 'id', value:false});
+    if(auth.register.checked.username === undefined){
+      changeCheck({name: 'username', value:false});
     }
-    if(auth.register.checked.nick === undefined){
-      changeCheck({name: 'nick', value:false});
+    if(auth.register.checked.nickname === undefined){
+      changeCheck({name: 'nickname', value:false});
     }
-    if(auth.register.checked.pw === undefined){
-      changeCheck({name: 'pw', value:false});
+    if(auth.register.checked.password === undefined){
+      changeCheck({name: 'password', value:false});
     }
 
-    if(!id_val || !nick_val || !pw_val){
+    if(!username_val || !nickname_val || !password_val){
       setErrorMessage({name: "register", msg:"필수 항목입니다."});
     }
-    else if(regex.regnum.test(id_val)){
-      if(!regex.regphone.test(id_val)){
+    else if(regex.regnum.test(username_val)){
+      if(!regex.regphone.test(username_val)){
         setErrorMessage({name: "register", msg:"휴대폰 번호가 정확하지 않은 것 같습니다. 국가 번호를 포함하여 전체 전화번호를 입력해주세요."});
       }
     }
-    else if(!regex.regemail.test(id_val)){
+    else if(!regex.regemail.test(username_val)){
       setErrorMessage({name: "register", msg:"올바른 이메일 주소를 입력하세요."});    }
-    else if(!auth.register.checked.id){
-      setErrorMessage({name: "register", msg:`다른 계정에서 ${id_val} 주소를 사용하고 있습니다.`});
+    else if(!auth.register.checked.username){
+      setErrorMessage({name: "register", msg:`다른 계정에서 ${username_val} 주소를 사용하고 있습니다.`});
     }
-    else if(!regex.regnick.test(nick_val)){
+    else if(!regex.regnickname.test(nickname_val)){
       setErrorMessage({name: "register", msg:"사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
     }
-    else if(!auth.register.checked.nick){
+    else if(!auth.register.checked.nickname){
       setErrorMessage({name: "register", msg:"다른 사람이 이용 중인 사용자 이름입니다."});
     }
-    else if(!regex.regpw.test(pw_val)){
+    else if(!regex.regpassword.test(password_val)){
       setErrorMessage({name: "register", msg:"6자 이상의 비밀번호를 만드세요."});
     }
     else{
       await signUp(auth.register);
-      await signIn({id:auth.register.id, pw:auth.register.pw});
       storage.set('session', {...session, user: auth.session.user, logged: true});
-      document.location = "/"
     }
     setSubmitStatus({name: 'signup', value: false});
   }
@@ -131,17 +129,17 @@ class Register extends Component {
                 <h2 className="subtitle">친구들의 사진과 동영상을 보려면 가입하세요.</h2>
                 <div className="logininput_div">
                   <input type="text" className="logininput_txt"
-                  name="id" maxLength="30"
+                  name="username" maxLength="30"
                   aria-describedby="" aria-label="휴대폰 번호 또는 이메일 주소"
                   aria-required="true" autoCapitalize="off" autoCorrect="off"
                   placeholder="휴대폰 번호 또는 이메일 주소"
-                  value={auth.register.id}
-                  ref={(input) => { this.InputId = input; }}
+                  value={auth.register.username}
+                  ref={(input) => { this.InputUserName = input; }}
                   onBlur={this.handleBlur}
                   onChange={this.handleChange}/>
                   <div className="inputinfo_div">
-                  {auth.register.checked.id !== undefined &&
-                    <span className={`input_img ${auth.register.checked.id?"inputAceept_img":"inputError_img"}`}></span>
+                  {auth.register.checked.username !== undefined &&
+                    <span className={`input_img ${auth.register.checked.username?"inputAceept_img":"inputError_img"}`}></span>
                   }
                   </div>
                 </div>
@@ -155,32 +153,32 @@ class Register extends Component {
                 </div>
                 <div className="logininput_div">
                   <input type="text" className="logininput_txt"
-                  name="nick" maxLength="20"
+                  name="nickname" maxLength="20"
                   aria-describedby="" aria-label="사용자 이름" aria-required="true"
                   autoCapitalize="off" autoCorrect="off" placeholder="사용자 이름"
-                  value={auth.register.nick}
-                  ref={(input) => { this.InputNick = input; }}
+                  value={auth.register.nickname}
+                  ref={(input) => { this.InputNickName = input; }}
                   onBlur={this.handleBlur}
                   onChange={this.handleChange}/>
                   <div className="inputinfo_div">
-                  {auth.register.checked.nick !== undefined &&
-                      <span className={`input_img ${auth.register.checked.nick?"inputAceept_img":"inputError_img"}`}></span>
+                  {auth.register.checked.nickname !== undefined &&
+                      <span className={`input_img ${auth.register.checked.nickname?"inputAceept_img":"inputError_img"}`}></span>
                   }
                   </div>
                 </div>
                 <div className="logininput_div">
                   <input type="password" className="logininput_txt"
-                  name="pw" maxLength="15"
+                  name="password" maxLength="15"
                   aria-describedby="" aria-label="비밀번호" aria-required="true"
                   autoCapitalize="off" autoCorrect="off" placeholder="비밀번호"
-                  value={auth.register.pw}
-                  ref={(input) => { this.InputPw = input; }}
+                  value={auth.register.password}
+                  ref={(input) => { this.InputPassword = input; }}
                   onBlur={this.handleBlur}
                   onChange={this.handleChange}
                   onKeyPress={this.handleKeyPress}/>
                   <div className="inputinfo_div">
-                  {auth.register.checked.pw !== undefined &&
-                      <span className={`input_img ${auth.register.checked.pw?"inputAceept_img":"inputError_img"}`}></span>
+                  {auth.register.checked.password !== undefined &&
+                      <span className={`input_img ${auth.register.checked.password?"inputAceept_img":"inputError_img"}`}></span>
                   }
                   </div>
                 </div>

@@ -30,7 +30,7 @@ const FollowList = ({follow, page, handleFollowClick}) => {
 										</a>
 										<div className="profile_info_wrap">
 											<div className="profile_nickname_div">
-												<a className="profile_info_nick profile_info_nickwrap" title={contact.nick}>{contact.nick}</a>
+												<a className="profile_info_nick profile_info_nickwrap" title={contact.nickname}>{contact.nickname}</a>
 											</div>
 											<div className="profile_info_name">{contact.name}</div>
 										</div>

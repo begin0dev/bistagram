@@ -1,34 +1,34 @@
 import request from '../helpers/request';
 
-export const checkUserId = (id) => {
+export const checkUserName = (username) => {
   return request({
-    url: '/api/account/idCheck/' + id
+    url: '/api/account/checkUserName/' + username
   });
 }
 
-export const checkUserNick = (nick) =>{
+export const checkNickName = (nickname) =>{
   return request({
-    url: '/api/account/nickCheck/' + nick
+    url: '/api/account/checkNickName/' + nickname
   });
 }
 
-export const SignUp = ({id, name, nick, pw}) => request({
+export const signUp = ({username, name, nickname, password}) => request({
     url: '/api/account/signup',
     method: 'post',
     data: {
-      id,
+      username,
       name,
-      nick,
-      pw
+      nickname,
+      password
     }
 });
 
-export const SignIn = ({id, pw}) => request({
+export const signIn = ({username, password}) => request({
     url: '/api/account/signin',
     method: 'post',
     data: {
-        id,
-        pw
+        username,
+        password
     }
 });
 

@@ -10,9 +10,9 @@ router.get('/', (req, res) => {
     res.json({sessionID: req.sessionID, session: req.session});
 });
 
-router.get('/idCheck/:id', (req, res) => {
-    let sql = "select id from member where id=?";
-    let params = [req.params.id];
+router.get('/checkUserName/:username', (req, res) => {
+    let sql = "select username from member where username=?";
+    let params = [req.params.username];
     conn.query(sql, params, function(err, rows) {
       if(err) {
         return res.status(500).json({message: err.message});
@@ -26,9 +26,9 @@ router.get('/idCheck/:id', (req, res) => {
     });
 });
 
-router.get('/nickCheck/:nick', (req, res) => {
-    let sql = "select nick from member where nick=?";
-    let params = [req.params.nick];
+router.get('/checkNickName/:nickname', (req, res) => {
+    let sql = "select nickname from member where nickname=?";
+    let params = [req.params.nickname];
     conn.query(sql, params, function(err, rows) {
       if(err) {
         return res.status(500).json({message: err.message});
@@ -43,9 +43,8 @@ router.get('/nickCheck/:nick', (req, res) => {
 });
 
 router.post('/signup', (req, res) => {
-    console.log(req.body)
-    let sql = "insert into member(id, name, nick, pw, state) values(?, ?, ?, ?, ?)";
-    let params = [req.body.id, req.body.name, req.body.nick, req.body.pw, 'all'];
+    let sql = "insert into member(username, name, nickname, password, state) values(?, ?, ?, ?, ?)";
+    let params = [req.body.username, req.body.name, req.body.nickname, req.body.password, 'all'];
     conn.query(sql, params, function(err, rows) {
       if(err) {
         return res.status(500).json({message: err.message});
@@ -58,12 +57,13 @@ router.post('/signup', (req, res) => {
 });
 
 router.post('/signin', (req, res) => {
-    let sql = "select * from member where id=? and pw=?";
-    let params = [req.body.id, req.body.pw];
+    let sql = "select username, name, nickname, profileimgname, state from member where username=? and password=?";
+    let params = [req.body.username, req.body.password];
     conn.query(sql, params, function(err, rows) {
       if(err) {
         return res.status(500).json({message: err.message});
       }
+      console.log(rows[0])
       return res.json(rows[0]);
     });
 });

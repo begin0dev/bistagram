@@ -12,16 +12,16 @@ const Status ={
 }
 
 const checked ={
-  id: undefined,
-  nick: undefined,
-  pw: undefined
+  username: undefined,
+  nickname: undefined,
+  password: undefined
 }
 
 const register ={
-  id: '',
+  username: '',
   name: '',
-  nick: '',
-  pw: '',
+  nickname: '',
+  password: '',
   checked: {
     ...checked
   },
@@ -31,21 +31,21 @@ const register ={
 }
 
 const login ={
-  id: '',
-  pw: '',
+  username: '',
+  password: '',
   status: {
     ...Status
   }
 }
 
 const session ={
+  sessionID: null,
   user: {
-    id: undefined,
-    name: undefined,
-    nick: undefined,
-    intro: undefined,
-    profileimgname: undefined,
-    type: undefined
+    username: null,
+    name: null,
+    nickname: null,
+    profileimgname: null,
+    state: null
   },
   followInfo: {
     followers: 0,
@@ -64,10 +64,10 @@ const initialState ={
   login: { ...login },
   session: { ...session },
   requests: {
-    checkUserId: {
+    checkUserName: {
         ...request
     },
-    checkNick: {
+    checkNickName: {
         ...request
     },
     signup: {
@@ -146,82 +146,82 @@ function auth(state=initialState, action) {
       };
 
     //ID check
-    case AUTH.CHECK_USERID + "_PENDING":
+    case AUTH.CHECK_USERNAME + "_PENDING":
       return {
         ...state,
         requests: {
             ...state.requests,
-            checkUserId: { ...pending }
+            checkUserName: { ...pending }
         }
       }
-    case AUTH.CHECK_USERID + '_FULFILLED':
+    case AUTH.CHECK_USERNAME + '_FULFILLED':
       return {
         ...state,
         register: {
           ...state.register,
           checked:{
             ...state.register.checked,
-            id: payload.data.possible
+            username: payload.data.possible
           }
         },
         requests: {
           ...state.requests,
-          checkUserId: { ...fulfilled }
+          checkUserName: { ...fulfilled }
         }
       }
-    case AUTH.CHECK_USERID + '_REJECTED':
+    case AUTH.CHECK_USERNAME + '_REJECTED':
       return {
         ...state,
         register: {
           ...state.register,
           checked:{
             ...state.register.checked,
-            id: false
+            username: false
           }
         },
         requests: {
           ...state.requests,
-          checkUserId: { ...rejected, error: payload }
+          checkUserName: { ...rejected, error: payload }
         }
       };
 
     //NICK check
-    case AUTH.CHECK_USERNICK + "_PENDING":
+    case AUTH.CHECK_NICKNAME + "_PENDING":
       return {
         ...state,
         requests: {
           ...state.requests,
-          checkUserNick: { ...pending }
+          checkNickName: { ...pending }
         }
       }
-    case AUTH.CHECK_USERNICK + '_FULFILLED':
+    case AUTH.CHECK_NICKNAME + '_FULFILLED':
       return {
         ...state,
         register: {
           ...state.register,
           checked:{
             ...state.register.checked,
-            nick: payload.data.possible
+            nickname: payload.data.possible
           }
         },
         requests: {
           ...state.requests,
-          checkUserNick: { ...fulfilled }
+          checkNickName: { ...fulfilled }
         }
       }
-    case AUTH.CHECK_USERNICK + '_REJECTED':
+    case AUTH.CHECK_NICKNAME + '_REJECTED':
       return {
         ...state,
         register: {
           ...state.register,
           checked:{
             ...state.register.checked,
-            nick: false
+            nickname: false
           }
         },
         requests: {
           ...state.requests,
-          checkUserNick: { ...rejected, error: payload }
+          checkNickName: { ...rejected, error: payload }
         }
       };
 
@@ -235,7 +235,6 @@ function auth(state=initialState, action) {
         }
       }
     case AUTH.SIGNUP + '_FULFILLED':
-      console.log(payload.data)
       return {
         ...state,
         session: {
@@ -288,12 +287,12 @@ function auth(state=initialState, action) {
           ...state.session,
           user:{
             ...state.session.user,
-            id: payload.data.id,
+            username: payload.data.username,
             name: payload.data.name,
-            nick: payload.data.nick,
+            nickname: payload.data.nick,
             intro: payload.data.intro,
             profileimgname: payload.data.profileimgname,
-            type: payload.data.state
+            state: payload.data.state
           },
           logged: !payload.data?false:true
         },

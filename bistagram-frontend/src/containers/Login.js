@@ -50,8 +50,8 @@ class Login extends Component {
                 auth={auth}
                 panelChange={this.handlePanelChange}
                 changeUserData={this.props.changeUserData}
-                checkUserId={this.props.checkUserId}
-                checkUserNick={this.props.checkUserNick}
+                checkUserName={this.props.checkUserName}
+                checkNickName={this.props.checkNickName}
                 changeCheck={this.props.changeCheck}
                 signUp={this.props.signUp}
                 signIn={this.props.signIn}
@@ -80,8 +80,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   changeUserData: (formname, name, value) => dispatch(auth.changeUserData(formname, name, value)),
 
-  checkUserId: (id) => dispatch(auth.checkUserId(id)),
-  checkUserNick: (nick) => dispatch(auth.checkUserNick(nick)),
+  checkUserName: (username) => dispatch(auth.checkUserName(username)),
+  checkNickName: (nickname) => dispatch(auth.checkNickName(nickname)),
   changeCheck: (name, value) => dispatch(auth.changeCheck(name, value)),
 
   authDataReset: () => dispatch(auth.authDataReset()),

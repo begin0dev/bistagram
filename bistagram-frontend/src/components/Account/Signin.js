@@ -21,9 +21,8 @@ class Signin extends Component {
     await signIn(auth.login);
     if(this.props.auth.session.logged){
       storage.set('session', {...session, user: this.props.auth.session.user, logged: true});
-      document.location = "/"
     }
-    else if(auth.login.id.length === 0){
+    else if(auth.login.username.length === 0){
       setErrorMessage({name: "login", msg:"입력한 사용자 이름이 계정과 일치하지 않습니다. 사용자 이름을 확인하고 다시 시도하세요."});
     }
     else{
@@ -47,17 +46,17 @@ class Signin extends Component {
           <div className="loginfrm_div">
             <form className="inputForm">
               <div className="logininput_div">
-                <input type="text" className="logininput_txt" name="id" maxLength="30"
+                <input type="text" className="logininput_txt" name="username" maxLength="30"
                 aria-describedby="" aria-label="휴대폰 번호 또는 이메일 주소"
                 aria-required="true" autoCapitalize="off" autoCorrect="off"
                 placeholder="휴대폰 번호 또는 이메일 주소"
-                value={auth.login.id} onChange={this.handleChange}/>
+                value={auth.login.username} onChange={this.handleChange}/>
               </div>
               <div className="logininput_div">
-                <input type="password" className="logininput_txt" name="pw" maxLength="15"
+                <input type="password" className="logininput_txt" name="password" maxLength="15"
                 aria-describedby="" aria-label="비밀번호" aria-required="true"
                 autoCapitalize="off" autoCorrect="off" placeholder="비밀번호"
-                value={auth.login.pw} onChange={this.handleChange}
+                value={auth.login.password} onChange={this.handleChange}
                 onKeyPress={this.handleKeyPress}/>
                 <div className="inputinfo_div">
                   <a className="">비밀번호를 잊으셨나요?</a>

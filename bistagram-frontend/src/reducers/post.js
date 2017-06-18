@@ -10,9 +10,10 @@ const initialState = {
   posts: [],
   start: 0,
   isMore: true,
+  index: -1,
   status: {
-    post: true,
-    reply: true
+    post: false,
+    reply: false
   },
   request: {
     searchPosts:{

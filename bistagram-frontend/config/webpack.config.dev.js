@@ -43,7 +43,7 @@ module.exports = {
     // the line below with these two lines if you prefer the stock client:
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
-    require.resolve('webpack-dev-server/client') + '?http://0.0.0.0:31/',
+    require.resolve('webpack-dev-server/client') + '?http://0.0.0.0:3000/',
     require.resolve('webpack/hot/dev-server'),
     // We ship a few polyfills by default:
     require.resolve('./polyfills'),

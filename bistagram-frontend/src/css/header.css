@@ -209,16 +209,16 @@ height: 24px;
 width: 24px;
 }
 .top_items:not(:first-child){
-    margin-left: 30px;
+margin-left: 30px;
 }
 .top_menuimg1{
-background-position: -242px -272px;
+background-position: -235px -338px;
 }
 .top_menuimg2{
-background-position: -130px -322px;
+background-position: -139px -289px;
 }
 .top_menuimg3{
-background-position: -78px -322px;
+background-position: -113px -289px;
 }
 @media (max-width: 500px){
 	.top_center{

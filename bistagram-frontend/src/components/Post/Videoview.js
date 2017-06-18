@@ -4,8 +4,7 @@ const Videoview = ({media}) => {
     return (
       <div className="videowrap_div">
         <div className="video_div">
-          <video className="video" loop>
-            <source src={`/upload/${media.medianame}`}/>
+          <video className="video" src={`/upload/${media.medianame}`} loop>
           </video>
         </div>
       </div>

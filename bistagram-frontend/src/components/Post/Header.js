@@ -51,7 +51,7 @@ class Header extends Component {
             <img src={noimg} className="postview_profileimg img_100" alt=""></img>
           </a>
           <div className="postview_iddiv">
-            <a className="postview_id_a postview_idwrap">{post.userinfo.nick}</a>
+            <a className="postview_id_a postview_idwrap">{post.userinfo.nickname}</a>
           </div>
             <a className="postview_day_a">
               <time dateTime={new Date(post.registerday)}

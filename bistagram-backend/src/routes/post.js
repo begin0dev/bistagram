@@ -11,14 +11,14 @@ const conn = mysql.createConnection(dbconfig);
 router.post('/SearchPosts', (req, res) => {
   let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
             "(select y.*, count(reply.atcnum) as repliescount from "+
-            "(select * from article where memid in "+
-            "(select id from ("+
-            "(select followingid as id from following where memid=? and followingid in (select followid from follower where memid=?))"+
-            "union (select member.id from follower join member on follower.memid=? and follower.followid=member.id and member.state='all')"+
-            "union (select id from member where id=?))x) order by atcnum desc limit ?, ?"+
+            "(select * from article where username in "+
+            "(select username from ("+
+            "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
+            "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
+            "union (select username from member where username=?))x) order by atcnum desc limit ?, ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
             ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
-  let params = [req.body.id, req.body.id, req.body.id, req.body.id, req.body.start, 10];
+  let params = [req.body.username, req.body.username, req.body.username, req.body.username, req.body.start, 10];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -39,8 +39,8 @@ router.post('/SearchPosts', (req, res) => {
 });
 
 function selectUserInfo(row, callback){
-  let sql = "select name, nick, profileimgname from member where id=?";
-  let params = [row.memid];
+  let sql = "select name, nickname, profileimgname from member where username=?";
+  let params = [row.username];
   conn.query(sql, params, function(err, userinfo){
     row.userinfo=userinfo[0];
     callback(null, row);
@@ -58,7 +58,9 @@ function selectAtcMedia(row, callback){
 
 
 function selectReplyLimitFour(row, callback){
-  let sql = "select replynum, memid, nick, content from (select * from reply join member on reply.memid = member.id where atcnum=? order by replynum desc limit ?) as a order by replynum asc";
+  let sql = "select * from "+
+            "(select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? order by replynum desc limit ?)"+
+            "as a order by replynum asc";
   let params = [row.atcnum, 4];
   conn.query(sql, params, function(err, replies){
     row.replies=replies;
@@ -67,8 +69,8 @@ function selectReplyLimitFour(row, callback){
 }
 
 function checkLike(row, callback){
-  let sql = "select memid from atclike where atcnum=? and memid=?";
-  let params = [row.atcnum, row.memid];
+  let sql = "select username from atclike where atcnum=? and username=?";
+  let params = [row.atcnum, row.username];
   conn.query(sql, params, function(err, boolean){
     if(boolean.length === 0){
       row.like=false;
@@ -79,5 +81,77 @@ function checkLike(row, callback){
     callback(null, row);
   })
 }
+
+router.post('/likeAtc', (req, res) => {
+  let sql = "insert into atclike(atcnum, username) values (?, ?)";
+  let params = [req.body.atcnum, req.body.username];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.json({result: false});
+      }
+      else{
+        return res.json({result: true});
+      }
+    }
+  });
+});
+
+router.delete('/notlikeAtc', (req, res) => {
+  let sql = "delete from atclike where atcnum=? and username=?";
+  let params = [req.body.atcnum, req.body.username];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.json({result: false});
+      }
+      else{
+        return res.json({result: true});
+      }
+    }
+  });
+});
+
+router.post('/insertReply', (req, res) => {
+  let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
+  let params = [req.body.atcnum, req.body.username, req.body.content];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.json({result: false});
+      }
+      else{
+        return res.json({result: true});
+      }
+    }
+  });
+});
+
+router.delete('/deleteReply', (req, res) => {
+  let sql = "delete from reply where replynum=?";
+  let params = [req.body.replynum];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.json({result: false});
+      }
+      else{
+        return res.json({result: true});
+      }
+    }
+  });
+});
 
 module.exports = router;

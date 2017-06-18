@@ -12,17 +12,17 @@ import * as service from '../services/auth';
 */
 export const changeUserData = createAction(AUTH.CHANGE_USERDATA);
 
-export const checkUserId = (id) => ({
-  type: AUTH.CHECK_USERID,
+export const checkUserName = (username) => ({
+  type: AUTH.CHECK_USERNAME,
   payload: {
-    promise: service.checkUserId(id)
+    promise: service.checkUserName(username)
   }
 })
 
-export const checkUserNick = (nick) => ({
-  type: AUTH.CHECK_USERNICK,
+export const checkNickName = (nickname) => ({
+  type: AUTH.CHECK_NICKNAME,
   payload: {
-    promise: service.checkUserNick(nick)
+    promise: service.checkNickName(nickname)
   }
 })
 
@@ -37,13 +37,13 @@ export const setErrorMessage = createAction(AUTH.SET_ERRORMESSAGE);
 export const signUp = (params) => ({
   type: AUTH.SIGNUP,
   payload: {
-    promise: service.SignUp(params)
+    promise: service.signUp(params)
   }
 })
 
 export const signIn = (params) => ({
   type: AUTH.SIGNIN,
   payload: {
-    promise: service.SignIn(params)
+    promise: service.signIn(params)
   }
 })

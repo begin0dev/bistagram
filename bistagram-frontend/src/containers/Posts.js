@@ -25,8 +25,8 @@ class Post extends Component{
 	async getPostData (session){
 		const {searchPosts, recommendFollow} = this.props;
 		try {
-			await searchPosts({id:session.user.id, start:this.props.post.start});
-			await recommendFollow({id:session.user.id, start:0, count:3})
+			await searchPosts({username:session.user.username, start:this.props.post.start});
+			await recommendFollow({username:session.user.username, start:0, count:3})
 		}
 		catch(e) {
 		}
@@ -38,10 +38,10 @@ class Post extends Component{
 
 		setClickIndex(num);
 		if(follow.user[num].follow === 0){
-			following({id:session.user.id, followid:follow.user[num].id});
+			following({username:session.user.username, follower:follow.user[num].username});
 		}
 		else{
-			unfollow({id:session.user.id, followid:follow.user[num].id});
+			unfollow({username:session.user.username, follower:follow.user[num].username});
 		}
 	}
 

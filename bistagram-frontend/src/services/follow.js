@@ -1,29 +1,29 @@
 import request from '../helpers/request';
 
-export const recommendFollow = ({id, start, count}) => request({
+export const recommendFollow = ({username, start, count}) => request({
     url: '/api/follow/RecommedFollow',
     method: 'post',
     data: {
-      id,
+      username,
       start,
       count
     }
 });
 
-export const following = ({id, followid}) => request({
+export const following = ({username, follower}) => request({
     url: '/api/follow/following',
     method: 'post',
     data: {
-      id,
-      followid
+      username,
+      follower
     }
 });
 
-export const unfollow = ({id, followid}) => request({
+export const unfollow = ({username, follower}) => request({
     url: '/api/follow/unfollow',
     method: 'delete',
     data: {
-      id,
-      followid
+      username,
+      follower
     }
 });

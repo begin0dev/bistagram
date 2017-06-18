@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FollowLoader = ({follow, page, handleFollowClick}) => {
+const FollowLoader = () => {
     return (
       <ul className="border_gray2 post_marginbt30px follow_ul">
 				{/*팔로우추천부분*/}
