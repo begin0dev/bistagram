@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions';
+
 import POST from './ActionTypes/post';
 import * as service from '../services/post';
 
@@ -7,6 +9,8 @@ export const searchPosts = (params) => ({
     promise: service.searchPosts(params)
   }
 })
+
+export const setPostIndex = createAction(POST.SET_POST_INDEX);
 
 export const likeAtc = (params) => ({
   type: POST.LIKE_ATC,
@@ -33,5 +37,12 @@ export const deleteReply = (params) => ({
   type: POST.DELETE_REPLY,
   payload: {
     promise: service.deleteReply(params)
+  }
+})
+
+export const getAllReplies = (params) => ({
+  type: POST.GET_ALL_REPLIES,
+  payload: {
+    promise: service.getAllReplies(params)
   }
 })

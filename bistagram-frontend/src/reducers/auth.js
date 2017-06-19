@@ -273,7 +273,8 @@ function auth(state=initialState, action) {
         ...state,
         session: {
           ...state.session,
-          logged: payload.data.result
+          user: payload.data,
+          logged: payload.data.msg?false:true
         },
         requests: {
           ...state.requests,
@@ -319,6 +320,7 @@ function auth(state=initialState, action) {
         ...state,
         session: {
           ...state.session,
+          user: payload.data,
           logged: payload.data.msg?false:true
         },
         login: {
@@ -337,6 +339,9 @@ function auth(state=initialState, action) {
     case AUTH.SIGNIN + '_REJECTED':
       return {
         ...state,
+        session: {
+          ...session
+        },
         login: {
           ...state.login,
           status:{

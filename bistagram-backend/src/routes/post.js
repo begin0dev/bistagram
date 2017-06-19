@@ -8,7 +8,7 @@ const router = new express.Router();
 const conn = mysql.createConnection(dbconfig);
 
 router.post('/SearchPosts', (req, res) => {
-  let username=req.session.passport.user;
+  let username=req.user.username;
   let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
             "(select y.*, count(reply.atcnum) as repliescount from "+
             "(select * from article where username in "+
@@ -58,7 +58,8 @@ function selectAtcMedia(row, callback){
 
 function selectReplyLimitFour(row, callback){
   let sql = "select * from "+
-            "(select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? order by replynum desc limit ?)"+
+            "(select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? "+
+            "order by replynum desc limit ?)"+
             "as a order by replynum asc";
   let params = [row.atcnum, 4];
   conn.query(sql, params, function(err, replies){
@@ -82,7 +83,7 @@ function checkLike(row, callback){
 }
 
 router.post('/likeAtc', (req, res) => {
-  let username=req.session.passport.user;
+  let username=req.user.username;
   let sql = "insert into atclike(atcnum, username) values (?, ?)";
   let params = [req.body.atcnum, username];
   conn.query(sql, params, function(err, rows) {
@@ -101,7 +102,7 @@ router.post('/likeAtc', (req, res) => {
 });
 
 router.delete('/notlikeAtc', (req, res) => {
-  let username=req.session.passport.user;
+  let username=req.user.username;
   let sql = "delete from atclike where atcnum=? and username=?";
   let params = [req.body.atcnum, username];
   conn.query(sql, params, function(err, rows) {
@@ -120,7 +121,7 @@ router.delete('/notlikeAtc', (req, res) => {
 });
 
 router.post('/insertReply', (req, res) => {
-  let username=req.session.passport.user;
+  let username=req.user.username;
   let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
   let params = [req.body.atcnum, username, req.body.content];
   conn.query(sql, params, function(err, rows) {
@@ -129,10 +130,10 @@ router.post('/insertReply', (req, res) => {
     }
     else{
       if(rows.affectedRows===0){
-        return res.json({result: false});
+        return res.json({message: 'fail'});
       }
       else{
-        return res.json({result: true});
+        return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
       }
     }
   });
@@ -155,5 +156,26 @@ router.delete('/deleteReply', (req, res) => {
     }
   });
 });
+
+router.post('/getAllReplies', (req, res) => {
+  let sql = "select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? "+
+            "order by replynum asc limit 0, ?";
+  let params = [req.body.atcnum, req.body.count];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.status(401).json({message: '정보불러오기 실패 잠시후에 시도해주세요'});
+      }
+      else{
+        return res.json({rows});
+      }
+    }
+  });
+});
+
+
 
 module.exports = router;

@@ -4,7 +4,7 @@ import Header from './Header';
 import MediaView from './MediaView';
 import Footer from './Footer';
 
-const PostView = ({post}) => {
+const PostView = ({post, handleLikeClick, insertReply, deleteReply, getAllReplies, setPostIndex, session}) => {
     return (
       <div>
         {post.posts.map((contact, i) => {
@@ -16,6 +16,15 @@ const PostView = ({post}) => {
               }
               <Footer
                 post={contact}
+                likeload={post.index===i && post.status.like?true:false}
+                replyload={post.index===i && post.status.reply?true:false}
+                index={i}
+                handleLikeClick={handleLikeClick}
+                setPostIndex={setPostIndex}
+                insertReply={insertReply}
+                deleteReply={deleteReply}
+                getAllReplies={getAllReplies}
+                session={session}
               />
             </article>
           );

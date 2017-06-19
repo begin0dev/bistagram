@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { storage } from '../helpers';
 import * as follow from '../actions/follow';
 
-import Header from '../components/Header/Header';
 import FollowList from '../components/Follow/FollowList';
 import FollowLoader from '../components/Follow/FollowLoader';
 
@@ -16,9 +15,9 @@ class Explore extends Component {
   }
 
   handleFollowClick=(num)=>{
-    const {follow, setClickIndex, following, unfollow } =this.props;
+    const {follow, setFollowClickIndex, following, unfollow } =this.props;
 
-    setClickIndex(num);
+    setFollowClickIndex(num);
     if(follow.user[num].follow === 0){
       following({followid:follow.user[num].id});
     }
@@ -29,9 +28,6 @@ class Explore extends Component {
 
   render() {
 		return(
-      <section className="react-body">
-      {console.log("익스플")}
-        <Header />
         <main className="post_body">
 			    <section className="post_wrapper">
           {this.props.follow.pageload ?
@@ -44,7 +40,6 @@ class Explore extends Component {
           }
 			    </section>
         </main>
-      </section>
     );
 	}
 };
@@ -55,7 +50,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   recommendFollow: (params) => dispatch(follow.recommendFollow(params)),
-	setClickIndex: (index) => dispatch(follow.setClickIndex(index)),
+	setFollowClickIndex: (index) => dispatch(follow.setFollowClickIndex(index)),
 	following: (params) => dispatch(follow.following(params)),
 	unfollow: (params) => dispatch(follow.unfollow(params))
 });

@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Header from '../components/Header/Header';
-
 import '../css/notfound.css';
 
 class NotFound extends Component {
 
   render() {
 		return(
-      <section className="react-body">
-        <Header />
         <main className="post_body">
           <div className="notfound_div">
             <h2 className="basic_h2">죄송합니다. 페이지를 사용할 수 없습니다.</h2>
@@ -20,7 +16,6 @@ class NotFound extends Component {
             </p>
           </div>
         </main>
-      </section>
     );
 	}
 };

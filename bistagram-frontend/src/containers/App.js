@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import Header from '../components/Header/Header';
+
 import Login from './Login';
 import Posts from './Posts';
 import Explore from './Explore';
@@ -25,8 +27,35 @@ class App extends React.Component{
 					logged: false
 			});
 		}
+		this.state={
+			headDisplay:true
+		}
+	}
+	handleScroll = () => {
+		const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+		const body = document.body;
+		const html = document.documentElement;
+		const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+		const windowBottom = windowHeight + window.pageYOffset;
+		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+
+		if(scrollTop > 90){
+			this.setState({
+				headDisplay: false
+			});
+		} else{
+			this.setState({
+				headDisplay: true
+			});
+		}
+		if (windowBottom >= docHeight) {
+
+		} else {
+				return;
+		}
 	}
 	async componentDidMount() {
+		window.addEventListener("scroll", this.handleScroll);
     let session = storage.get('session');
     if (session) {
       if (session.expired) {
@@ -72,15 +101,21 @@ class App extends React.Component{
       }
     }
   }
+	componentWillUnmount() {
+		window.removeEventListener("scroll", this.handleScroll);
+	}
 	render(){
 		let session = storage.get('session');
 		return(
 			<Router>
-				<Switch>
-					<Route exact path="/" component={session.logged?Posts:Login}/>
-					<Route path="/explore" component={Explore}/>
-					<Route component={NotFound}/>
-				</Switch>
+				<section className="react-body">
+					{storage.get('session').logged ?<Header headDisplay={this.state.headDisplay}/>:null}
+					<Switch>
+						<Route exact path="/" component={session.logged?Posts:Login}/>
+						<Route path="/explore" component={Explore}/>
+						<Route component={NotFound}/>
+					</Switch>
+				</section>
 			</Router>
 		);
 	}

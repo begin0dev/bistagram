@@ -10,7 +10,7 @@ export const recommendFollow = (params) => ({
   }
 })
 
-export const setClickIndex = createAction(FOLLOW.SET_CLICK_INDEX);
+export const setFollowClickIndex = createAction(FOLLOW.SET_FOLLOW_CLICK_INDEX);
 
 export const following = (params) => ({
   type: FOLLOW.FOLLOWING,

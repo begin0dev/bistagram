@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import ScInput from './ScInput';
 import HeaderNavi from './HeaderNavi';
 
-const Header = (props) => {
+const Header = ({headDisplay}) => {
   return (
 		<nav className="topNavi">
+      <div className="topframe"></div>
 			<div>
-				<div className="top_wrapper">
+				<div className={`top_wrapper ${headDisplay?'tap_animation':''}`}>
 					<div className="top_center">
 						<div className="top_titlewrapper">
 							<div className="top_title">

@@ -24,18 +24,28 @@ export const notlikeAtc = ({atcnum}) => request({
     }
 });
 
-export const insertReply = ({atcnum}) => request({
+export const insertReply = ({atcnum, content}) => request({
     url: '/api/post/insertReply',
     method: 'post',
     data: {
       atcnum,
+      content
     }
 });
 
-export const deleteReply = ({atcnum}) => request({
+export const deleteReply = ({replynum}) => request({
     url: '/api/post/deleteReply',
     method: 'delete',
     data: {
+      replynum
+    }
+});
+
+export const getAllReplies = ({atcnum, count}) => request({
+    url: '/api/post/getAllReplies',
+    method: 'post',
+    data: {
       atcnum,
+      count
     }
 });

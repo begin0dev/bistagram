@@ -32,11 +32,13 @@ const rejected = {fetching: false, fetched: false}
 function post(state=initialState, action) {
   const payload = action.payload;
   switch (action.type) {
-    case FOLLOW.SET_CLICK_INDEX:
+
+    case FOLLOW.SET_FOLLOW_CLICK_INDEX:
       return{
         ...state,
         index: payload
       }
+
     case FOLLOW.RECOMMEND_FOLLOW + "_PENDING":
       return{
         ...state,

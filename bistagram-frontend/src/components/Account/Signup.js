@@ -65,8 +65,7 @@ class Register extends Component {
 
   async handleSubmit(){
     const {auth, signUp, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
-    let session = storage.get('session');
-
+    
     setSubmitStatus({name: 'signup', value: true});
 
     let username_val=auth.register.username;

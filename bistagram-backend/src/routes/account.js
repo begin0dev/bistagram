@@ -69,12 +69,21 @@ router.post('/signup', (req, res) => {
       if(err) {
         return res.status(500).json({message: err.message});
       }
-      let user = {...req.body, state: 'all'}
-      req.login(user, function(err){
-        req.session.save(function(){
-          res.json({user});
+      if(rows.affectedRows===0){
+        return res.json({code: err.code, message: err.message});
+      }
+      else{
+        let user = {...req.body, state: 'all'}
+        req.login(user, function(err){
+          req.session.save(function(){
+            res.json({username: user.username,
+                      name: user.name,
+                      nickname: user.nickname,
+                      profileimgname: user.profileimgname,
+                      state: user.state});
+          })
         })
-      })
+      }
     });
 });
 
@@ -91,7 +100,11 @@ router.post('/signin', (req, res, next) => {
                   if (err) {
                       return res.status(500).json({code: err.code, message: err.message});
                   }
-                  return res.json({username: user.username, nickname: user.nickname, state: user.state});
+                  res.json({username: user.username,
+                            name: user.name,
+                            nickname: user.nickname,
+                            profileimgname: user.profileimgname,
+                            state: user.state});
               });
             }
         }
