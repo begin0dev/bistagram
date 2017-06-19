@@ -90,7 +90,41 @@ const rejected = {fetching: false, fetched: false}
 function auth(state=initialState, action) {
   const payload = action.payload
   switch (action.type) {
+    case AUTH.CHECK_SESSION + "_PENDING":
+        return {
+            ...state,
+            requests: {
+                ...state.requests,
+                checkSession: { ...pending }
+            }
+        }
 
+    case AUTH.CHECK_SESSION + "_FULFILLED":
+        return {
+            ...state,
+            requests: {
+                ...state.requests,
+                checkSession: { ...fulfilled }
+            },
+            session: {
+                ...state.session,
+                sessionID: payload.data.sessionID,
+                user: payload.data.user === null ? {...session.user} : payload.data.user,
+                logged: (payload.data.user !== null && payload.data.user.username !== null)
+            },
+            followInfo: {
+                ...payload.data.followInfo
+            }
+        }
+
+    case AUTH.CHECK_SESSION + "_REJECTED":
+        return {
+            ...state,
+            requests: {
+                ...state.requests,
+                checkSession: { ...rejected, error: payload }
+            }
+        }
     case AUTH.CHANGE_USERDATA:
       return {
         ...state,
@@ -285,16 +319,15 @@ function auth(state=initialState, action) {
         ...state,
         session: {
           ...state.session,
-          user:{
-            ...state.session.user,
-            username: payload.data.username,
-            name: payload.data.name,
-            nickname: payload.data.nick,
-            intro: payload.data.intro,
-            profileimgname: payload.data.profileimgname,
-            state: payload.data.state
+          logged: payload.data.msg?false:true
+        },
+        login: {
+          ...state.login,
+          status:{
+            ...state.login.status,
+            error: payload.data.msg?true:false,
+            message: payload.data.msg
           },
-          logged: !payload.data?false:true
         },
         requests: {
           ...state.requests,
@@ -304,7 +337,7 @@ function auth(state=initialState, action) {
     case AUTH.SIGNIN + '_REJECTED':
       return {
         ...state,
-        register: {
+        login: {
           ...state.login,
           status:{
             ...state.login.status,

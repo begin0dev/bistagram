@@ -27,6 +27,10 @@ end//
 delimiter ;
 
 
+insert into article(username, content) values('test1@naver.com', '게시물테스트');
+insert into media(atcnum, medianame, mediatype) values(1, 'test1@naver.com2017060209110.mp4', 'video')
+
+
 create table article
 (
 atcnum int not null primary key auto_increment,

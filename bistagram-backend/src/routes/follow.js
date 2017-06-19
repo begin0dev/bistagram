@@ -7,6 +7,7 @@ const router = new express.Router();
 const conn = mysql.createConnection(dbconfig);
 
 router.post('/RecommedFollow', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "select member.username, name, nickname, profileimgname, state, false as follow, convert(recommend.type using utf8) as type from member join "+
 					  "(select * from ("+
 						"(select following as username, '나를 팔로우중인 사람' as type, 1 as rank  from following where username = ?) "+
@@ -19,7 +20,7 @@ router.post('/RecommedFollow', (req, res) => {
 						"group by username order by null) as recommend "+
 						"on member.username=recommend.username "+
 						"order by rank asc, type desc limit ?, ?";
-  let params = [req.body.username, req.body.username, req.body.username, req.body.username, req.body.start, req.body.count];
+  let params = [username, username, username, username, req.body.start, req.body.count];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -31,8 +32,9 @@ router.post('/RecommedFollow', (req, res) => {
 });
 
 router.post('/following', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "insert into follower(username, follower) values(?, ?)";
-  let params = [req.body.username, req.body.follower];
+  let params = [username, req.body.follower];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -49,8 +51,9 @@ router.post('/following', (req, res) => {
 });
 
 router.delete('/unfollow', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "delete from follower where username=? and follower=?";
-  let params = [req.body.username, req.body.follower];
+  let params = [username, req.body.follower];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});

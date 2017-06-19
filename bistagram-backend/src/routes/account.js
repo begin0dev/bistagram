@@ -1,5 +1,6 @@
 import express from 'express';
 import mysql from 'mysql';
+import passport from 'passport';
 import dbconfig from '../dbinfo/database';
 
 const router = new express.Router();
@@ -8,6 +9,25 @@ const conn = mysql.createConnection(dbconfig);
 
 router.get('/', (req, res) => {
     res.json({sessionID: req.sessionID, session: req.session});
+});
+
+router.get('/check', async (req, res) => {
+    let user = null;
+    if (req.user) {
+        const { username, nickname, state} = req.user;
+        // const followers = await Follow.getFollowerCount(req.user._id);
+        // const following = await Follow.getFollowingCount(req.user._id);
+        // followInfo = {
+        //     followers,
+        //     following
+        // }
+        user = {
+            username,
+            nickname,
+            state,
+        };
+    }
+    res.json({sessionID: req.sessionID, user});
 });
 
 router.get('/checkUserName/:username', (req, res) => {
@@ -31,7 +51,7 @@ router.get('/checkNickName/:nickname', (req, res) => {
     let params = [req.params.nickname];
     conn.query(sql, params, function(err, rows) {
       if(err) {
-        return res.status(500).json({message: err.message});
+        return res.status(500).json({code: err.code, message: err.message});
       }
       if(rows.length === 0){
         return res.json({possible: true});
@@ -49,27 +69,37 @@ router.post('/signup', (req, res) => {
       if(err) {
         return res.status(500).json({message: err.message});
       }
-      if(rows.affectedRows === 0){
-        return res.json({result: false});
-      }
-      return res.json({result: true});
+      let user = {...req.body, state: 'all'}
+      req.login(user, function(err){
+        req.session.save(function(){
+          res.json({user});
+        })
+      })
     });
 });
 
-router.post('/signin', (req, res) => {
-    let sql = "select username, name, nickname, profileimgname, state from member where username=? and password=?";
-    let params = [req.body.username, req.body.password];
-    conn.query(sql, params, function(err, rows) {
-      if(err) {
-        return res.status(500).json({message: err.message});
-      }
-      console.log(rows[0])
-      return res.json(rows[0]);
-    });
+router.post('/signin', (req, res, next) => {
+    passport.authenticate('local-login', (err, user, info) => {
+        if (err) {
+          return res.status(500).json({code: err.code, message: err.message});
+        } else {
+            if(info){
+              return res.json({...info});
+            }
+            else{
+              req.login(user, (err) => {
+                  if (err) {
+                      return res.status(500).json({code: err.code, message: err.message});
+                  }
+                  return res.json({username: user.username, nickname: user.nickname, state: user.state});
+              });
+            }
+        }
+    })(req, res, next);
 });
 
 router.post('/logout', (req, res) => {
-    req.session.destroy();
+    req.logout();
     res.json({success: true});
 });
 

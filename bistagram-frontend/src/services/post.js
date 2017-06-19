@@ -1,46 +1,41 @@
 import request from '../helpers/request';
 
-export const searchPosts = ({username, start}) => request({
+export const searchPosts = ({start}) => request({
     url: '/api/post/SearchPosts',
     method: 'post',
     data: {
-      username,
       start
     }
 });
 
-export const likeAtc = ({username, atcnum}) => request({
+export const likeAtc = ({atcnum}) => request({
     url: '/api/post/likeAtc',
     method: 'post',
     data: {
-      username,
       atcnum,
     }
 });
 
-export const notlikeAtc = ({username, atcnum}) => request({
+export const notlikeAtc = ({atcnum}) => request({
     url: '/api/post/notlikeAtc',
     method: 'delete',
     data: {
-      username,
       atcnum,
     }
 });
 
-export const insertReply = ({username, atcnum}) => request({
+export const insertReply = ({atcnum}) => request({
     url: '/api/post/insertReply',
     method: 'post',
     data: {
-      username,
       atcnum,
     }
 });
 
-export const deleteReply = ({username, atcnum}) => request({
+export const deleteReply = ({atcnum}) => request({
     url: '/api/post/deleteReply',
     method: 'delete',
     data: {
-      username,
       atcnum,
     }
 });

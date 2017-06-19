@@ -1,5 +1,10 @@
 import request from '../helpers/request';
 
+
+export const checkSession = () => request({
+    url: '/api/account/check'
+});
+
 export const checkUserName = (username) => {
   return request({
     url: '/api/account/checkUserName/' + username
@@ -34,5 +39,5 @@ export const signIn = ({username, password}) => request({
 
 export const logout = () => request({
     url: '/api/account/logout',
-    method: 'post'
+    method: 'delete'
 });

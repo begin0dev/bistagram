@@ -3,12 +3,12 @@ import mysql from 'mysql';
 import async from 'async';
 import dbconfig from '../dbinfo/database';
 
-
 const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
 router.post('/SearchPosts', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
             "(select y.*, count(reply.atcnum) as repliescount from "+
             "(select * from article where username in "+
@@ -18,7 +18,7 @@ router.post('/SearchPosts', (req, res) => {
             "union (select username from member where username=?))x) order by atcnum desc limit ?, ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
             ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
-  let params = [req.body.username, req.body.username, req.body.username, req.body.username, req.body.start, 10];
+  let params = [username, username, username, username, req.body.start, 10];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -56,7 +56,6 @@ function selectAtcMedia(row, callback){
   })
 }
 
-
 function selectReplyLimitFour(row, callback){
   let sql = "select * from "+
             "(select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? order by replynum desc limit ?)"+
@@ -83,8 +82,9 @@ function checkLike(row, callback){
 }
 
 router.post('/likeAtc', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "insert into atclike(atcnum, username) values (?, ?)";
-  let params = [req.body.atcnum, req.body.username];
+  let params = [req.body.atcnum, username];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -101,8 +101,9 @@ router.post('/likeAtc', (req, res) => {
 });
 
 router.delete('/notlikeAtc', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "delete from atclike where atcnum=? and username=?";
-  let params = [req.body.atcnum, req.body.username];
+  let params = [req.body.atcnum, username];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -119,8 +120,9 @@ router.delete('/notlikeAtc', (req, res) => {
 });
 
 router.post('/insertReply', (req, res) => {
+  let username=req.session.passport.user;
   let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
-  let params = [req.body.atcnum, req.body.username, req.body.content];
+  let params = [req.body.atcnum, username, req.body.content];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});

@@ -13,21 +13,12 @@ class Signin extends Component {
   }
 
   async handleSubmit() {
-    const {auth, signIn, setErrorMessage, setSubmitStatus} = this.props;
-    let session = storage.get('session');
-
+    const {auth, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
 
     await signIn(auth.login);
-    if(this.props.auth.session.logged){
-      storage.set('session', {...session, user: this.props.auth.session.user, logged: true});
-    }
-    else if(auth.login.username.length === 0){
-      setErrorMessage({name: "login", msg:"입력한 사용자 이름이 계정과 일치하지 않습니다. 사용자 이름을 확인하고 다시 시도하세요."});
-    }
-    else{
-      setErrorMessage({name: "login", msg:"잘못된 비밀번호입니다. 다시 확인하세요."});
-    }
+    storage.set('session', this.props.auth.session);
+    
     setSubmitStatus({name: 'signin', value: false});
   }
 

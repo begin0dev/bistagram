@@ -1,19 +1,19 @@
 const storage = {};
 
 storage.set = (key, object) => {
-    sessionStorage[key] = JSON.stringify(object);
+    localStorage[key] = JSON.stringify(object);
 }
 
 storage.get = (key) => {
-    if(!sessionStorage[key]) {
+    if(!localStorage[key]) {
         return undefined;
     }
-    return JSON.parse(sessionStorage[key]);
+    return JSON.parse(localStorage[key]);
 }
 
 storage.remove = (key) => {
     if(localStorage[key]) {
-        sessionStorage.removeItem(key);
+        localStorage.removeItem(key);
     }
 }
 

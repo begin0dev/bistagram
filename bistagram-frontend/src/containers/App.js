@@ -5,14 +5,14 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './Login';
 import Posts from './Posts';
 import Explore from './Explore';
+import NotFound from './NotFound';
 
 import { storage } from '../helpers';
 
+import * as auth from '../actions/auth';
+
 import '../css/basic.css';
-import '../css/login.css';
-import '../css/posts.css';
 import '../css/header.css';
-import '../css/postview.css';
 import '../css/followUl.css';
 
 class App extends React.Component{
@@ -26,7 +26,7 @@ class App extends React.Component{
 			});
 		}
 	}
-	componentDidMount() {
+	async componentDidMount() {
     let session = storage.get('session');
     if (session) {
       if (session.expired) {
@@ -42,11 +42,14 @@ class App extends React.Component{
 					);
           return;
       }
-      if(!session.logged && (window.location.pathname === "/posts" || window.location.pathname === "/explore")){
-         document.location = "/"
+      if(!session.logged && (window.location.pathname === "/explore")){
+				document.location = "/"
       }
     }
-		if(!this.props.auth.session){
+
+		await this.props.checkSession();
+
+		if(!this.props.auth.session.logged){
 			storage.set('session', {
 				 ...session,
 				 logged: false
@@ -60,7 +63,14 @@ class App extends React.Component{
 				});
 				document.location.reload();
 			}
-		}
+		}else {
+      if (!session.logged) {
+        // got a new session
+        storage.set('session', {
+            ...this.props.auth.session
+        });
+      }
+    }
   }
 	render(){
 		let session = storage.get('session');
@@ -69,6 +79,7 @@ class App extends React.Component{
 				<Switch>
 					<Route exact path="/" component={session.logged?Posts:Login}/>
 					<Route path="/explore" component={Explore}/>
+					<Route component={NotFound}/>
 				</Switch>
 			</Router>
 		);
@@ -79,7 +90,7 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 const mapDispatchToProps = (dispatch) => ({
-
+	checkSession: () => dispatch(auth.checkSession())
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

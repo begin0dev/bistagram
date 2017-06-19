@@ -9,6 +9,9 @@ import Header from '../components/Header/Header';
 import FollowList from '../components/Follow/FollowList';
 import PostView from '../components/Post/PostView';
 
+import '../css/posts.css';
+import '../css/postview.css';
+
 class Post extends Component{
 	constructor(props) {
 		super(props);
@@ -33,15 +36,14 @@ class Post extends Component{
 	}
 
 	handleFollowClick=(num)=>{
-		let session = storage.get('session');
 		const {follow, setClickIndex, following, unfollow } =this.props;
 
 		setClickIndex(num);
 		if(follow.user[num].follow === 0){
-			following({username:session.user.username, follower:follow.user[num].username});
+			following({follower:follow.user[num].username});
 		}
 		else{
-			unfollow({username:session.user.username, follower:follow.user[num].username});
+			unfollow({follower:follow.user[num].username});
 		}
 	}
 

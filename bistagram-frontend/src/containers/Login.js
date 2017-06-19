@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import * as auth from '../actions/auth';
 
+import '../css/login.css';
+
 import Signin from '../components/Account/Signin';
 import Signup from '../components/Account/Signup';
 
@@ -22,7 +24,9 @@ class Login extends Component {
       );
     }
     imgAnimation =(e)=> {
-      this.setState({imgNum: this.state.imgNum===4?0:this.state.imgNum+1});
+      if(this.refs.imgdiv){
+        this.setState({imgNum: this.state.imgNum===4?0:this.state.imgNum+1});
+      }
     }
     handlePanelChange =(e)=> {
       this.props.authDataReset();
@@ -37,7 +41,7 @@ class Login extends Component {
           <main className="login_main" role="main">
             <article className="center_wrap">
               <div className="imgtotal_div">
-                <div className="imgmargin_div">
+                <div className="imgmargin_div" ref="imgdiv">
                   <img className={'screenimg_style '+(this.state.imgNum===0?'screanimg-enter':'')+(this.state.imgNum===1?'screanimg-leave':'')} src={imgPath[0]} alt="screan_img"/>
                   <img className={'screenimg_style '+(this.state.imgNum===1?'screanimg-enter':'')+(this.state.imgNum===2?'screanimg-leave':'')} src={imgPath[1]} alt="screan_img"/>
                   <img className={'screenimg_style '+(this.state.imgNum===2?'screanimg-enter':'')+(this.state.imgNum===3?'screanimg-leave':'')} src={imgPath[2]} alt="screan_img"/>
@@ -54,7 +58,6 @@ class Login extends Component {
                 checkNickName={this.props.checkNickName}
                 changeCheck={this.props.changeCheck}
                 signUp={this.props.signUp}
-                signIn={this.props.signIn}
                 setSubmitStatus={this.props.setSubmitStatus}
                 setErrorMessage={this.props.setErrorMessage}
                 /> :

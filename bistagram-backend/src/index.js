@@ -2,15 +2,18 @@ import dotenv from 'dotenv';
 dotenv.config(); // LOAD CONFIG
 
 import http from 'http';
-
 import express from 'express';
 import session from 'express-session';
+const MySQLStore = require('express-mysql-session')(session);
+
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 
-import api from './routes';
+import passport from 'passport';
+require('./passport');
 
 import path from 'path';
+import api from './routes';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,10 +28,20 @@ app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        maxAge: 14 * 24 * 60 * 60 * 1000
-    }
+    store: new MySQLStore({
+      host     : 'localhost',
+      user     : 'root',
+      password : '',
+      port     : 3306,
+      database : 'bistagram',
+      checkExpirationInterval: 900000,
+      expiration: 86400000
+    })
 })); // setup session
+
+// using passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // SETUP ROUTER
 app.use('/api', api);

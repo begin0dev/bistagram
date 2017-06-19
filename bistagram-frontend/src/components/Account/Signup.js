@@ -64,7 +64,7 @@ class Register extends Component {
   }
 
   async handleSubmit(){
-    const {auth, signUp, signIn, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
+    const {auth, signUp, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
     let session = storage.get('session');
 
     setSubmitStatus({name: 'signup', value: true});
@@ -107,7 +107,7 @@ class Register extends Component {
     }
     else{
       await signUp(auth.register);
-      storage.set('session', {...session, user: auth.session.user, logged: true});
+      storage.set('session', this.props.auth.session);
     }
     setSubmitStatus({name: 'signup', value: false});
   }

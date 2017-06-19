@@ -11,20 +11,19 @@ class Explore extends Component {
   componentDidMount() {
     let session = storage.get('session');
     if (session.logged){
-      this.props.recommendFollow({id:session.user.id, start:0, count:10})
+      this.props.recommendFollow({start:0, count:10})
     }
   }
 
   handleFollowClick=(num)=>{
-    let session = storage.get('session');
     const {follow, setClickIndex, following, unfollow } =this.props;
 
     setClickIndex(num);
     if(follow.user[num].follow === 0){
-      following({id:session.user.id, followid:follow.user[num].id});
+      following({followid:follow.user[num].id});
     }
     else{
-      unfollow({id:session.user.id, followid:follow.user[num].id});
+      unfollow({followid:follow.user[num].id});
     }
   }
 
