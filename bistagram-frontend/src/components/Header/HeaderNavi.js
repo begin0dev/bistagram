@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const TopInfoPart = (props) => {
+const TopInfoPart = ({handleLogout}) => {
   return (
 		<div className="top_menuwrapper">
 			<div className="top_menu">
@@ -12,7 +12,7 @@ const TopInfoPart = (props) => {
 					<a className="clickscimg top_menuimgsize imgblock top_menuimg2">활동 피드</a>
 				</div>
 				<div className="top_items">
-					<a className="clickscimg top_menuimgsize imgblock top_menuimg3">프로필</a>
+					<a className="clickscimg top_menuimgsize imgblock top_menuimg3" onClick={handleLogout}>프로필</a>
 				</div>
 			</div>
 		</div>

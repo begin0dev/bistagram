@@ -5,7 +5,6 @@ import * as post from '../actions/post';
 import * as follow from '../actions/follow';
 import { storage } from '../helpers';
 
-
 import FollowList from '../components/Follow/FollowList';
 import PostView from '../components/Post/PostView';
 import Postmodal from '../components/Post/Postmodal';
@@ -106,7 +105,7 @@ class Post extends Component{
 						</div>
 					</section>
 
-					{post.status.modal&& <Postmodal handleModal={this.handleModal}/> }
+					{post.status.modal&& <Postmodal handleModal={this.handleModal}/>}
 
 				</main>
 		);

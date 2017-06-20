@@ -55,3 +55,10 @@ export const signIn = (params) => ({
     promise: service.signIn(params)
   }
 })
+
+export const logout = () => ({
+  type: AUTH.LOGOUT,
+  payload: {
+    promise: service.logout()
+  }
+})

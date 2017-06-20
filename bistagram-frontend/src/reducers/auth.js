@@ -77,6 +77,9 @@ const initialState ={
     },
     checkSession: {
         ...request
+    },
+    logout: {
+        ...request
     }
   },
   submitStatus: { ...submitStatus }
@@ -360,6 +363,38 @@ function auth(state=initialState, action) {
         }
       };
 
+    case AUTH.LOGOUT + "_PENDING":
+      return {
+        ...state,
+        requests: {
+            ...state.requests,
+            logout: { ...pending  }
+        }
+      }
+    case AUTH.LOGOUT + '_FULFILLED':
+      return {
+        ...state,
+        session: {
+          ...payload.data,
+          logged: payload?false:true
+        },
+        requests: {
+          ...state.requests,
+          logout: { fulfilled }
+        }
+      }
+    case AUTH.LOGOUT + '_REJECTED':
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          logged: true
+        },
+        requests: {
+          ...state.requests,
+          logout: { ...rejected, error: payload }
+        }
+      };
   default:
     return state;
   }

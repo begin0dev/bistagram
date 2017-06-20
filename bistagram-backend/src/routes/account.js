@@ -103,8 +103,9 @@ router.post('/signin', (req, res, next) => {
     })(req, res, next);
 });
 
-router.post('/logout', (req, res) => {
+router.delete('/logout', (req, res) => {
     req.logout();
+    req.session.destroy();
     res.json({success: true});
 });
 

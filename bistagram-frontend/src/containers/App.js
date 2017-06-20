@@ -29,7 +29,15 @@ class App extends React.Component{
 		this.state={
 			headDisplay:true
 		}
+		this.handleLogout=this.handleLogout.bind(this);
 	}
+
+	async handleLogout() {
+		const {logout} = this.props;
+		await logout().then(()=>document.location = "/login");
+		storage.set('session', { logged: false });
+	}
+
 	handleScroll = () => {
 		const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
 		const body = document.body;
@@ -111,7 +119,7 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{session.logged ?<Header headDisplay={this.state.headDisplay}/>:null}
+					{session.logged ?<Header headDisplay={this.state.headDisplay} handleLogout={this.handleLogout}/>:null}
 					<Switch>
 						<Route exact path="/" component={Posts}/>
 						<Route path="/login" component={Login}/>
@@ -129,7 +137,8 @@ const mapStateToProps = (state) => ({
 	post: state.post
 });
 const mapDispatchToProps = (dispatch) => ({
-	checkSession: () => dispatch(auth.checkSession())
+	checkSession: () => dispatch(auth.checkSession()),
+	logout: () => dispatch(auth.logout())
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)
