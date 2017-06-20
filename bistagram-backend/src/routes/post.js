@@ -7,36 +7,21 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-router.post('/SearchPosts', (req, res) => {
-  let username=req.user.username;
-  let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
-            "(select y.*, count(reply.atcnum) as repliescount from "+
-            "(select * from article where username in "+
-            "(select username from ("+
-            "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
-            "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
-            "union (select username from member where username=?))x) order by atcnum desc limit ?, ?"+
-            ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
-            ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
-  let params = [username, username, username, username, req.body.start, 10];
-  conn.query(sql, params, function(err, rows) {
-    if(err) {
-      return res.status(500).json({message: err.message});
-    }
-    else{
-      async.map(rows, selectUserInfo, function(err_map, result){
-        async.map(rows, selectAtcMedia, function(err_map, result){
-          async.map(rows, checkLike, function(err_map, result){
-            async.map(rows, selectReplyLimitFour, function(err_map, posts){
-
-              return res.json(posts);
-            })
-          })
-        })
-      })
-    }
-  });
-});
+const checkLike = function(username){
+  return function(row, callback){
+    let sql = "select username from atclike where atcnum=? and username=?";
+    let params = [row.atcnum, username];
+    conn.query(sql, params, function(err, boolean){
+      if(boolean.length === 0){
+        row.like=false;
+      }
+      else{
+        row.like=true;
+      }
+      callback(null, row);
+    })
+  }
+}
 
 function selectUserInfo(row, callback){
   let sql = "select name, nickname, profileimgname from member where username=?";
@@ -68,19 +53,36 @@ function selectReplyLimitFour(row, callback){
   })
 }
 
-function checkLike(row, callback){
-  let sql = "select username from atclike where atcnum=? and username=?";
-  let params = [row.atcnum, row.username];
-  conn.query(sql, params, function(err, boolean){
-    if(boolean.length === 0){
-      row.like=false;
+router.post('/SearchPosts', (req, res) => {
+  let username=req.user.username;
+  let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
+            "(select y.*, count(reply.atcnum) as repliescount from "+
+            "(select * from article where username in "+
+            "(select username from ("+
+            "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
+            "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
+            "union (select username from member where username=?))x) order by atcnum desc limit ?, ?"+
+            ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
+            ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
+  let params = [username, username, username, username, req.body.start, 10];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
     }
     else{
-      row.like=true;
+      async.map(rows, selectUserInfo, function(err_map, result){
+        async.map(rows, selectAtcMedia, function(err_map, result){
+          async.map(rows, checkLike(username), function(err_map, result){
+            async.map(rows, selectReplyLimitFour, function(err_map, posts){
+
+              return res.json(posts);
+            })
+          })
+        })
+      })
     }
-    callback(null, row);
-  })
-}
+  });
+});
 
 router.post('/likeAtc', (req, res) => {
   let username=req.user.username;

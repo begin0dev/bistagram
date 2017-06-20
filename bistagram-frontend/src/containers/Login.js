@@ -37,41 +37,39 @@ class Login extends Component {
     render() {
       const {auth} = this.props;
       return(
-        <section className="react-body">
-          <main className="login_main" role="main">
-            <article className="center_wrap">
-              <div className="imgtotal_div">
-                <div className="imgmargin_div" ref="imgdiv">
-                  <img className={'screenimg_style '+(this.state.imgNum===0?'screanimg-enter':'')+(this.state.imgNum===1?'screanimg-leave':'')} src={imgPath[0]} alt="screan_img"/>
-                  <img className={'screenimg_style '+(this.state.imgNum===1?'screanimg-enter':'')+(this.state.imgNum===2?'screanimg-leave':'')} src={imgPath[1]} alt="screan_img"/>
-                  <img className={'screenimg_style '+(this.state.imgNum===2?'screanimg-enter':'')+(this.state.imgNum===3?'screanimg-leave':'')} src={imgPath[2]} alt="screan_img"/>
-                  <img className={'screenimg_style '+(this.state.imgNum===3?'screanimg-enter':'')+(this.state.imgNum===4?'screanimg-leave':'')} src={imgPath[3]} alt="screan_img"/>
-                  <img className={'screenimg_style '+(this.state.imgNum===4?'screanimg-enter':'')+(this.state.imgNum===0?'screanimg-leave':'')} src={imgPath[4]} alt="screan_img"/>
-                </div>
+        <main className="login_main" role="main">
+          <article className="center_wrap">
+            <div className="imgtotal_div">
+              <div className="imgmargin_div" ref="imgdiv">
+                <img className={'screenimg_style '+(this.state.imgNum===0?'screanimg-enter':'')+(this.state.imgNum===1?'screanimg-leave':'')} src={imgPath[0]} alt="screan_img"/>
+                <img className={'screenimg_style '+(this.state.imgNum===1?'screanimg-enter':'')+(this.state.imgNum===2?'screanimg-leave':'')} src={imgPath[1]} alt="screan_img"/>
+                <img className={'screenimg_style '+(this.state.imgNum===2?'screanimg-enter':'')+(this.state.imgNum===3?'screanimg-leave':'')} src={imgPath[2]} alt="screan_img"/>
+                <img className={'screenimg_style '+(this.state.imgNum===3?'screanimg-enter':'')+(this.state.imgNum===4?'screanimg-leave':'')} src={imgPath[3]} alt="screan_img"/>
+                <img className={'screenimg_style '+(this.state.imgNum===4?'screanimg-enter':'')+(this.state.imgNum===0?'screanimg-leave':'')} src={imgPath[4]} alt="screan_img"/>
               </div>
-              {this.state.isRegi ?
-                <Signup
-                auth={auth}
-                panelChange={this.handlePanelChange}
-                changeUserData={this.props.changeUserData}
-                checkUserName={this.props.checkUserName}
-                checkNickName={this.props.checkNickName}
-                changeCheck={this.props.changeCheck}
-                signUp={this.props.signUp}
-                setSubmitStatus={this.props.setSubmitStatus}
-                setErrorMessage={this.props.setErrorMessage}
-                /> :
-                <Signin
-                auth={auth}
-                panelChange={this.handlePanelChange}
-                changeUserData={this.props.changeUserData}
-                signIn={this.props.signIn}
-                setSubmitStatus={this.props.setSubmitStatus}
-                setErrorMessage={this.props.setErrorMessage}
-                />}
-            </article>
-          </main>
-        </section>
+            </div>
+            {this.state.isRegi ?
+              <Signup
+              auth={auth}
+              panelChange={this.handlePanelChange}
+              changeUserData={this.props.changeUserData}
+              checkUserName={this.props.checkUserName}
+              checkNickName={this.props.checkNickName}
+              changeCheck={this.props.changeCheck}
+              signUp={this.props.signUp}
+              setSubmitStatus={this.props.setSubmitStatus}
+              setErrorMessage={this.props.setErrorMessage}
+              /> :
+              <Signin
+              auth={auth}
+              panelChange={this.handlePanelChange}
+              changeUserData={this.props.changeUserData}
+              signIn={this.props.signIn}
+              setSubmitStatus={this.props.setSubmitStatus}
+              setErrorMessage={this.props.setErrorMessage}
+              />}
+          </article>
+        </main>
       );
     }
 }

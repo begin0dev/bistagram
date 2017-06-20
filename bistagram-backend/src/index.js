@@ -24,19 +24,21 @@ app.use(bodyParser.json()); // parses json
 app.use('/', express.static(path.join(__dirname, '../../bistagram-frontend/public/')));
 app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 
+const options ={
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  port     : 3306,
+  database : 'bistagram',
+  checkExpirationInterval: 900000,
+  expiration: 86400000
+}
+
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
-    store: new MySQLStore({
-      host     : 'localhost',
-      user     : 'root',
-      password : '',
-      port     : 3306,
-      database : 'bistagram',
-      checkExpirationInterval: 900000,
-      expiration: 86400000
-    })
+    store: new MySQLStore(options)
 })); // setup session
 
 // using passport

@@ -65,7 +65,6 @@ class Register extends Component {
 
   async handleSubmit(){
     const {auth, signUp, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
-    
     setSubmitStatus({name: 'signup', value: true});
 
     let username_val=auth.register.username;
@@ -85,13 +84,14 @@ class Register extends Component {
     if(!username_val || !nickname_val || !password_val){
       setErrorMessage({name: "register", msg:"필수 항목입니다."});
     }
-    else if(regex.regnum.test(username_val)){
-      if(!regex.regphone.test(username_val)){
+    else if(!regex.regemail.test(username_val) && !regex.regphone.test(username_val)){
+      if(regex.regnum){
         setErrorMessage({name: "register", msg:"휴대폰 번호가 정확하지 않은 것 같습니다. 국가 번호를 포함하여 전체 전화번호를 입력해주세요."});
       }
+      else{
+        setErrorMessage({name: "register", msg:"올바른 이메일 주소를 입력하세요."});
+      }
     }
-    else if(!regex.regemail.test(username_val)){
-      setErrorMessage({name: "register", msg:"올바른 이메일 주소를 입력하세요."});    }
     else if(!auth.register.checked.username){
       setErrorMessage({name: "register", msg:`다른 계정에서 ${username_val} 주소를 사용하고 있습니다.`});
     }
@@ -105,8 +105,10 @@ class Register extends Component {
       setErrorMessage({name: "register", msg:"6자 이상의 비밀번호를 만드세요."});
     }
     else{
-      await signUp(auth.register);
-      storage.set('session', this.props.auth.session);
+      await signUp(auth.register).then(()=>storage.set('session', this.props.auth.session));
+      if(this.props.auth.session.logged){
+        document.location = "/"
+      }
     }
     setSubmitStatus({name: 'signup', value: false});
   }

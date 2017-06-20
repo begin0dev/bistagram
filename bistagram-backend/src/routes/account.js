@@ -76,11 +76,7 @@ router.post('/signup', (req, res) => {
         let user = {...req.body, state: 'all'}
         req.login(user, function(err){
           req.session.save(function(){
-            res.json({username: user.username,
-                      name: user.name,
-                      nickname: user.nickname,
-                      profileimgname: user.profileimgname,
-                      state: user.state});
+            res.send(req.session);
           })
         })
       }
@@ -100,11 +96,7 @@ router.post('/signin', (req, res, next) => {
                   if (err) {
                       return res.status(500).json({code: err.code, message: err.message});
                   }
-                  res.json({username: user.username,
-                            name: user.name,
-                            nickname: user.nickname,
-                            profileimgname: user.profileimgname,
-                            state: user.state});
+                  res.send(req.session);
               });
             }
         }

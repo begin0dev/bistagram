@@ -6,13 +6,13 @@ function changeTag(text){
   return text;
 }
 
-const Contentview = ({post, session, hanedleDeleteReply, handleGetReplies}) => {
+const Contentview = ({post, auth, hanedleDeleteReply, handleGetReplies}) => {
     return (
       <ul className="reply_ul_mgpd">
         <li className="reply_li">
             <a className="reply_li_id fontcolor_black">{post.userinfo.nickname}</a>
             <span>
-            <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
+              <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
             </span>
         </li>
         {post.repliescount > 4 && post.repliescount !== post.replies.length ?
@@ -23,7 +23,7 @@ const Contentview = ({post, session, hanedleDeleteReply, handleGetReplies}) => {
         {post.replies.map((contact, i) => {
           return(
             <li className="reply_li" key={"reply"+i}>
-              {contact.username === session.user.username &&
+              {contact.username === auth.userinfo.user.username &&
               <button className="reply_delbtn" title="댓글 삭제"
               onClick={(e) => hanedleDeleteReply(i)}>댓글 삭제</button>
               }

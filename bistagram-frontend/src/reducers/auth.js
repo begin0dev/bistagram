@@ -38,8 +38,7 @@ const login ={
   }
 }
 
-const session ={
-  sessionID: null,
+const userinfo ={
   user: {
     username: null,
     name: null,
@@ -50,8 +49,7 @@ const session ={
   followInfo: {
     followers: 0,
     following: 0
-  },
-  logged: false
+  }
 }
 
 const submitStatus = {
@@ -62,7 +60,8 @@ const submitStatus = {
 const initialState ={
   register: { ...register },
   login: { ...login },
-  session: { ...session },
+  userinfo: { ...userinfo },
+  session: { },
   requests: {
     checkUserName: {
         ...request
@@ -90,6 +89,7 @@ const rejected = {fetching: false, fetched: false}
 function auth(state=initialState, action) {
   const payload = action.payload
   switch (action.type) {
+
     case AUTH.CHECK_SESSION + "_PENDING":
         return {
             ...state,
@@ -98,7 +98,6 @@ function auth(state=initialState, action) {
                 checkSession: { ...pending }
             }
         }
-
     case AUTH.CHECK_SESSION + "_FULFILLED":
         return {
             ...state,
@@ -106,17 +105,18 @@ function auth(state=initialState, action) {
                 ...state.requests,
                 checkSession: { ...fulfilled }
             },
-            session: {
-                ...state.session,
-                sessionID: payload.data.sessionID,
-                user: payload.data.user === null ? {...session.user} : payload.data.user,
-                logged: (payload.data.user !== null && payload.data.user.username !== null)
+            userinfo: {
+                ...state.userinfo,
+                user: !payload.data.user ? {...userinfo.user} : payload.data.user,
+                followInfo: {
+                    ...payload.data.followInfo
+                }
             },
-            followInfo: {
-                ...payload.data.followInfo
+            session: {
+              ...state.session,
+              logged: !payload.data.user ? false : true
             }
         }
-
     case AUTH.CHECK_SESSION + "_REJECTED":
         return {
             ...state,
@@ -125,6 +125,7 @@ function auth(state=initialState, action) {
                 checkSession: { ...rejected, error: payload }
             }
         }
+
     case AUTH.CHANGE_USERDATA:
       return {
         ...state,
@@ -272,8 +273,7 @@ function auth(state=initialState, action) {
       return {
         ...state,
         session: {
-          ...state.session,
-          user: payload.data,
+          ...payload.data,
           logged: payload.data.msg?false:true
         },
         requests: {
@@ -319,8 +319,7 @@ function auth(state=initialState, action) {
       return {
         ...state,
         session: {
-          ...state.session,
-          user: payload.data,
+          ...payload.data,
           logged: payload.data.msg?false:true
         },
         login: {
@@ -340,7 +339,8 @@ function auth(state=initialState, action) {
       return {
         ...state,
         session: {
-          ...session
+          ...state.session,
+          logged: false
         },
         login: {
           ...state.login,

@@ -16,9 +16,10 @@ class Signin extends Component {
     const {auth, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
 
-    await signIn(auth.login);
-    storage.set('session', this.props.auth.session);
-    
+    await signIn(auth.login).then(()=>storage.set('session', this.props.auth.session));
+    if(this.props.auth.session.logged){
+      document.location = "/"
+    }
     setSubmitStatus({name: 'signin', value: false});
   }
 

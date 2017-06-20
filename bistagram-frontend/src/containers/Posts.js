@@ -14,6 +14,8 @@ import '../css/posts.css';
 import '../css/postview.css';
 import '../css/modalList.css';
 
+let top =	0;
+
 class Post extends Component{
 	constructor(props) {
 		super(props);
@@ -23,15 +25,15 @@ class Post extends Component{
 	componentDidMount() {
 		let session = storage.get('session');
 		if (session.logged) {
-			this.getPostData(session);
+			this.getPostData();
 		}
 	}
 
-	async getPostData (session){
+	async getPostData (){
 		const {searchPosts, recommendFollow} = this.props;
 		try {
-			await searchPosts({username:session.user.username, start:this.props.post.start});
-			await recommendFollow({username:session.user.username, start:0, count:3})
+			await searchPosts({start:this.props.post.start});
+			await recommendFollow({start:0, count:3})
 		}
 		catch(e) {
 		}
@@ -48,7 +50,7 @@ class Post extends Component{
 	}
 
 	handleFollowClick = (num) => {
-		const {follow, setFollowClickIndex, following, unfollow } = this.props;
+		const {follow, setFollowClickIndex, following, unfollow} = this.props;
 		setFollowClickIndex(num);
 		if(follow.user[num].follow === 0){
 			following({follower:follow.user[num].username});
@@ -57,9 +59,25 @@ class Post extends Component{
 		}
 	}
 
+	handleModal = (index) =>{
+		const {setModal} = this.props;
+		let doc = document.documentElement;
+		if(index !== -1){
+			top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+			document.body.style.position= 'fixed';
+			document.body.style.top= -top+'px';
+			document.body.style.width= '100%';
+		}
+		else{
+			document.body.style='';
+			window.scrollTo(0, top);
+		}
+		setModal({index: index})
+	}
+
 	render(){
-		const {post, follow, setPostIndex, insertReply, deleteReply, getAllReplies} = this.props;
-		let session = storage.get('session');
+		const {post, auth, follow, setPostIndex, insertReply, deleteReply, getAllReplies} = this.props;
+
 		return(
 				<main className="post_body">
 					<section className="post_wrapper">
@@ -72,25 +90,31 @@ class Post extends Component{
 						<div className="post_marginbt30px">
 							<PostView
 								post={post}
+								auth={auth}
 								handleLikeClick={this.handleLikeClick}
 								setPostIndex={setPostIndex}
 								insertReply={insertReply}
 								deleteReply={deleteReply}
 								getAllReplies={getAllReplies}
-								session={session}
+								handleModal={this.handleModal}
 							/>
+
 							<div className="scroll_lodingdiv">
 							{post.isMore && <div className="loding_div loding_lgimg"></div>}
 							</div>
+
 						</div>
 					</section>
-					<Postmodal />
+
+					{post.status.modal&& <Postmodal handleModal={this.handleModal}/> }
+
 				</main>
 		);
 	}
 };
 
 const mapStateToProps = (state) => ({
+	auth: state.auth,
   post: state.post,
 	follow: state.follow
 });
@@ -98,6 +122,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	searchPosts: (params) => dispatch(post.searchPosts(params)),
 	setPostIndex: (parmas) => dispatch(post.setPostIndex(parmas)),
+	setModal: (parmas) => dispatch(post.setModal(parmas)),
 	likeAtc: (params) => dispatch(post.likeAtc(params)),
 	notlikeAtc: (params) => dispatch(post.notlikeAtc(params)),
 	insertReply: (params) => dispatch(post.insertReply(params)),

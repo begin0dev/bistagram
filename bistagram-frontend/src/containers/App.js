@@ -23,8 +23,7 @@ class App extends React.Component{
 		let session = storage.get('session');
 		if (!session) {
 			storage.set('session', {
-					user: null,
-					logged: false
+				logged: false
 			});
 		}
 		this.state={
@@ -43,26 +42,28 @@ class App extends React.Component{
 			this.setState({
 				headDisplay: false
 			});
-		} else{
+		}else if(this.props.post.status.modal){
+			this.setState({
+				headDisplay: false
+			});
+		}else{
 			this.setState({
 				headDisplay: true
 			});
 		}
 		if (windowBottom >= docHeight) {
 
-		} else {
-				return;
 		}
 	}
+
 	async componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
     let session = storage.get('session');
     if (session) {
       if (session.expired) {
-          //toastr.error('Your session is expired');
           storage.set('session', {
-              ...session,
-              expired: false
+						...session,
+						expired: false
           });
 					setTimeout(
 							() => {
@@ -71,8 +72,8 @@ class App extends React.Component{
 					);
           return;
       }
-      if(!session.logged && (window.location.pathname === "/explore")){
-				document.location = "/"
+      if(!session.logged && (window.location.pathname === "/" || window.location.pathname === "/explore")){
+				document.location = "/login"
       }
     }
 
@@ -83,21 +84,22 @@ class App extends React.Component{
 				 ...session,
 				 logged: false
 			});
-			if (session.logged) {
+			if(session.logged){
 				// session is expired
-				session = storage.get('session');
 				storage.set('session', {
 					...session,
 					expired: true
 				});
 				document.location.reload();
 			}
-		}else {
+		}else { //login
       if (!session.logged) {
         // got a new session
         storage.set('session', {
-            ...this.props.auth.session
+            ...this.props.auth.session,
+						logged: true
         });
+				document.location.reload();
       }
     }
   }
@@ -109,9 +111,10 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{storage.get('session').logged ?<Header headDisplay={this.state.headDisplay}/>:null}
+					{session.logged ?<Header headDisplay={this.state.headDisplay}/>:null}
 					<Switch>
-						<Route exact path="/" component={session.logged?Posts:Login}/>
+						<Route exact path="/" component={Posts}/>
+						<Route path="/login" component={Login}/>
 						<Route path="/explore" component={Explore}/>
 						<Route component={NotFound}/>
 					</Switch>
@@ -122,7 +125,8 @@ class App extends React.Component{
 };
 
 const mapStateToProps = (state) => ({
-  auth: state.auth
+  auth: state.auth,
+	post: state.post
 });
 const mapDispatchToProps = (dispatch) => ({
 	checkSession: () => dispatch(auth.checkSession())

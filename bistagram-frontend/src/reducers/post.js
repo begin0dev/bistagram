@@ -55,6 +55,15 @@ function post(state=initialState, action) {
         replyindex: payload.replyindex,
       }
 
+    case POST.SET_MODAL:
+      return{
+        ...state,
+        index: payload.index,
+        status: {
+          modal: !state.status.modal
+        }
+      }
+
     case POST.SEARCH_POSTS + "_PENDING":
       return{
         ...state,
@@ -104,7 +113,7 @@ function post(state=initialState, action) {
         posts: [
           ...state.posts.slice(0, state.index),
           {...state.posts[state.index],
-              atclikecount: state.posts[state.index].atclikecount + payload?1:0,
+              atclikecount: state.posts[state.index].atclikecount + (payload?1:0),
               like: payload?true:false
           },
           ...state.posts.slice(state.index+1, state.posts.length)
@@ -151,7 +160,7 @@ function post(state=initialState, action) {
         posts: [
           ...state.posts.slice(0, state.index),
           {...state.posts[state.index],
-              atclikecount: state.posts[state.index].atclikecount - payload?1:0,
+              atclikecount: state.posts[state.index].atclikecount - (payload?1:0),
               like: payload?false:true
           },
           ...state.posts.slice(state.index+1, state.posts.length)

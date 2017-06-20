@@ -13,27 +13,33 @@ class Footer extends Component {
         reply:''
       }
     }
+
     handleReplyheight = () =>{
 
     }
+
     handleChangeText = (e) =>{
       this.setState({
         reply: e.target.value
       });
     }
+
     handleFocus = () =>{
       this.contenttextarea.focus();
     }
+
     handleGetReplies = () =>{
       const { post, getAllReplies, setPostIndex, index} = this.props;
       setPostIndex({index: index, replyindex: -1});
       getAllReplies({atcnum:post.atcnum, count:post.repliescount - post.replies.length});
     }
+
     hanedleDeleteReply = (replyindex) => {
       const { post, deleteReply, setPostIndex, index} = this.props;
       setPostIndex({index: index, replyindex: replyindex});
       deleteReply({replynum: post.replies[replyindex].replynum});
     }
+
     handleReplySubmit = (e) =>{
       const { post, insertReply, setPostIndex, index } = this.props;
       if(this.state.reply.length===0){
@@ -47,13 +53,15 @@ class Footer extends Component {
         });
       }
     }
+
     handleKeyPress = (e) => {
       if(e.charCode ===13 ){
         e.preventDefault();
       }
     }
+
     render() {
-      const { post, likeload, replyload, index, handleLikeClick, session } = this.props;
+      const { post, auth, likeload, replyload, index, handleLikeClick, handleModal } = this.props;
         return(
           <div className="replybody_div">
             <section className={`like_img_section ${post.media.length > 1 && "like_imgs_section"}`} >
@@ -78,7 +86,7 @@ class Footer extends Component {
 
             <Contentview
             post={post}
-            session={session}
+            auth={auth}
             hanedleDeleteReply={this.hanedleDeleteReply}
             handleGetReplies={this.handleGetReplies}
             />
@@ -98,7 +106,8 @@ class Footer extends Component {
                   disabled={`${replyload?true:''}`}>
                 </textarea>
               </form>
-              <button className="imgs more_btn more_btn_img more_btn_display">옵션 더 보기</button>
+              <button className="imgs more_btn more_btn_img more_btn_display"
+              onClick={(e)=>handleModal(index)}>옵션 더 보기</button>
             </section>
     			</div>
         );
