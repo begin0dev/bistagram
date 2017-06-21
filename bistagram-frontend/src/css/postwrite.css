@@ -22,12 +22,14 @@ text-align:right;
 margin-left: 5px;
 }
 .headbtn_img{
-background-position: -54px -280px;
-height: 17px;
-width: 23px;
+background-image: url("../img/addimg.png");
+background-repeat: no-repeat;
+background-position: 0px 0px;
+height: 23px;
+width: 26px;
 position: absolute;
-left: 9px;
-top: 7px;
+left: 8px;
+top: 4px;
 }
 .writebody_div{
 border-top: 1px solid #efefef;
@@ -42,14 +44,14 @@ min-height: 150px;
 .media_view{
 background-color: #fff;
 overflow: hidden;
-height: 110px;
+height: 94px;
 }
 .media_wrapper{
-height: 100px;
+height: 84px;
 margin: 5px;
 }
 .writebody_media{
-height: 100px;
+height: 84px;
 flex-direction: row;
 align-items: flex-start;
 overflow-x: hidden;
@@ -63,8 +65,8 @@ user-select: none;
 .draggable_img{
 box-sizing: border-box;
 cursor: pointer;
-width:100px;
-height:100px;
+height:84px;
+width:84px;
 margin-right: 5px;
 }
 .mask{
@@ -72,8 +74,8 @@ box-sizing: border-box;
 background-color: rgba(0,0,0,0.7);
 position: absolute;
 display: none;
-width:100px;
-height:100px;
+height:84px;
+width:84px;
 left: 0px;
 top: 0px;
 }
@@ -111,8 +113,8 @@ background-size: 20px;
 border: 2px dashed #dddfe2;
 box-sizing: border-box;
 border-radius: 2px;
-height:100px;
-width:100px;
+height:84px;
+width:84px;
 }
 .draggable_img:hover .mask, .draggable_img:hover .draggable_delbtn, .draggable_img:hover .draggable_playbtn{
 display: block;

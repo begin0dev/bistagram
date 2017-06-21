@@ -137,3 +137,9 @@ top: 0;
 @keyframes spinner-spin8{0%{-webkit-transform:rotate(180deg);transform:rotate(180deg)}to{-webkit-transform:rotate(540deg);transform:rotate(540deg)}}
 @-webkit-keyframes spinner-spin12{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
 @keyframes spinner-spin12{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+@media screen and (max-width: 450px) {
+  .border_gray{
+  border: 0;
+  background-color: transparent;
+  }
+}

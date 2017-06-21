@@ -35,7 +35,7 @@ class App extends React.Component{
 	async handleLogout() {
 		const {logout} = this.props;
 		await logout().then(()=>document.location = "/login");
-		storage.set('session', { logged: false });
+		storage.set('session', { logged: false, expired: true });
 	}
 
 	handleScroll = () => {
@@ -65,17 +65,21 @@ class App extends React.Component{
 	}
 
 	async componentDidMount() {
+
 		window.addEventListener("scroll", this.handleScroll);
+
     let session = storage.get('session');
+
     if (session) {
       if (session.expired) {
           storage.set('session', {
 						...session,
+						logged: false,
 						expired: false
           });
 					setTimeout(
 							() => {
-									document.location = '/'
+									document.location = '/login'
 							}, 1000
 					);
           return;
@@ -94,11 +98,12 @@ class App extends React.Component{
 			});
 			if(session.logged){
 				// session is expired
+				session = storage.get('session');
 				storage.set('session', {
 					...session,
 					expired: true
 				});
-				document.location.reload();
+				document.location = "/login"
 			}
 		}else { //login
       if (!session.logged) {
@@ -107,7 +112,6 @@ class App extends React.Component{
             ...this.props.auth.session,
 						logged: true
         });
-				document.location.reload();
       }
     }
   }

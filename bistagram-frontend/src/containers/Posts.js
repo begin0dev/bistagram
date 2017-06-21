@@ -6,11 +6,13 @@ import * as follow from '../actions/follow';
 import { storage } from '../helpers';
 
 import FollowList from '../components/Follow/FollowList';
+import Postwrite from '../components/Post/Postwrite';
 import PostView from '../components/Post/PostView';
 import Postmodal from '../components/Post/Postmodal';
 
 import '../css/posts.css';
 import '../css/postview.css';
+import '../css/postwrite.css';
 import '../css/modalList.css';
 
 let top =	0;
@@ -80,6 +82,8 @@ class Post extends Component{
 		return(
 				<main className="post_body">
 					<section className="post_wrapper">
+						<Postwrite />
+
 						<FollowList
 						follow={follow}
 						handleFollowClick={this.handleFollowClick}

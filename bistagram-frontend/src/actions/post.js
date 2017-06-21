@@ -47,3 +47,6 @@ export const getAllReplies = (params) => ({
     promise: service.getAllReplies(params)
   }
 })
+
+export const setPostContent = createAction(POST.SET_POST_CONTENT);
+export const setPostMedia = createAction(POST.SET_POST_MEDIA);
