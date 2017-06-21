@@ -7,51 +7,58 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-const checkLike = function(username){
-  return function(row, callback){
-    let sql = "select username from atclike where atcnum=? and username=?";
-    let params = [row.atcnum, username];
-    conn.query(sql, params, function(err, boolean){
-      if(boolean.length === 0){
-        row.like=false;
+const getPostData = function(username){
+  return function(item, callback){
+    async.waterfall([
+      function(callback){
+        let sql = "select username from atclike where atcnum=? and username=?";
+        let params = [item.atcnum, username];
+        conn.query(sql, params, function(err, boolean){
+          if(boolean.length === 0){
+            item.like=false;
+          }
+          else{
+            item.like=true;
+          }
+          callback(null, item);
+        })
+      },
+      function(arg1, callback){
+        let sql = "select name, nickname, profileimgname from member where username=?";
+        let params = [item.username];
+        conn.query(sql, params, function(err, rows){
+          let userinfo=JSON.stringify(rows[0]);
+          item.userinfo=JSON.parse(userinfo);
+          callback(null, item);
+        })
+      },
+      function(arg1, callback){
+        let sql = "select medianum, medianame, mediatype from media where atcnum=?";
+        let params = [item.atcnum];
+        conn.query(sql, params, function(err, rows){
+          let media=JSON.stringify(rows);
+          item.media=JSON.parse(media);
+          callback(null, item);
+        })
+      },
+      function(arg1, callback){
+        let sql = "select * from "+
+                  "(select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? "+
+                  "order by replynum desc limit ?)"+
+                  "as a order by replynum asc";
+        let params = [item.atcnum, 4];
+        conn.query(sql, params, function(err, rows){
+          let replies=JSON.stringify(rows);
+          item.replies=JSON.parse(replies);
+          callback(null, item);
+        })
       }
-      else{
-        row.like=true;
-      }
-      callback(null, row);
-    })
+    ], function (err, result) {
+      callback(err, result);
+    });
   }
 }
 
-function selectUserInfo(row, callback){
-  let sql = "select name, nickname, profileimgname from member where username=?";
-  let params = [row.username];
-  conn.query(sql, params, function(err, userinfo){
-    row.userinfo=userinfo[0];
-    callback(null, row);
-  })
-}
-
-function selectAtcMedia(row, callback){
-  let sql = "select medianum, medianame, mediatype from media where atcnum=?";
-  let params = [row.atcnum];
-  conn.query(sql, params, function(err, media){
-    row.media=media;
-    callback(null, row);
-  })
-}
-
-function selectReplyLimitFour(row, callback){
-  let sql = "select * from "+
-            "(select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? "+
-            "order by replynum desc limit ?)"+
-            "as a order by replynum asc";
-  let params = [row.atcnum, 4];
-  conn.query(sql, params, function(err, replies){
-    row.replies=replies;
-    callback(null, row);
-  })
-}
 
 router.post('/SearchPosts', (req, res) => {
   let username=req.user.username;
@@ -70,15 +77,13 @@ router.post('/SearchPosts', (req, res) => {
       return res.status(500).json({message: err.message});
     }
     else{
-      async.map(rows, selectUserInfo, function(err_map, result){
-        async.map(rows, selectAtcMedia, function(err_map, result){
-          async.map(rows, checkLike(username), function(err_map, result){
-            async.map(rows, selectReplyLimitFour, function(err_map, posts){
-
-              return res.json(posts);
-            })
-          })
-        })
+      async.map(rows, getPostData(username), function(err, posts){
+        if(err){
+          return res.status(500).json({message: err.message});
+        }
+        else{
+          return res.json(posts);
+        }
       })
     }
   });

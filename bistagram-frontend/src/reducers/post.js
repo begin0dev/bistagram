@@ -5,16 +5,7 @@ const request = {
     fetched: false,
     error: null
 }
-
-const postfrm = {
-  content: '',
-  media: []
-}
-
 const initialState = {
-  postfrm:{
-    ...postfrm
-  },
   posts: [],
   start: 0,
   isMore: true,

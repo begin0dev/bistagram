@@ -80,7 +80,7 @@ left: 0px;
 top: 0px;
 }
 .draggable_delbtn{
-background-position: -177px -115px;
+background-position: -277px -103px;
 background-color: transparent;
 position: absolute;
 border: 0 none;
@@ -93,16 +93,16 @@ top: 5px;
 z-index: 1;
 }
 .draggable_playbtn{
-background-position: -355px -158px;
+background-position: -333px -255px;
 background-color: transparent;
 position: absolute;
 border: 0 none;
 display: none;
 padding: 0;
-height: 20px;
-width: 20px;
-left: 40px;
-top: 40px;
+height: 16px;
+width: 16px;
+left: 35px;
+top: 35px;
 z-index: 3;
 }
 .mediaadd_btn{

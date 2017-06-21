@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/check', async (req, res) => {
-  console.log(req.user)
     let user = null;
     if (req.user) {
         const { username, nickname, state} = req.user;

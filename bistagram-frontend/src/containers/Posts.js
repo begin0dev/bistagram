@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as post from '../actions/post';
+import * as postfrm from '../actions/postfrm';
 import * as follow from '../actions/follow';
+
 import { storage } from '../helpers';
 
 import FollowList from '../components/Follow/FollowList';
@@ -77,20 +79,29 @@ class Post extends Component{
 	}
 
 	render(){
-		const {post, auth, follow, setPostIndex, insertReply, deleteReply, getAllReplies} = this.props;
+		const {post, auth, follow, postfrm, setPostIndex,
+			insertReply, deleteReply, getAllReplies, setPostMedia,
+			setPostMediaReset, moveMedia} = this.props;
 
 		return(
 				<main className="post_body">
 					<section className="post_wrapper">
-						<Postwrite />
+
+						<Postwrite
+							post={postfrm.post}
+							setPostMediaReset={setPostMediaReset}
+							setPostMedia={setPostMedia}
+							moveMedia={moveMedia}
+						/>
 
 						<FollowList
-						follow={follow}
-						handleFollowClick={this.handleFollowClick}
-						page='mainpost'
+							follow={follow}
+							handleFollowClick={this.handleFollowClick}
+							page='mainpost'
 						/>
 
 						<div className="post_marginbt30px">
+
 							<PostView
 								post={post}
 								auth={auth}
@@ -119,6 +130,7 @@ class Post extends Component{
 const mapStateToProps = (state) => ({
 	auth: state.auth,
   post: state.post,
+	postfrm: state.postfrm,
 	follow: state.follow
 });
 
@@ -131,6 +143,11 @@ const mapDispatchToProps = (dispatch) => ({
 	insertReply: (params) => dispatch(post.insertReply(params)),
 	deleteReply: (replynum) => dispatch(post.deleteReply(replynum)),
 	getAllReplies: (params) => dispatch(post.getAllReplies(params)),
+
+	setPostContent: (value) => dispatch(postfrm.setPostContent(value)),
+	setPostMediaReset: () => dispatch(postfrm.setPostMediaReset()),
+	setPostMedia: (params) => dispatch(postfrm.setPostMedia(params)),
+	moveMedia: (params) => dispatch(postfrm.moveMedia(params)),
 
 	recommendFollow: (params) => dispatch(follow.recommendFollow(params)),
 	setFollowClickIndex: (index) => dispatch(follow.setFollowClickIndex(index)),
