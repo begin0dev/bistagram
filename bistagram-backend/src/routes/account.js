@@ -7,10 +7,6 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-router.get('/', (req, res) => {
-    res.json({sessionID: req.sessionID, session: req.session});
-});
-
 router.get('/check', async (req, res) => {
     let user = null;
     if (req.user) {

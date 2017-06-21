@@ -8,7 +8,6 @@ import Login from './Login';
 import Posts from './Posts';
 import Explore from './Explore';
 import NotFound from './NotFound';
-import Container from '../components/test/Container';
 
 
 import { storage } from '../helpers';
@@ -130,7 +129,6 @@ class App extends React.Component{
 						<Route exact path="/" component={Posts}/>
 						<Route path="/login" component={Login}/>
 						<Route path="/explore" component={Explore}/>
-						<Route path="/Container" component={Container}/>
 						<Route component={NotFound}/>
 					</Switch>
 				</section>

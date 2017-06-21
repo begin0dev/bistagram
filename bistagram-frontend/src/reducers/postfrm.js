@@ -10,7 +10,8 @@ const post = {
 const initialState = {
   post:{
     ...post
-  }
+  },
+  draging: false
 }
 
 function postfrm(state=initialState, action) {
@@ -72,7 +73,11 @@ function postfrm(state=initialState, action) {
           }
         }
       })
-
+    case POSTFRM.TOGGLE_DRAGGING:
+      return {
+        ...state,
+        draging : payload
+      }
     default:
       return state;
   }

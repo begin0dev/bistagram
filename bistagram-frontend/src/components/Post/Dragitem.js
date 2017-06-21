@@ -73,9 +73,15 @@ class Dragitem extends Component {
       const { media, media_url, connectDragSource, connectDropTarget} = this.props;
       return connectDragSource(connectDropTarget(
         <div className="draggable_img">
+          {media.type.match("image")?
             <img src={media_url} className="img_100" alt=""></img>:
+            <video src={media_url} className="img_100" alt=""></video>
+          }
           <div className="mask"></div>
           <button type="button" className="imgs draggable_delbtn"></button>
+          {media.type.match("video")&&
+          <button type="button" className="imgs draggable_playbtn"></button>
+          }
         </div>
       ));
     }
