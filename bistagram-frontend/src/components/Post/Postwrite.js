@@ -8,7 +8,6 @@ import Dragitem from './Dragitem';
 
 @DragDropContext(HTML5Backend)
 class Postwrite extends Component {
-
     handleChangeContent = (e) =>{
       const {setPostContent} = this.props;
       setPostContent({value: e.target.value});
@@ -25,7 +24,7 @@ class Postwrite extends Component {
     handleFileChange = (e) =>{
       e.preventDefault();
       const {setPostMediaReset} = this.props;
-      setPostMediaReset();
+
       let files = e.target.files;
       for(let i=0; i<files.length; i++){
         this.handleMedieRender(files[i]);

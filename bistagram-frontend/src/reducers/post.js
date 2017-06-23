@@ -38,7 +38,7 @@ const initialState = {
       ...request
     },
     uploadPost: {
-
+      ...request
     }
   }
 }
@@ -357,12 +357,11 @@ function post(state=initialState, action) {
         }
       }
     case POST.UPLOAD_POST + '_FULFILLED':
-      console.log(payload)
       return {
         ...state,
         posts:[
-          ...state.posts,
-          ...payload.data
+          ...payload.data,
+          ...state.posts          
         ],
         status:{
           ...state.status,

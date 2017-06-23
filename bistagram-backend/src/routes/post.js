@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 import mysql from 'mysql';
 import async from 'async';
 import dbconfig from '../dbinfo/database';
@@ -182,6 +183,152 @@ router.post('/getAllReplies', (req, res) => {
     }
   });
 });
+
+
+const DBpool  = mysql.createPool({
+  connectionLimit : 10,
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  port     : 3306,
+  database : 'bistagram'
+});
+
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'upload/')
+  },
+  filename: function (req, file, cb) {
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+
+    cb(null, req.user.username+Date.now()+'.'+extension)
+  }
+})
+
+let upload = multer({ storage: storage }).any();
+
+
+const getHashTag = params =>{
+  let tagString=params.content;
+  let atcnum=params.atcnum;
+  let tagListArray = [];
+  let regexp = new RegExp('#([^\\s\@\$\&\8]*)', 'g');
+  let tmplist = tagString.match(regexp);
+  for (let w in tmplist) {
+      let hashSub = tmplist[ w ].split('#');
+      for (let x in hashSub) {
+          if (hashSub[x] != "")
+          {
+              if (hashSub[x].substr(hashSub[x].length - 1) == ":")
+              {
+                  hashSub[x] = hashSub[x].slice(0, -1);
+              }
+              if (hashSub[x] != "") {
+                  tagListArray.push([atcnum, hashSub[x]]);
+              }
+          }
+      }
+  }
+  return tagListArray;
+}
+
+
+router.post('/uploadPost', function (req, res) {
+  upload(req, res, function(err){
+    let username = req.user.username;
+    let atcnum = -1;
+    DBpool.getConnection((err, con) => {
+        if (err) {
+          callback(error => {
+              throw new Error('에러 발생')
+          });
+        }
+        con.beginTransaction(err => {
+            if (err) {
+                con.release();
+                console.log(err)
+            }
+            con.query('insert into article(username, content) values(?, ?)',
+            [username, req.body.content.replace(/\r\n/g, "<br />")], (err, data) => {
+                if(err) {
+                    return con.rollback(() => {
+                        con.release();
+                        console.log(err)
+                    });
+                }
+
+                atcnum=data.insertId;
+                let insertfiles = [];
+                if(req.files.length>0){
+                  req.files.forEach(function(md){
+                    insertfiles=[...insertfiles, [atcnum, md.filename, md.mimetype]]
+                  })
+                  let mediasql='insert into media(atcnum, medianame, mediatype) values ?';
+                  con.query(mediasql, [insertfiles], (err, data) => {
+                      if(err) {
+                          return con.rollback(() => {
+                              con.release();
+                              console.log(err)
+                          });
+                      }
+                      insertfiles=[];
+                      req.files.forEach(function(md, i){
+                        insertfiles=[...insertfiles, {medianame:md.filename, medianum:(data.insertId+i), mediatype: md.mimetype}];
+                      })
+                  });
+                }
+
+                let hashtags=getHashTag({atcnum:atcnum, content:req.body.content});
+                if(hashtags.length>0){
+                  let hashtagsql='insert into hashtag(atcnum, hashtag) values ?';
+                  con.query(hashtagsql, [hashtags], (err, data) => {
+                      if(err) {
+                          return con.rollback(() => {
+                              con.release();
+                              console.log(err)
+                          });
+                      }
+                  });
+                }
+
+                con.commit((err) => {
+                  if (err) {
+                      return con.rollback(() => {
+                          con.release();
+                          console.log(err)
+                      });
+                  }
+                  con.release();
+
+
+                  let sql = "select article.*, 0 as atclikecount, 0 as repliescount from article where atcnum = ?";
+                  let params = [atcnum];
+                  conn.query(sql, params, function(err, rows) {
+                    if(err) {
+                      return res.status(500).json({message: err.message});
+                    }
+                    else{
+                      async.map(rows, getPostData(username), function(err, posts){
+                        if(err){
+                          return res.status(500).json({message: err.message});
+                        }
+                        else{
+                          return res.json(posts);
+                        }
+                      })
+                    }
+                  });
+                });
+            });
+        });
+    });
+  })
+});
+
+
+
+
 
 
 
