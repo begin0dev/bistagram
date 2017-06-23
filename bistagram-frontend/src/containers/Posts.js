@@ -17,7 +17,7 @@ import '../css/postview.css';
 import '../css/postwrite.css';
 import '../css/modalList.css';
 
-let top =	0;
+let position =	0;
 
 class Post extends Component{
 	constructor(props) {
@@ -25,21 +25,37 @@ class Post extends Component{
 		this.getPostData=this.getPostData.bind(this);
 	}
 
+	handleScroll = () => {
+		const { post, searchPosts } = this.props;
+		const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+		const body = document.body;
+		const html = document.documentElement;
+		const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+		const windowBottom = windowHeight + window.pageYOffset;
+
+		if (windowBottom >= docHeight) {
+			if(post.isMore && !post.status.post){
+				searchPosts({start:post.start});
+			}
+		}
+	}
+
 	componentDidMount() {
+		window.addEventListener("scroll", this.handleScroll);
 		let session = storage.get('session');
 		if (session.logged) {
 			this.getPostData();
 		}
 	}
 
+	componentWillUnmount() {
+		window.removeEventListener("scroll", this.handleScroll);
+	}
+
 	async getPostData (){
 		const {searchPosts, recommendFollow} = this.props;
-		try {
-			await searchPosts({start:this.props.post.start});
-			await recommendFollow({start:0, count:3})
-		}
-		catch(e) {
-		}
+		await recommendFollow({start:0, count:3})
+		await searchPosts({start:this.props.post.start});
 	}
 
 	handleLikeClick = (num) => {
@@ -63,25 +79,34 @@ class Post extends Component{
 	}
 
 	handleModal = (index) =>{
-		const {setModal} = this.props;
+		const {post, auth, setModal} = this.props;
 		let doc = document.documentElement;
 		if(index !== -1){
-			top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+			position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
 			document.body.style.position= 'fixed';
-			document.body.style.top= -top+'px';
+			document.body.style.top= -position+'px';
 			document.body.style.width= '100%';
 		}
 		else{
 			document.body.style='';
-			window.scrollTo(0, top);
+			window.scrollTo(0, position);
 		}
-		setModal({index: index})
+		let result=false;
+		if(index !== -1){
+			result=post.posts[index].username===auth.userinfo.user.username?true:false
+		}
+		setModal({index: index, mine: result})
+	}
+
+	handleDeletePost = async() =>{
+		const {post, deletePost} = this.props;
+		await deletePost({atcnum: post.posts[post.index].atcnum}).then(()=>this.handleModal(-1));
 	}
 
 	render(){
 		const {post, auth, follow, postfrm, setPostIndex,
 			insertReply, deleteReply, getAllReplies, setPostMedia,
-			setPostMediaReset, moveMedia, deleteMedia, setPostContent,
+			moveMedia, deleteMedia, setPostContent,
 			uploadPost, postformReset} = this.props;
 
 		return(
@@ -92,7 +117,6 @@ class Post extends Component{
 							post={postfrm.post}
 							upload={post.status.uploadPost}
 							setPostContent={setPostContent}
-							setPostMediaReset={setPostMediaReset}
 							setPostMedia={setPostMedia}
 							moveMedia={moveMedia}
 							deleteMedia={deleteMedia}
@@ -126,7 +150,14 @@ class Post extends Component{
 						</div>
 					</section>
 
-					{post.status.modal&& <Postmodal handleModal={this.handleModal}/>}
+					{post.status.modal&&
+						<Postmodal
+							lodingpost={post.status.post}
+							mine={post.status.mine}
+							handleModal={this.handleModal}
+							handleDeletePost={this.handleDeletePost}
+						/>
+					}
 
 				</main>
 		);
@@ -142,6 +173,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	searchPosts: (params) => dispatch(post.searchPosts(params)),
+	deletePost: (params) => dispatch(post.deletePost(params)),
 	setPostIndex: (parmas) => dispatch(post.setPostIndex(parmas)),
 	setModal: (parmas) => dispatch(post.setModal(parmas)),
 	likeAtc: (params) => dispatch(post.likeAtc(params)),
@@ -153,7 +185,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 	postformReset: () => dispatch(postfrm.postformReset()),
 	setPostContent: (value) => dispatch(postfrm.setPostContent(value)),
-	setPostMediaReset: () => dispatch(postfrm.setPostMediaReset()),
 	setPostMedia: (params) => dispatch(postfrm.setPostMedia(params)),
 	moveMedia: (params) => dispatch(postfrm.moveMedia(params)),
 	deleteMedia: (index) => dispatch(postfrm.deleteMedia(index)),

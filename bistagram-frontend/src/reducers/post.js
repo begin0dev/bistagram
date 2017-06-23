@@ -16,10 +16,14 @@ const initialState = {
     post: false,
     like: false,
     reply: false,
-    uploadPost: false
+    uploadPost: false,
+    mine: false
   },
   requests: {
     searchPosts:{
+      ...request
+    },
+    deletePost:{
       ...request
     },
     likeAtc:{
@@ -63,13 +67,19 @@ function post(state=initialState, action) {
         ...state,
         index: payload.index,
         status: {
-          modal: !state.status.modal
+          ...state.status,
+          modal: !state.status.modal,
+          mine: payload.mine
         }
       }
 
     case POST.SEARCH_POSTS + "_PENDING":
       return{
         ...state,
+        status:{
+          ...state.status,
+          post: true
+        },
         requests: {
           ...state.requests,
           searchPosts: { ...pending }
@@ -84,6 +94,10 @@ function post(state=initialState, action) {
         ],
         start: state.start + payload.data.length,
         isMore: payload.data.length<5 ?false:true,
+        status:{
+          ...state.status,
+          post: false
+        },
         requests: {
           ...state.requests,
           searchPosts: { ...fulfilled }
@@ -92,9 +106,55 @@ function post(state=initialState, action) {
     case POST.SEARCH_POSTS + '_REJECTED':
       return {
         ...state,
+        status:{
+          ...state.status,
+          post: false
+        },
         requests: {
           ...state.requests,
           searchPosts: { ...rejected, error: payload }
+        }
+      };
+
+    case POST.DELETE_POST + "_PENDING":
+      return{
+        ...state,
+        status:{
+          ...state.status,
+          post: true
+        },
+        requests: {
+          ...state.requests,
+          deletePost: { ...pending }
+        }
+      }
+    case POST.DELETE_POST + '_FULFILLED':
+      return {
+        ...state,
+        posts:
+        (payload.data?
+          [ ...state.posts.slice(0, state.index),
+            ...state.posts.slice((state.index+1), state.posts.length)]:
+          [...state.posts]),
+        status:{
+          ...state.status,
+          post: false
+        },
+        requests: {
+          ...state.requests,
+          deletePost: { ...fulfilled }
+        }
+      }
+    case POST.DELETE_POST + '_REJECTED':
+      return {
+        ...state,
+        status:{
+          ...state.status,
+          post: false
+        },
+        requests: {
+          ...state.requests,
+          deletePost: { ...rejected, error: payload }
         }
       };
 
@@ -361,7 +421,7 @@ function post(state=initialState, action) {
         ...state,
         posts:[
           ...payload.data,
-          ...state.posts          
+          ...state.posts
         ],
         status:{
           ...state.status,

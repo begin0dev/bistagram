@@ -98,11 +98,6 @@ function postfrm(state=initialState, action) {
         }
       }
 
-    case POSTFRM.TOGGLE_DRAGGING:
-      return {
-        ...state,
-        draging : payload
-      }
     default:
       return state;
   }

@@ -44,23 +44,38 @@ min-height: 150px;
 .media_view{
 background-color: #fff;
 overflow: hidden;
-height: 94px;
 }
 .media_wrapper{
-height: 84px;
 margin: 5px;
 }
 .writebody_media{
-height: 84px;
+min-height: 84px;
 flex-direction: row;
 align-items: flex-start;
-overflow-x: hidden;
+overflow-x: auto;
 overflow-y: hidden;
 -webkit-overflow-scrolling: touch;
 -webkit-user-select: none;
 -moz-user-select: none;
 -ms-user-select: none;
 user-select: none;
+}
+.writebody_media::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+	border-radius: 10px;
+	background-color: #f9f9f9;
+}
+.writebody_media::-webkit-scrollbar
+{
+	height: 8px;
+	background-color: #f9f9f9;
+}
+.writebody_media::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.2);
+	background-color: #999;
 }
 .draggable_img{
 box-sizing: border-box;

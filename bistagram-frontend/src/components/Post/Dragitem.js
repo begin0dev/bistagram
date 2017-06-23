@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-import ItemTypes from './ItemTypes';
 
 const itemSource = {
   beginDrag(props) {
@@ -58,10 +57,10 @@ const itemTarget = {
   },
 };
 
-@DropTarget(ItemTypes.MEDIA, itemTarget, connect => ({
+@DropTarget('media', itemTarget, connect => ({
   connectDropTarget: connect.dropTarget(),
 }))
-@DragSource(ItemTypes.MEDIA, itemSource, (connect, monitor) => ({
+@DragSource('media', itemSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))
@@ -71,7 +70,7 @@ class Dragitem extends Component {
       const { media, media_url, connectDragSource, connectDropTarget, handleDeleteMedia, index} = this.props;
       return connectDragSource(connectDropTarget(
         <div className="draggable_img">
-          {media.type.match("image")?
+          {media.type.match("image") ?
             <img src={media_url} className="img_100" alt=""></img>:
             <video src={media_url} className="img_100" alt=""></video>
           }

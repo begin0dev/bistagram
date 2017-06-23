@@ -23,8 +23,6 @@ class Postwrite extends Component {
     }
     handleFileChange = (e) =>{
       e.preventDefault();
-      const {setPostMediaReset} = this.props;
-
       let files = e.target.files;
       for(let i=0; i<files.length; i++){
         this.handleMedieRender(files[i]);
@@ -38,7 +36,7 @@ class Postwrite extends Component {
       }
       reader.readAsDataURL(file);
     }
-    handlePostSubmit = (e) =>{
+    handlePostSubmit = async(e) => {
       e.preventDefault();
       const {post, uploadPost, postformReset} = this.props;
       let formdata=new FormData();
@@ -46,8 +44,7 @@ class Postwrite extends Component {
       post.media.forEach(function(file){
         formdata.append('media', file)
       })
-      uploadPost(formdata);
-      postformReset();
+      await uploadPost(formdata).then(()=>postformReset());
     }
     render() {
         const { post, upload } = this.props;

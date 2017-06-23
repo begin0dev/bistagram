@@ -90,6 +90,24 @@ router.post('/SearchPosts', (req, res) => {
   });
 });
 
+router.delete('/deletePost', (req, res) => {
+  let sql = "delete from article where atcnum=?";
+  let params = [req.body.atcnum];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.json({result: false});
+      }
+      else{
+        return res.json({result: true});
+      }
+    }
+  });
+});
+
 router.post('/likeAtc', (req, res) => {
   let username=req.user.username;
   let sql = "insert into atclike(atcnum, username) values (?, ?)";

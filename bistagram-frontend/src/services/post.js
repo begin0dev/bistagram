@@ -8,6 +8,14 @@ export const searchPosts = ({start}) => request({
     }
 });
 
+export const deletePost = ({atcnum}) => request({
+    url: '/api/post/deletePost',
+    method: 'delete',
+    data: {
+      atcnum
+    }
+});
+
 export const likeAtc = ({atcnum}) => request({
     url: '/api/post/likeAtc',
     method: 'post',

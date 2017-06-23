@@ -10,6 +10,13 @@ export const searchPosts = (params) => ({
   }
 })
 
+export const deletePost = (params) => ({
+  type: POST.DELETE_POST,
+  payload: {
+    promise: service.deletePost(params)
+  }
+})
+
 export const setPostIndex = createAction(POST.SET_POST_INDEX);
 export const setModal = createAction(POST.SET_MODAL);
 

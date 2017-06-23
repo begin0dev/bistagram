@@ -14,17 +14,15 @@ class Explore extends Component {
     }
   }
 
-  handleFollowClick=(num)=>{
-    const {follow, setFollowClickIndex, following, unfollow } =this.props;
-
-    setFollowClickIndex(num);
-    if(follow.user[num].follow === 0){
-      following({followid:follow.user[num].id});
-    }
-    else{
-      unfollow({followid:follow.user[num].id});
-    }
-  }
+  handleFollowClick = (num) => {
+		const {follow, setFollowClickIndex, following, unfollow} = this.props;
+		setFollowClickIndex(num);
+		if(follow.user[num].follow === 0){
+			following({follower:follow.user[num].username});
+		}else{
+			unfollow({follower:follow.user[num].username});
+		}
+	}
 
   render() {
 		return(
