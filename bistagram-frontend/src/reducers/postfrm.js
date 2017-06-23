@@ -18,6 +18,14 @@ function postfrm(state=initialState, action) {
   const payload = action.payload;
   switch (action.type) {
 
+    case POSTFRM.POSTFORM_RESET:
+      return{
+        ...state,
+        post: {
+          ...post
+        }
+      }
+
     case POSTFRM.SET_POST_CONTENT:
       return{
         ...state,
@@ -73,6 +81,23 @@ function postfrm(state=initialState, action) {
           }
         }
       })
+
+    case POSTFRM.DELETE_MEDIA:
+      return{
+        ...state,
+        post: {
+          ...state.post,
+          media: [
+            ...state.post.media.slice(0, payload.index),
+            ...state.post.media.slice((payload.index+1), state.post.media.length)
+          ],
+          media_url: [
+            ...state.post.media_url.slice(0, payload.index),
+            ...state.post.media_url.slice((payload.index+1), state.post.media_url.length)
+          ]
+        }
+      }
+
     case POSTFRM.TOGGLE_DRAGGING:
       return {
         ...state,

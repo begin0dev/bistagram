@@ -114,6 +114,9 @@ class App extends React.Component{
 						logged: true
         });
       }
+			if(window.location.pathname === "/login"){
+				document.location = "/"
+			}
     }
   }
 	componentWillUnmount() {

@@ -58,26 +58,20 @@ router.get('/checkNickName/:nickname', (req, res) => {
     });
 });
 
-router.post('/signup', (req, res) => {
-    let sql = "insert into member(username, name, nickname, password, state) values(?, ?, ?, ?, ?)";
-    let params = [req.body.username, req.body.name, req.body.nickname, req.body.password, 'all'];
-    conn.query(sql, params, function(err, rows) {
-      if(err) {
-        return res.status(500).json({message: err.message});
-      }
-      if(rows.affectedRows===0){
-        return res.json({code: err.code, message: err.message});
-      }
-      else{
-        let user = {...req.body, state: 'all'}
-        req.login(user, function(err){
-          req.session.save(function(){
-            res.send(req.session);
-          })
-        })
-      }
+router.post('/signup', (req, res, next) => {
+  passport.authenticate('local-register', (err, user, info) => {
+    if (err) {
+      return res.status(500).json({code: err.code, message: err.message});
+    }
+    req.login(user, (err) => {
+        if (err) {
+            return res.status(500).json({code: err.code, message: err.message});
+        }
+        res.send(req.session);
     });
+  })(req, res, next);
 });
+
 
 router.post('/signin', (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {

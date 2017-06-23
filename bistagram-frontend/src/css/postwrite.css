@@ -18,8 +18,8 @@ width:60px;
 .txt_right{
 text-align:right;
 }
-.marginlf_5{
-margin-left: 5px;
+.marginrt_5{
+margin-right: 5px;
 }
 .headbtn_img{
 background-image: url("../img/addimg.png");
@@ -69,40 +69,31 @@ height:84px;
 width:84px;
 margin-right: 5px;
 }
-.mask{
-box-sizing: border-box;
-background-color: rgba(0,0,0,0.7);
-position: absolute;
-display: none;
-height:84px;
-width:84px;
-left: 0px;
-top: 0px;
-}
 .draggable_delbtn{
-background-position: -277px -103px;
+background-image: url("../img/delbtn.png");
+background-repeat: no-repeat;
+background-position: -1px -1px;
 background-color: transparent;
 position: absolute;
 border: 0 none;
 display: none;
 padding: 0;
-height: 10px;
-width: 10px;
-right: 5px;
-top: 5px;
+height: 15px;
+width: 15px;
+right: 4px;
+top: 4px;
 z-index: 1;
 }
 .draggable_playbtn{
-background-position: -333px -255px;
+background-position: -311px -143px;
 background-color: transparent;
 position: absolute;
 border: 0 none;
-display: none;
 padding: 0;
 height: 16px;
-width: 16px;
-left: 35px;
-top: 35px;
+width: 21px;
+left: 33px;
+top: 34px;
 z-index: 3;
 }
 .mediaadd_btn{
@@ -116,14 +107,14 @@ border-radius: 2px;
 height:84px;
 width:84px;
 }
-.draggable_img:hover .mask, .draggable_img:hover .draggable_delbtn, .draggable_img:hover .draggable_playbtn{
+.draggable_img:hover .draggable_delbtn{
 display: block;
 }
-.draggable_img:hover .draggable_delbtn:active, .draggable_img:hover .draggable_playbtn:active{
+.draggable_img:hover .draggable_delbtn:active{
 opacity: 0.7;
 }
 /* jQuery enabled behavior for mobile */
-.touch .draggable_img.no-hover .mask,  .touch .draggable_img.no-hover .draggable_delbtn, .touch .draggable_img.no-hover .draggable_playbtn{
+.touch .draggable_img.no-hover .draggable_delbtn{
 display: none !important;
 }
 .scroll_btn{

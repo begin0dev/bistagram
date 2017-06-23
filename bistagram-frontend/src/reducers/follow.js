@@ -12,7 +12,7 @@ const initialState = {
   start: 0,
   pageload: false,
   isMore: true,
-  request: {
+  requests: {
     recommendFollow: {
       ...request
     },

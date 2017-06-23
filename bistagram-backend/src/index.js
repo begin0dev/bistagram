@@ -50,7 +50,7 @@ app.use('/api', api);
 
 /* handle error */
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error(err.message);
     res.status(500).json({
         error: {
             message: 'Something Broke!',

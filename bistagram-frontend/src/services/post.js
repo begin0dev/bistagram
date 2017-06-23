@@ -49,3 +49,9 @@ export const getAllReplies = ({atcnum, count}) => request({
       count
     }
 });
+
+export const uploadPost = (formdata) => request({
+    url: '/api/upload/uploadPost',
+    method: 'post',
+    data: formdata
+});

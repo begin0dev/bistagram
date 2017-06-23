@@ -52,7 +52,7 @@ class MediaView extends Component {
           <div className="mediaview">
           <div className="postview_bodywraper">
             <div className="postview_body" style={this.state.style} ref="mediadiv">
-              {post.media[this.state.index].mediatype === "image" ?
+              {post.media[index].mediatype.match("image") ?
               <Imgview
                 media={post.media[index]}
                 handleImgLoad={this.handleImgLoad}/> :
@@ -71,7 +71,7 @@ class MediaView extends Component {
                 onClick={this.handleAftBfClick}>after</a>:
                 null
             }
-            {post.media[index].mediatype === 'video' &&
+            {post.media[index].mediatype.match('video') &&
                 <a className="media_play_btn media_play_btn_img" role="button"
                 onClick={this.playVideo}>play</a>
             }

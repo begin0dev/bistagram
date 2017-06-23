@@ -81,7 +81,8 @@ class Post extends Component{
 	render(){
 		const {post, auth, follow, postfrm, setPostIndex,
 			insertReply, deleteReply, getAllReplies, setPostMedia,
-			setPostMediaReset, moveMedia} = this.props;
+			setPostMediaReset, moveMedia, deleteMedia, setPostContent,
+			uploadPost, postformReset} = this.props;
 
 		return(
 				<main className="post_body">
@@ -89,9 +90,14 @@ class Post extends Component{
 
 						<Postwrite
 							post={postfrm.post}
+							upload={post.status.uploadPost}
+							setPostContent={setPostContent}
 							setPostMediaReset={setPostMediaReset}
 							setPostMedia={setPostMedia}
 							moveMedia={moveMedia}
+							deleteMedia={deleteMedia}
+							uploadPost={uploadPost}
+							postformReset={postformReset}
 						/>
 
 						<FollowList
@@ -143,11 +149,14 @@ const mapDispatchToProps = (dispatch) => ({
 	insertReply: (params) => dispatch(post.insertReply(params)),
 	deleteReply: (replynum) => dispatch(post.deleteReply(replynum)),
 	getAllReplies: (params) => dispatch(post.getAllReplies(params)),
+	uploadPost: (params) => dispatch(post.uploadPost(params)),
 
+	postformReset: () => dispatch(postfrm.postformReset()),
 	setPostContent: (value) => dispatch(postfrm.setPostContent(value)),
 	setPostMediaReset: () => dispatch(postfrm.setPostMediaReset()),
 	setPostMedia: (params) => dispatch(postfrm.setPostMedia(params)),
 	moveMedia: (params) => dispatch(postfrm.moveMedia(params)),
+	deleteMedia: (index) => dispatch(postfrm.deleteMedia(index)),
 
 	recommendFollow: (params) => dispatch(follow.recommendFollow(params)),
 	setFollowClickIndex: (index) => dispatch(follow.setFollowClickIndex(index)),

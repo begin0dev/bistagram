@@ -47,3 +47,10 @@ export const getAllReplies = (params) => ({
     promise: service.getAllReplies(params)
   }
 })
+
+export const uploadPost = (params) => ({
+  type: POST.UPLOAD_POST,
+  payload: {
+    promise: service.uploadPost(params)
+  }
+})

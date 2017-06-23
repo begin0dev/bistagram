@@ -24,7 +24,17 @@ passport.deserializeUser((username, done) => {
 
 passport.use('local-register',
   new LocalStrategy({passReqToCallback: true}, (req, username, password, done) => {
-
+    let sql = "insert into member(username, name, nickname, password, state) values(?, ?, ?, ?, ?)";
+    let params = [username, req.body.name, req.body.nickname, password, 'all'];
+    conn.query(sql, params, function(err, rows) {
+      if(err) {
+        return done(err);
+      }
+      if(rows.affectedRows===0){
+        return done(null, false, {code: 1,  msg: "회원등록에 실패하였습니다.." })
+      }
+      return done(null, {username:username, password:password});
+    });
   })
 )
 

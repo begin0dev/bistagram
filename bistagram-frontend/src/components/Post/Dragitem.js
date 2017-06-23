@@ -47,8 +47,6 @@ const itemTarget = {
     if (lastX > nextX && hoverClientY > hoverMiddleY) {
       return;
     }
-    console.log(lastX)
-    console.log(nextX)
     // Time to actually perform the action
     props.handleDragMedia(lastX, nextX);
 
@@ -70,15 +68,14 @@ const itemTarget = {
 
 class Dragitem extends Component {
     render() {
-      const { media, media_url, connectDragSource, connectDropTarget} = this.props;
+      const { media, media_url, connectDragSource, connectDropTarget, handleDeleteMedia, index} = this.props;
       return connectDragSource(connectDropTarget(
         <div className="draggable_img">
           {media.type.match("image")?
             <img src={media_url} className="img_100" alt=""></img>:
             <video src={media_url} className="img_100" alt=""></video>
           }
-          <div className="mask"></div>
-          <button type="button" className="imgs draggable_delbtn"></button>
+          <button type="button" className="draggable_delbtn" onClick={(e)=>handleDeleteMedia(index)}></button>
           {media.type.match("video")&&
           <button type="button" className="imgs draggable_playbtn"></button>
           }

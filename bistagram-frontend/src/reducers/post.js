@@ -15,9 +15,10 @@ const initialState = {
     modal: false,
     post: false,
     like: false,
-    reply: false
+    reply: false,
+    uploadPost: false
   },
-  request: {
+  requests: {
     searchPosts:{
       ...request
     },
@@ -35,6 +36,9 @@ const initialState = {
     },
     getAllReplies: {
       ...request
+    },
+    uploadPost: {
+
     }
   }
 }
@@ -337,6 +341,48 @@ function post(state=initialState, action) {
         requests: {
           ...state.requests,
           getAllReplies: { ...rejected, error: payload }
+        }
+      };
+
+    case POST.UPLOAD_POST + "_PENDING":
+      return{
+        ...state,
+        status:{
+          ...state.status,
+          uploadPost: true
+        },
+        requests: {
+          ...state.requests,
+          uploadPost: { ...pending }
+        }
+      }
+    case POST.UPLOAD_POST + '_FULFILLED':
+      console.log(payload)
+      return {
+        ...state,
+        posts:[
+          ...state.posts,
+          ...payload.data
+        ],
+        status:{
+          ...state.status,
+          uploadPost: false
+        },
+        requests: {
+          ...state.requests,
+          uploadPost: { ...fulfilled }
+        }
+      }
+    case POST.UPLOAD_POST + '_REJECTED':
+      return {
+        ...state,
+        status:{
+          ...state.status,
+          uploadPost: false
+        },
+        requests: {
+          ...state.requests,
+          searchPosts: { ...rejected, error: payload }
         }
       };
 
