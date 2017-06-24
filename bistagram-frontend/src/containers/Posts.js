@@ -20,10 +20,6 @@ import '../css/modalList.css';
 let position =	0;
 
 class Post extends Component{
-	constructor(props) {
-		super(props);
-		this.getPostData=this.getPostData.bind(this);
-	}
 
 	handleScroll = () => {
 		const { post, searchPosts } = this.props;
@@ -52,7 +48,7 @@ class Post extends Component{
 		window.removeEventListener("scroll", this.handleScroll);
 	}
 
-	async getPostData (){
+	getPostData = async() =>{
 		const {searchPosts, recommendFollow} = this.props;
 		await recommendFollow({start:0, count:3})
 		await searchPosts({start:this.props.post.start});

@@ -28,7 +28,8 @@ class App extends React.Component{
 			});
 		}
 		this.state={
-			headDisplay:true
+			headDisplay:true,
+			loading:true
 		}
 		this.handleLogout=this.handleLogout.bind(this);
 	}
@@ -68,9 +69,8 @@ class App extends React.Component{
 						logged: false,
 						expired: false
           });
-					setTimeout(
-							() => {
-									document.location = '/login'
+					setTimeout(() => {
+							document.location = '/login'
 							}, 1000
 					);
           return;
@@ -108,6 +108,9 @@ class App extends React.Component{
 				document.location = "/"
 			}
     }
+		this.setState({
+			loading: false
+		});
   }
 	componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
@@ -117,13 +120,16 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{session.logged ?<Header headDisplay={this.state.headDisplay} handleLogout={this.handleLogout}/>:null}
+					{this.state.loading && <div className="loding_div loding_lgimg"></div>}
+					{!this.state.loading &&	session.logged ?<Header headDisplay={this.state.headDisplay} handleLogout={this.handleLogout}/>:null}
+					{!this.state.loading &&
 					<Switch>
 						<Route exact path="/" component={Posts}/>
 						<Route path="/login" component={Login}/>
 						<Route path="/explore" component={Explore}/>
 						<Route component={NotFound}/>
 					</Switch>
+					}
 				</section>
 			</Router>
 		);
