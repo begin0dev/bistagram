@@ -150,7 +150,7 @@ function post(state=initialState, action) {
         ...state,
         status:{
           ...state.status,
-          post: false
+          post: false          
         },
         requests: {
           ...state.requests,

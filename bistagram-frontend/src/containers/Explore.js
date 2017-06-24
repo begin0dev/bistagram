@@ -10,7 +10,7 @@ class Explore extends Component {
   componentDidMount() {
     let session = storage.get('session');
     if (session.logged){
-      this.props.recommendFollow({start:0, count:10})
+      this.props.recommendFollow({start:0, count:20})
     }
   }
 

@@ -12,14 +12,14 @@ class Postmodal extends Component {
           position: 'relative',
           zIndex: 2
         }
-        const {mine, lodingpost, handleDeletePost}=this.props;
+        const {deletePossible, lodingpost, handleDeletePost}=this.props;
         return(
           <div style={style}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
               <div className="modal_wrap">
                 <div className="modal_center">
                   <ul className="modal_UlPosition" role="menu">
-                    {mine &&
+                    {deletePossible &&
                     <li className="modal_LiStyle">
                        <button className="modal_listBtn"
                        ref={(button) => { this.deletebtn = button; }}

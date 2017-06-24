@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
+import Textarea from 'react-textarea-autosize';
 
 import Contentview from './Contentview'
-
-const textareaSt={
-  height: '18px'
-}
 
 class Footer extends Component {
     constructor(props) {
@@ -12,10 +9,6 @@ class Footer extends Component {
       this.state={
         reply:''
       }
-    }
-
-    handleReplyheight = () =>{
-
     }
 
     handleChangeText = (e) =>{
@@ -45,7 +38,7 @@ class Footer extends Component {
       if(this.state.reply.length===0){
         return;
       }
-      if(e.charCode ===13 ){
+      if(e.charCode === 13){
         setPostIndex({index: index, replyindex: -1});
         insertReply({atcnum: post.atcnum, content: this.state.reply});
         this.setState({
@@ -85,10 +78,10 @@ class Footer extends Component {
             </section>
 
             <Contentview
-            post={post}
-            auth={auth}
-            hanedleDeleteReply={this.hanedleDeleteReply}
-            handleGetReplies={this.handleGetReplies}
+              post={post}
+              auth={auth}
+              hanedleDeleteReply={this.hanedleDeleteReply}
+              handleGetReplies={this.handleGetReplies}
             />
 
             <section className="replywrite_st replywrite_st_media">
@@ -96,15 +89,14 @@ class Footer extends Component {
                 {replyload&&
                   <div className='loding_div loding_img'></div>
                 }
-                <textarea name="content" className="reply_textarea" style={textareaSt}
+                <Textarea name="content" className="reply_textarea"
                   aria-label="댓글 달기..." placeholder="댓글 달기..."
-                  onKeyUp={this.handleReplyheight}
                   onChange={this.handleChangeText}
                   onKeyPress={this.handleKeyPress}
                   ref={(textarea) => { this.contenttextarea = textarea }}
                   value={this.state.reply}
                   disabled={`${replyload?true:''}`}>
-                </textarea>
+                </Textarea>
               </form>
               <button className="imgs more_btn more_btn_img more_btn_display"
               onClick={(e)=>handleModal(index)}>옵션 더 보기</button>

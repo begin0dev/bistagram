@@ -153,7 +153,7 @@ class Post extends Component{
 					{post.status.modal&&
 						<Postmodal
 							lodingpost={post.status.post}
-							mine={post.status.mine}
+							deletePossible={post.status.mine && post.posts[post.index].atclikecount===0 && post.posts[post.index].repliescount===0?true:false}
 							handleModal={this.handleModal}
 							handleDeletePost={this.handleDeletePost}
 						/>

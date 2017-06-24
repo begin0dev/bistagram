@@ -254,6 +254,7 @@ flex-direction: row;
 -webkit-justify-content: center;
 -ms-flex-pack: center;
 justify-content: center;
+padding: 16px 0;
 }
 .like_abtn, .reply_abtn{
 display: inline-block;
@@ -347,9 +348,9 @@ margin-right: 0px;
 padding: 0;
 }
 .more_btn_img{
-background-position: -298px -115px;
-height: 17px;
-width: 17px;
+background-position: -297px -114px;
+height: 19px;
+width: 19px;
 }
 .more_btn_display{
 display: block;

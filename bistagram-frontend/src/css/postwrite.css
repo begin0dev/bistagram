@@ -60,22 +60,19 @@ overflow-y: hidden;
 -ms-user-select: none;
 user-select: none;
 }
-.writebody_media::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-	border-radius: 10px;
-	background-color: #f9f9f9;
+.writebody_media::-webkit-scrollbar-track{
+-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+border-radius: 10px;
+background-color: #f9f9f9;
 }
-.writebody_media::-webkit-scrollbar
-{
-	height: 8px;
-	background-color: #f9f9f9;
+.writebody_media::-webkit-scrollbar{
+height: 8px;
+background-color: #f9f9f9;
 }
-.writebody_media::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.2);
-	background-color: #999;
+.writebody_media::-webkit-scrollbar-thumb{
+border-radius: 10px;
+-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.2);
+background-color: #999;
 }
 .draggable_img{
 box-sizing: border-box;
