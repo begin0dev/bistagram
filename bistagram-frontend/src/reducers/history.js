@@ -36,13 +36,12 @@ function history(state=initialState, action) {
     case HISTORY.GET_HISTORY + "_FULFILLED":
         return {
             ...state,
+            history:[
+                ...payload.data
+            ],
             requests: {
                 ...state.requests,
                 getHistory: { ...fulfilled }
-            },
-            session: {
-              ...state.session,
-              logged: !payload.data.user ? false : true
             }
         }
     case HISTORY.GET_HISTORY + "_REJECTED":

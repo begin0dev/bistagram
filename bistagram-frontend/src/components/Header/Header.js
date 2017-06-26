@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ScInput from './ScInput';
 import HeaderNavi from './HeaderNavi';
 
-const Header = ({headDisplay, handleLogout}) => {
+const Header = ({ui, userinfo, headDisplay, handleHeaderModal, handleLogout}) => {
   return (
 		<nav className="topNavi">
       <div className="topframe"></div>
@@ -17,7 +17,12 @@ const Header = ({headDisplay, handleLogout}) => {
 							</div>
 						</div>
 						<ScInput />
-						<HeaderNavi handleLogout={handleLogout}/>
+						<HeaderNavi
+              ui={ui}
+              userinfo={userinfo}
+              handleHeaderModal={handleHeaderModal}
+              handleLogout={handleLogout}
+            />
 					</div>
 				</div>
 			</div>

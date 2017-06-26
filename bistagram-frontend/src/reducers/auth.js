@@ -109,6 +109,7 @@ function auth(state=initialState, action) {
             }
         }
     case AUTH.CHECK_SESSION + "_FULFILLED":
+    console.log(payload)
         return {
             ...state,
             requests: {
@@ -118,6 +119,7 @@ function auth(state=initialState, action) {
             userinfo: {
                 ...state.userinfo,
                 user: !payload.data.user ? {...userinfo.user} : payload.data.user,
+                hiscount: payload.data.hiscount,
                 followInfo: {
                     ...payload.data.followInfo
                 }

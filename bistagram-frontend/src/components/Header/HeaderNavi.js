@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const TopInfoPart = ({handleLogout}) => {
+const TopInfoPart = ({ui, userinfo, handleLogout, handleHeaderModal}) => {
   return (
 		<div className="top_menuwrapper">
 			<div className="top_menu">
@@ -9,13 +9,10 @@ const TopInfoPart = ({handleLogout}) => {
 					<Link to="/explore" className="clickscimg top_menuimgsize imgblock top_menuimg1">사람 찾기</Link>
 				</div>
 				<div className="top_items">
-					<a className="clickscimg top_menuimgsize imgblock top_menuimg2">
-            <span className="span_alert">
-              활동 피드
-            </span>
+					<a className="clickscimg top_menuimgsize imgblock top_menuimg2 point" onClick={handleHeaderModal}>
+            {userinfo.hiscount > 0 && <span className="span_alert">활동 피드</span>}
           </a>
-          <div style={{display:'none'}}>
-            <div className="headbase"></div>
+          <div style={{display:`${ui.headerModal?'':'none'}`}}>
             <div className="alert_triangle"></div>
             <div className="alert_triangle_link"></div>
             <div className="alert_body">

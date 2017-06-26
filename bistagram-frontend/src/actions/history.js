@@ -1,5 +1,3 @@
-import { createAction } from 'redux-actions';
-
 import HISTORY from './ActionTypes/history';
 import * as service from '../services/history';
 

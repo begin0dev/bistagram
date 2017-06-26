@@ -7,8 +7,20 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
+const getHisCount = (username, callback) =>{
+    let countsql = "select count(hisnum)as count from history where username=? and `read`=0;";
+    let params = [username];
+    conn.query(countsql, params, function(err, rows) {
+      if(err) {
+        callback (err, null);
+      }
+        callback (null, rows[0].count)
+    });
+}
+
 router.get('/check', async (req, res) => {
     let user = null;
+    let hiscount = null;
     if (req.user) {
         const { username, nickname, state} = req.user;
         user = {
@@ -16,8 +28,11 @@ router.get('/check', async (req, res) => {
             nickname,
             state,
         };
+        getHisCount(req.user.username, (err, value)=>{
+
+          res.json({sessionID: req.sessionID, user, hiscount: value});
+        });
     }
-    res.json({sessionID: req.sessionID, user});
 });
 
 router.get('/checkUserName/:username', async (req, res) => {

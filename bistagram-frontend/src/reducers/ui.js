@@ -8,6 +8,7 @@ const loading = {
 
 const initialState = {
   header: true,
+  headerModal: false,
   loading: {
     ...loading
   }
@@ -21,6 +22,12 @@ function ui(state=initialState, action) {
       return{
         ...state,
         header: payload
+      }
+
+    case UI.SET_HEADER_MODAL:
+      return{
+        ...state,
+        headerModal: !state.headerModal
       }
 
     case UI.SET_LOADING_INITIAL:

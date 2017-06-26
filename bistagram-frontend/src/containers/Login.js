@@ -23,7 +23,7 @@ class Login extends Component {
       const {setLoading, setLoadingInitial} = this.props;
       setLoading({name:"main", value:true});
 
-      setTimeout(()=>{ setLoadingInitial() }, 300);
+      setTimeout(()=>{ setLoadingInitial() }, 700);
     }
     componentWillMount(){
       this.timerID = setInterval(
@@ -42,9 +42,9 @@ class Login extends Component {
       });
     }
     render() {
-      const {auth} = this.props;
+      const {auth, ui} = this.props;
       return(
-        <main className="login_main" role="main" style={{display:`${this.props.ui.loading.main?'none':''}`}}>
+        <main className="login_main" role="main" style={{display:`${ui.loading.main?'none':''}`}}>
           <article className="center_wrap">
             <div className="imgtotal_div">
               <div className="imgmargin_div" ref="imgdiv">

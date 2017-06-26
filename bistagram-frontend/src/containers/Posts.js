@@ -26,7 +26,7 @@ class Post extends Component{
 		const {setLoadingInitial, setLoading} = this.props;
 		setLoading({name:"main", value:true});
 		await this.getPostData();
-		setTimeout(()=>{ setLoadingInitial() }, 300);
+		setTimeout(()=>{ setLoadingInitial() }, 200);
 	}
 
 	componentWillUnmount() {
@@ -100,13 +100,13 @@ class Post extends Component{
 	}
 
 	render(){
-		const {post, auth, follow, form, setPostIndex,
+		const {post, auth, follow, form, ui, setPostIndex,
 			insertReply, deleteReply, getAllReplies, setPostMedia,
 			moveMedia, deleteMedia, setPostContent,
 			uploadPost, postformReset} = this.props;
 
 		return(
-				<main className="post_body" style={{display:`${this.props.ui.loading.main?'none':''}`}}>
+				<main className="post_body" style={{display:`${ui.loading.main?'none':''}`}}>
 					<section className="post_wrapper">
 
 						<Postwrite

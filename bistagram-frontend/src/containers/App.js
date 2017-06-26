@@ -10,12 +10,22 @@ import NotFound from './NotFound';
 
 import * as auth from '../actions/auth';
 import * as ui from '../actions/ui';
+import * as history from '../actions/history';
 
 import '../css/basic.css';
 import '../css/header.css';
 import '../css/followUl.css';
 
 class App extends React.Component{
+
+	handleHeaderModal = async () =>{
+		const {ui, setHeaderModal, getHistory} = this.props;
+		setHeaderModal();
+		if(!ui.headerModal){
+			console.log("히스토리불러올거임")
+			await getHistory();
+		}
+	}
 
 	handleLogout = async () =>{
 		const {logout} = this.props;
@@ -24,13 +34,19 @@ class App extends React.Component{
 
 	handleScroll = () => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-		const {post, setHeader} = this.props;
-		if(scrollTop > 90){
-			setHeader(false);
+		const {ui, post, setHeader} = this.props;
+		let result=true;
+		if(ui.headerModal){
+			result=true;
+		}else if(scrollTop > 90){
+			result=false;
 		}else if(post.status.modal){
-			setHeader(false);
+			result=false;
 		}else{
-			setHeader(true);
+			result=true;
+		}
+		if(result!==ui.header){
+			setHeader(result);
 		}
 	}
 
@@ -57,13 +73,18 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{this.props.auth.session.logged ?
-					<Header headDisplay={this.props.ui.header}
-					handleLogout={this.handleLogout}/>:
+					{auth.session.logged ?
+					<Header
+						ui={ui}
+						userinfo={auth.userinfo}
+						headDisplay={ui.header}
+						handleHeaderModal={this.handleHeaderModal}
+						handleLogout={this.handleLogout}
+					/>:
 					null}
-					{this.props.ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
+					{ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
 					<Switch>
-						<Route exact path="/" component={this.props.auth.session.logged?Posts:Login}/>
+						<Route exact path="/" component={auth.session.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
 						<Route component={NotFound}/>
 					</Switch>
@@ -78,11 +99,15 @@ const mapStateToProps = (state) => ({
 	ui: state.ui,
 	post: state.post
 });
+
 const mapDispatchToProps = (dispatch) => ({
 	checkSession: () => dispatch(auth.checkSession()),
 	logout: () => dispatch(auth.logout()),
 
-	setHeader: (value) => dispatch(ui.setHeader(value))
+	setHeader: (value) => dispatch(ui.setHeader(value)),
+	setHeaderModal: () => dispatch(ui.setHeaderModal()),
+
+	getHistory: () => dispatch(history.getHistory())
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)
