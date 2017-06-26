@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as auth from '../actions/auth';
+import * as ui from '../actions/ui';
 
 import '../css/login.css';
 
@@ -17,6 +18,10 @@ class Login extends Component {
           imgNum: 0,
           isRegi: true
         };
+    }
+    componentDidMount() {
+      const {setLoading} = this.props;
+      setLoading(true)
     }
     componentWillMount(){
       this.timerID = setInterval(
@@ -92,6 +97,8 @@ const mapDispatchToProps = (dispatch) => ({
 
   signUp: (params) => dispatch(auth.signUp(params)),
   signIn: (params) => dispatch(auth.signIn(params)),
+
+	setLoading: (value) => dispatch(ui.setLoading(value))
 })
 
 

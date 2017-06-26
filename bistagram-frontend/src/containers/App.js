@@ -36,7 +36,6 @@ class App extends React.Component{
 
 	async componentDidMount() {
 		const {setLoading} = this.props;
-		setLoading(true)
 		window.addEventListener("scroll", this.handleScroll);
 		await this.props.checkSession().then(()=>this.handleCheckLogin());
 		setLoading(false)
@@ -85,7 +84,7 @@ const mapDispatchToProps = (dispatch) => ({
 	logout: () => dispatch(auth.logout()),
 
 	setHeader: (value) => dispatch(ui.setHeader(value)),
-	setLoading: (params) => dispatch(ui.setLoading(params))
+	setLoading: (value) => dispatch(ui.setLoading(value))
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

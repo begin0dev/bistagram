@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as post from '../actions/post';
 import * as form from '../actions/form';
 import * as follow from '../actions/follow';
+import * as ui from '../actions/ui';
 
 
 import FollowList from '../components/Follow/FollowList';
@@ -22,7 +23,10 @@ class Post extends Component{
 
 	async componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
+		const {setLoading} = this.props;
+		setLoading(true)
 		await this.getPostData();
+		setLoading(false)
 	}
 
 	componentWillUnmount() {
@@ -181,12 +185,14 @@ const mapDispatchToProps = (dispatch) => ({
 	setPostMedia: (params) => dispatch(form.setPostMedia(params)),
 	moveMedia: (params) => dispatch(form.moveMedia(params)),
 	deleteMedia: (index) => dispatch(form.deleteMedia(index)),
-	setLoading: (value) => dispatch(form.setLoading(value)),
+
 
 	recommendFollow: (params) => dispatch(follow.recommendFollow(params)),
 	setFollowClickIndex: (index) => dispatch(follow.setFollowClickIndex(index)),
 	following: (params) => dispatch(follow.following(params)),
-	unfollow: (params) => dispatch(follow.unfollow(params))
+	unfollow: (params) => dispatch(follow.unfollow(params)),
+
+	setLoading: (value) => dispatch(ui.setLoading(value))
 });
 
 
