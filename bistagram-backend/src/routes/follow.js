@@ -1,5 +1,6 @@
 import express from 'express';
 import mysql from 'mysql';
+import passport from 'passport';
 import dbconfig from '../dbinfo/database';
 
 const router = new express.Router();
@@ -7,7 +8,12 @@ const router = new express.Router();
 const conn = mysql.createConnection(dbconfig);
 
 router.post('/RecommedFollow', (req, res) => {
-  let username=req.session.passport.user;
+  if (!req.user) {
+    return res
+        .status(401)
+        .json({code: 0, message: 'NOT LOGGED IN'});
+  }
+  let username=req.user.username;
   let sql = "select member.username, name, nickname, profileimgname, state, false as follow, convert(recommend.type using utf8) as type from member join "+
 					  "(select * from ("+
 						"(select following as username, '나를 팔로우중인 사람' as type, 1 as rank  from following where username = ?) "+
@@ -32,7 +38,7 @@ router.post('/RecommedFollow', (req, res) => {
 });
 
 router.post('/following', (req, res) => {
-  let username=req.session.passport.user;
+  let username=req.user.username;
   let sql = "insert into follower(username, follower) values(?, ?)";
   let params = [username, req.body.follower];
   conn.query(sql, params, function(err, rows) {
@@ -51,7 +57,7 @@ router.post('/following', (req, res) => {
 });
 
 router.delete('/unfollow', (req, res) => {
-  let username=req.session.passport.user;
+  let username=req.user.username;
   let sql = "delete from follower where username=? and follower=?";
   let params = [username, req.body.follower];
   conn.query(sql, params, function(err, rows) {

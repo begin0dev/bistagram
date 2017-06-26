@@ -30,14 +30,16 @@ const options ={
   password : '',
   port     : 3306,
   database : 'bistagram',
-  checkExpirationInterval: 900000,
-  expiration: 86400000
+  expiration: 3 * 24 * 60 * 60 * 1000
 }
 
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        maxAge: 3 * 24 * 60 * 60 * 1000
+    },
     store: new MySQLStore(options)
 })); // setup session
 

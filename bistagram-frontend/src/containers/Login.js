@@ -37,7 +37,7 @@ class Login extends Component {
     render() {
       const {auth} = this.props;
       return(
-        <main className="login_main" role="main">
+        <main className="login_main" role="main" style={{display:`${this.props.ui.loading?'none':''}`}}>
           <article className="center_wrap">
             <div className="imgtotal_div">
               <div className="imgmargin_div" ref="imgdiv">
@@ -75,7 +75,8 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth
+  auth: state.auth,
+  ui: state.ui
 });
 
 const mapDispatchToProps = (dispatch) => ({

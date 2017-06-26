@@ -58,10 +58,17 @@ const submitStatus = {
 }
 
 const initialState ={
-  register: { ...register },
-  login: { ...login },
-  userinfo: { ...userinfo },
-  session: { },
+  register: {
+    ...register
+  },
+  login: {
+    ...login
+   },
+  userinfo: {
+    ...userinfo
+  },
+  session: {
+  },
   requests: {
     checkUserName: {
         ...request
@@ -292,7 +299,7 @@ function auth(state=initialState, action) {
           status:{
             ...state.register.status,
             error: true,
-            message: "Instagram에 가입하는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+            message: "Bistagram에 가입하는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
           }
         },
         submitStatus: {
@@ -350,7 +357,7 @@ function auth(state=initialState, action) {
           status:{
             ...state.login.status,
             error: true,
-            message: "Instagram에 로그인하는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+            message: "Bistagram에 로그인하는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
           }
         },
         submitStatus: {

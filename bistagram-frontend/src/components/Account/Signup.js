@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { storage } from '../../helpers';
 
 const regex ={
   regemail: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
@@ -105,10 +104,10 @@ class Register extends Component {
       setErrorMessage({name: "register", msg:"6자 이상의 비밀번호를 만드세요."});
     }
     else{
-      await signUp(auth.register).then(()=>storage.set('session', this.props.auth.session));
-      if(this.props.auth.session.logged){
-        document.location = "/"
-      }
+      await signUp(auth.register).then(()=>{
+        if(this.props.auth.session.logged){        
+          document.location.reload();
+        }});
     }
     setSubmitStatus({name: 'signup', value: false});
   }

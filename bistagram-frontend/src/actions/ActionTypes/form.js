@@ -1,4 +1,4 @@
-const POSTFRM={
+const FORM={
   POSTFORM_RESET:"POSTFORM_RESET",
   SET_POST_CONTENT:"SET_POST_CONTENT",
 
@@ -9,4 +9,4 @@ const POSTFRM={
   DELETE_MEDIA: "DELETE_MEDIA"
 }
 
-export default POSTFRM;
+export default FORM;

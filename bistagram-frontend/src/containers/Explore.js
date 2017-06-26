@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { storage } from '../helpers';
+
 import * as follow from '../actions/follow';
 
 import FollowList from '../components/Follow/FollowList';
 import FollowLoader from '../components/Follow/FollowLoader';
 
 class Explore extends Component {
+
   componentDidMount() {
-    let session = storage.get('session');
-    if (session.logged){
-      this.props.recommendFollow({start:0, count:20})
-    }
+    window.addEventListener("scroll", this.handleScroll);
+		this.props.recommendFollow({start:0, count:20});
   }
 
   handleFollowClick = (num) => {
@@ -43,6 +42,7 @@ class Explore extends Component {
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
 	follow: state.follow
 });
 

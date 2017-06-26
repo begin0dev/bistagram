@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
+
 import auth from './auth';
 import post from './post';
-import postfrm from './postfrm';
+import form from './form';
 import follow from './follow';
+import ui from './ui';
 
 const reducers = {
-    auth, post, follow, postfrm
+    auth, post, follow, form, ui
 }
 
 export default combineReducers(reducers);

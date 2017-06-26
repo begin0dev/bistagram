@@ -3,133 +3,72 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from '../components/Header/Header';
-
 import Login from './Login';
 import Posts from './Posts';
 import Explore from './Explore';
 import NotFound from './NotFound';
 
-
-import { storage } from '../helpers';
-
 import * as auth from '../actions/auth';
+import * as ui from '../actions/ui';
 
 import '../css/basic.css';
 import '../css/header.css';
 import '../css/followUl.css';
 
 class App extends React.Component{
-	constructor(props) {
-		super(props);
-		let session = storage.get('session');
-		if (!session) {
-			storage.set('session', {
-				logged: false
-			});
-		}
-		this.state={
-			headDisplay:true,
-			loading:true
-		}
-		this.handleLogout=this.handleLogout.bind(this);
-	}
 
-	async handleLogout() {
+	handleLogout = async () =>{
 		const {logout} = this.props;
-		await logout().then(()=>document.location = "/login");
-		storage.set('session', { logged: false, expired: true });
+		await logout().then(() => document.location = "/");
 	}
 
 	handleScroll = () => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-
+		const {post, setHeader} = this.props;
 		if(scrollTop > 90){
-			this.setState({
-				headDisplay: false
-			});
-		}else if(this.props.post.status.modal){
-			this.setState({
-				headDisplay: false
-			});
+			setHeader(false);
+		}else if(post.status.modal){
+			setHeader(false);
 		}else{
-			this.setState({
-				headDisplay: true
-			});
+			setHeader(true);
 		}
 	}
 
 	async componentDidMount() {
+		const {setLoading} = this.props;
+		setLoading(true)
 		window.addEventListener("scroll", this.handleScroll);
+		await this.props.checkSession().then(()=>this.handleCheckLogin());
+		setLoading(false)
+  }
 
-    let session = storage.get('session');
-    if (session) {
-      if (session.expired) {
-          storage.set('session', {
-						...session,
-						logged: false,
-						expired: false
-          });
-					setTimeout(() => {
-							document.location = '/login'
-							}, 1000
-					);
-          return;
-      }
-      if(!session.logged && (window.location.pathname === "/" || window.location.pathname === "/explore")){
-				document.location = "/login"
-      }
-    }
-
-		await this.props.checkSession();
-
-		if(!this.props.auth.session.logged){
-			storage.set('session', {
-				 ...session,
-				 logged: false
-			});
-			if(session.logged){
-				// session is expired
-				session = storage.get('session');
-				storage.set('session', {
-					...session,
-					expired: true
-				});
-				document.location = "/login"
-			}
-		}else { //login
-      if (!session.logged) {
-        // got a new session
-        storage.set('session', {
-            ...this.props.auth.session,
-						logged: true
-        });
-      }
-			if(window.location.pathname === "/login"){
+	handleCheckLogin = () =>{
+		const { auth } = this.props;
+		if(!auth.session.logged){ //not login
+			if(window.location.pathname === "/explore"){
 				document.location = "/"
 			}
-    }
-		this.setState({
-			loading: false
-		});
-  }
+		}
+	}
+
 	componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
 	}
+
 	render(){
-		let session = storage.get('session');
 		return(
 			<Router>
 				<section className="react-body">
-					{this.state.loading && <div className="loding_div loding_lgimg"></div>}
-					{!this.state.loading &&	session.logged ?<Header headDisplay={this.state.headDisplay} handleLogout={this.handleLogout}/>:null}
-					{!this.state.loading &&
+					{this.props.auth.session.logged ?
+					<Header headDisplay={this.props.ui.header}
+					handleLogout={this.handleLogout}/>:
+					null}
+					{this.props.ui.loading?<div className="loding_div loding_lgimg"></div>:null}
 					<Switch>
-						<Route exact path="/" component={Posts}/>
-						<Route path="/login" component={Login}/>
+						<Route exact path="/" component={this.props.auth.session.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
 						<Route component={NotFound}/>
 					</Switch>
-					}
 				</section>
 			</Router>
 		);
@@ -138,11 +77,15 @@ class App extends React.Component{
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+	ui: state.ui,
 	post: state.post
 });
 const mapDispatchToProps = (dispatch) => ({
 	checkSession: () => dispatch(auth.checkSession()),
-	logout: () => dispatch(auth.logout())
+	logout: () => dispatch(auth.logout()),
+
+	setHeader: (value) => dispatch(ui.setHeader(value)),
+	setLoading: (params) => dispatch(ui.setLoading(params))
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

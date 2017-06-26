@@ -11,12 +11,6 @@ router.get('/check', async (req, res) => {
     let user = null;
     if (req.user) {
         const { username, nickname, state} = req.user;
-        // const followers = await Follow.getFollowerCount(req.user._id);
-        // const following = await Follow.getFollowingCount(req.user._id);
-        // followInfo = {
-        //     followers,
-        //     following
-        // }
         user = {
             username,
             nickname,
@@ -26,7 +20,7 @@ router.get('/check', async (req, res) => {
     res.json({sessionID: req.sessionID, user});
 });
 
-router.get('/checkUserName/:username', (req, res) => {
+router.get('/checkUserName/:username', async (req, res) => {
     let sql = "select username from member where username=?";
     let params = [req.params.username];
     conn.query(sql, params, function(err, rows) {
@@ -42,7 +36,7 @@ router.get('/checkUserName/:username', (req, res) => {
     });
 });
 
-router.get('/checkNickName/:nickname', (req, res) => {
+router.get('/checkNickName/:nickname', async (req, res) => {
     let sql = "select nickname from member where nickname=?";
     let params = [req.params.nickname];
     conn.query(sql, params, function(err, rows) {
@@ -58,7 +52,7 @@ router.get('/checkNickName/:nickname', (req, res) => {
     });
 });
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
   passport.authenticate('local-register', (err, user, info) => {
     if (err) {
       return res.status(500).json({code: err.code, message: err.message});
@@ -73,7 +67,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 
-router.post('/signin', (req, res, next) => {
+router.post('/signin', async (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
         if (err) {
           return res.status(500).json({code: err.code, message: err.message});
@@ -93,7 +87,7 @@ router.post('/signin', (req, res, next) => {
     })(req, res, next);
 });
 
-router.delete('/logout', (req, res) => {
+router.delete ('/logout', async (req, res) => {
     req.logout();
     req.session.destroy();
     res.json({success: true});

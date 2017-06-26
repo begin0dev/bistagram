@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "lodash.isempty": "^4.4.0",
+    "promise-polyfill": "^6.0.2",
     "react": "^15.5.4",
     "react-addons-update": "^15.5.2",
     "react-dnd": "^2.4.0",

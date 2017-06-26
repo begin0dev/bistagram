@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { storage } from '../../helpers';
+
+function login(auth, signIn) {
+  return new Promise(function(resolve, reject){
+	   signIn(auth.login);
+  });
+}
 
 class Signin extends Component {
-
   constructor(props) {
       super(props);
       this.handleSubmit=this.handleSubmit.bind(this);
@@ -16,10 +20,8 @@ class Signin extends Component {
     const {auth, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
 
-    await signIn(auth.login).then(()=>storage.set('session', this.props.auth.session));
-    if(this.props.auth.session.logged){
-      document.location = "/"
-    }
+    await login(auth, signIn);
+    
     setSubmitStatus({name: 'signin', value: false});
   }
 

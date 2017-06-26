@@ -7,7 +7,7 @@ import dbconfig from '../dbinfo/database';
 const conn = mysql.createConnection(dbconfig);
 
 passport.serializeUser((user, done) => {
-    done(null, user.username);
+  done(null, user.username);
 });
 
 passport.deserializeUser((username, done) => {

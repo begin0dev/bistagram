@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as post from '../actions/post';
-import * as postfrm from '../actions/postfrm';
+import * as form from '../actions/form';
 import * as follow from '../actions/follow';
 
-import { storage } from '../helpers';
 
 import FollowList from '../components/Follow/FollowList';
 import Postwrite from '../components/Post/Postwrite';
@@ -21,6 +20,21 @@ let position =	0;
 
 class Post extends Component{
 
+	async componentDidMount() {
+		window.addEventListener("scroll", this.handleScroll);
+		await this.getPostData();
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("scroll", this.handleScroll);
+	}
+
+	getPostData = async() =>{
+		const {searchPosts, recommendFollow} = this.props;
+		await recommendFollow({start:0, count:3})
+		await searchPosts({start:this.props.post.start});
+	}
+
 	handleScroll = () => {
 		const { post, searchPosts } = this.props;
 		const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
@@ -34,24 +48,6 @@ class Post extends Component{
 				searchPosts({start:post.start});
 			}
 		}
-	}
-
-	componentDidMount() {
-		window.addEventListener("scroll", this.handleScroll);
-		let session = storage.get('session');
-		if (session.logged) {
-			this.getPostData();
-		}
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener("scroll", this.handleScroll);
-	}
-
-	getPostData = async() =>{
-		const {searchPosts, recommendFollow} = this.props;
-		await recommendFollow({start:0, count:3})
-		await searchPosts({start:this.props.post.start});
 	}
 
 	handleLikeClick = (num) => {
@@ -100,17 +96,17 @@ class Post extends Component{
 	}
 
 	render(){
-		const {post, auth, follow, postfrm, setPostIndex,
+		const {post, auth, follow, form, setPostIndex,
 			insertReply, deleteReply, getAllReplies, setPostMedia,
 			moveMedia, deleteMedia, setPostContent,
 			uploadPost, postformReset} = this.props;
 
 		return(
-				<main className="post_body">
+				<main className="post_body" style={{display:`${this.props.ui.loading?'none':''}`}}>
 					<section className="post_wrapper">
 
 						<Postwrite
-							post={postfrm.post}
+							post={form.post}
 							upload={post.status.uploadPost}
 							setPostContent={setPostContent}
 							setPostMedia={setPostMedia}
@@ -163,8 +159,9 @@ class Post extends Component{
 const mapStateToProps = (state) => ({
 	auth: state.auth,
   post: state.post,
-	postfrm: state.postfrm,
-	follow: state.follow
+	form: state.form,
+	follow: state.follow,
+	ui:state.ui
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -179,11 +176,12 @@ const mapDispatchToProps = (dispatch) => ({
 	getAllReplies: (params) => dispatch(post.getAllReplies(params)),
 	uploadPost: (params) => dispatch(post.uploadPost(params)),
 
-	postformReset: () => dispatch(postfrm.postformReset()),
-	setPostContent: (value) => dispatch(postfrm.setPostContent(value)),
-	setPostMedia: (params) => dispatch(postfrm.setPostMedia(params)),
-	moveMedia: (params) => dispatch(postfrm.moveMedia(params)),
-	deleteMedia: (index) => dispatch(postfrm.deleteMedia(index)),
+	postformReset: () => dispatch(form.postformReset()),
+	setPostContent: (value) => dispatch(form.setPostContent(value)),
+	setPostMedia: (params) => dispatch(form.setPostMedia(params)),
+	moveMedia: (params) => dispatch(form.moveMedia(params)),
+	deleteMedia: (index) => dispatch(form.deleteMedia(index)),
+	setLoading: (value) => dispatch(form.setLoading(value)),
 
 	recommendFollow: (params) => dispatch(follow.recommendFollow(params)),
 	setFollowClickIndex: (index) => dispatch(follow.setFollowClickIndex(index)),

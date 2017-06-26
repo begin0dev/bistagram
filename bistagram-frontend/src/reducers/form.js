@@ -1,5 +1,5 @@
 import update from 'react/lib/update';
-import POSTFRM from '../actions/ActionTypes/postfrm';
+import FORM from '../actions/ActionTypes/form';
 
 const post = {
   content: '',
@@ -8,17 +8,20 @@ const post = {
 }
 
 const initialState = {
+  loading: {
+    login: true,
+    post: true
+  },
   post:{
     ...post
-  },
-  draging: false
+  }
 }
 
-function postfrm(state=initialState, action) {
+function form(state=initialState, action) {
   const payload = action.payload;
   switch (action.type) {
 
-    case POSTFRM.POSTFORM_RESET:
+    case FORM.POSTFORM_RESET:
       return{
         ...state,
         post: {
@@ -26,7 +29,7 @@ function postfrm(state=initialState, action) {
         }
       }
 
-    case POSTFRM.SET_POST_CONTENT:
+    case FORM.SET_POST_CONTENT:
       return{
         ...state,
         post: {
@@ -35,7 +38,7 @@ function postfrm(state=initialState, action) {
         }
       }
 
-    case POSTFRM.SET_POST_MEDIA_RESET:
+    case FORM.SET_POST_MEDIA_RESET:
       return{
         ...state,
         post: {
@@ -45,7 +48,7 @@ function postfrm(state=initialState, action) {
         }
       }
 
-    case POSTFRM.SET_POST_MEDIA:
+    case FORM.SET_POST_MEDIA:
       return{
         ...state,
         post: {
@@ -61,7 +64,7 @@ function postfrm(state=initialState, action) {
         }
       }
 
-    case POSTFRM.MOVE_MEDIA:
+    case FORM.MOVE_MEDIA:
       const { lastX, nextX } = payload;
       const dragmedia = state.post.media[lastX];
       const dragmedia_url = state.post.media_url[lastX];
@@ -82,7 +85,7 @@ function postfrm(state=initialState, action) {
         }
       })
 
-    case POSTFRM.DELETE_MEDIA:
+    case FORM.DELETE_MEDIA:
       return{
         ...state,
         post: {
@@ -104,4 +107,4 @@ function postfrm(state=initialState, action) {
 }
 
 
-export default postfrm;
+export default form;

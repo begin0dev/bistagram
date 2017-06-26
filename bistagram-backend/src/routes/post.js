@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import mysql from 'mysql';
+import passport from 'passport';
 import async from 'async';
 import dbconfig from '../dbinfo/database';
 
@@ -61,7 +62,7 @@ const getPostData = function(username){
 }
 
 
-router.post('/SearchPosts', (req, res) => {
+router.post('/SearchPosts', async (req, res) => {
   let username=req.user.username;
   let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
             "(select y.*, count(reply.atcnum) as repliescount from "+
@@ -90,7 +91,7 @@ router.post('/SearchPosts', (req, res) => {
   });
 });
 
-router.delete('/deletePost', (req, res) => {
+router.delete('/deletePost', async (req, res) => {
   let sql = "delete from article where atcnum=?";
   let params = [req.body.atcnum];
   conn.query(sql, params, function(err, rows) {
@@ -108,7 +109,7 @@ router.delete('/deletePost', (req, res) => {
   });
 });
 
-router.post('/likeAtc', (req, res) => {
+router.post('/likeAtc', async (req, res) => {
   let username=req.user.username;
   let sql = "insert into atclike(atcnum, username) values (?, ?)";
   let params = [req.body.atcnum, username];
@@ -127,7 +128,7 @@ router.post('/likeAtc', (req, res) => {
   });
 });
 
-router.delete('/notlikeAtc', (req, res) => {
+router.delete('/notlikeAtc', async (req, res) => {
   let username=req.user.username;
   let sql = "delete from atclike where atcnum=? and username=?";
   let params = [req.body.atcnum, username];
@@ -146,7 +147,7 @@ router.delete('/notlikeAtc', (req, res) => {
   });
 });
 
-router.post('/insertReply', (req, res) => {
+router.post('/insertReply', async (req, res) => {
   let username=req.user.username;
   let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
   let params = [req.body.atcnum, username, req.body.content];
@@ -165,7 +166,7 @@ router.post('/insertReply', (req, res) => {
   });
 });
 
-router.delete('/deleteReply', (req, res) => {
+router.delete('/deleteReply', async (req, res) => {
   let sql = "delete from reply where replynum=?";
   let params = [req.body.replynum];
   conn.query(sql, params, function(err, rows) {
@@ -183,7 +184,7 @@ router.delete('/deleteReply', (req, res) => {
   });
 });
 
-router.post('/getAllReplies', (req, res) => {
+router.post('/getAllReplies', async (req, res) => {
   let sql = "select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? "+
             "order by replynum asc limit 0, ?";
   let params = [req.body.atcnum, req.body.count];
@@ -252,7 +253,7 @@ const getHashTag = params =>{
 }
 
 
-router.post('/uploadPost', function (req, res) {
+router.post('/uploadPost', async (req, res) => {
   upload(req, res, function(err){
     let username = req.user.username;
     let atcnum = -1;
@@ -343,11 +344,6 @@ router.post('/uploadPost', function (req, res) {
     });
   })
 });
-
-
-
-
-
 
 
 module.exports = router;
