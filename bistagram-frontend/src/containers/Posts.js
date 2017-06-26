@@ -23,10 +23,10 @@ class Post extends Component{
 
 	async componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
-		const {setLoading} = this.props;
-		setLoading(true)
+		const {setLoadingInitial, setLoading} = this.props;
+		setLoading({name:"main", value:true});
 		await this.getPostData();
-		setLoading(false)
+		setTimeout(()=>{ setLoadingInitial() }, 300);
 	}
 
 	componentWillUnmount() {
@@ -106,7 +106,7 @@ class Post extends Component{
 			uploadPost, postformReset} = this.props;
 
 		return(
-				<main className="post_body" style={{display:`${this.props.ui.loading?'none':''}`}}>
+				<main className="post_body" style={{display:`${this.props.ui.loading.main?'none':''}`}}>
 					<section className="post_wrapper">
 
 						<Postwrite
@@ -192,7 +192,8 @@ const mapDispatchToProps = (dispatch) => ({
 	following: (params) => dispatch(follow.following(params)),
 	unfollow: (params) => dispatch(follow.unfollow(params)),
 
-	setLoading: (value) => dispatch(ui.setLoading(value))
+	setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
+	setLoading: (params) => dispatch(ui.setLoading(params))
 });
 
 

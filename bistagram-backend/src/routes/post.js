@@ -9,8 +9,8 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-const getPostData = function(username){
-  return function(item, callback){
+const getPostData = (username) =>{
+  return (item, callback) =>{
     async.waterfall([
       function(callback){
         let sql = "select username from atclike where atcnum=? and username=?";
@@ -147,24 +147,7 @@ router.delete('/notlikeAtc', async (req, res) => {
   });
 });
 
-router.post('/insertReply', async (req, res) => {
-  let username=req.user.username;
-  let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
-  let params = [req.body.atcnum, username, req.body.content];
-  conn.query(sql, params, function(err, rows) {
-    if(err) {
-      return res.status(500).json({message: err.message});
-    }
-    else{
-      if(rows.affectedRows===0){
-        return res.json({message: 'fail'});
-      }
-      else{
-        return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
-      }
-    }
-  });
-});
+
 
 router.delete('/deleteReply', async (req, res) => {
   let sql = "delete from reply where replynum=?";
@@ -205,7 +188,7 @@ router.post('/getAllReplies', async (req, res) => {
 
 
 const DBpool  = mysql.createPool({
-  connectionLimit : 10,
+  connectionLimit : 30,
   host     : 'localhost',
   user     : 'root',
   password : '',
@@ -232,7 +215,7 @@ const getHashTag = params =>{
   let tagString=params.content;
   let atcnum=params.atcnum;
   let tagListArray = [];
-  let regexp = new RegExp('#([^\\s\@\$\&\8]*)', 'g');
+  let regexp = new RegExp('#([a-z0-9가-힣][a-z0-9가-힣\-_]*)', 'ig');
   let tmplist = tagString.match(regexp);
   for (let w in tmplist) {
       let hashSub = tmplist[ w ].split('#');
@@ -252,9 +235,53 @@ const getHashTag = params =>{
   return tagListArray;
 }
 
+const getNickName = params =>{
+  let tagString=params.content;
+  let tagListArray = [];
+  let regexp = new RegExp('@([a-z0-9][a-z0-9\-_]*)', 'ig');
+  let tmplist = tagString.match(regexp);
+  for (let w in tmplist) {
+      let hashSub = tmplist[ w ].split('@');
+      for (let x in hashSub) {
+          if (hashSub[x] != "")
+          {
+              if (hashSub[x].substr(hashSub[x].length - 1) == ":")
+              {
+                  hashSub[x] = hashSub[x].slice(0, -1);
+              }
+              if (hashSub[x] != "") {
+                  tagListArray.push(hashSub[x]);
+              }
+          }
+      }
+  }
+  return tagListArray;
+}
 
-router.post('/uploadPost', async (req, res) => {
-  upload(req, res, function(err){
+
+router.post('/insertReply', async (req, res) => {
+  let username=req.user.username;
+  let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
+  let params = [req.body.atcnum, username, req.body.content];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    else{
+      if(rows.affectedRows===0){
+        return res.json({message: 'fail'});
+      }
+      else{
+        return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
+      }
+    }
+  });
+});
+
+
+
+router.post('/uploadPost', (req, res) => {
+  upload(req, res, (err) =>{
     let username = req.user.username;
     let atcnum = -1;
     DBpool.getConnection((err, con) => {
@@ -311,6 +338,40 @@ router.post('/uploadPost', async (req, res) => {
                   });
                 }
 
+                let nickNames=getNickName({content:req.body.content});
+                if(nickNames.length>0){
+                  let checkNicksql="select username from member where "
+                  nickNames.forEach((value, i)=>{
+                    if(i===0){
+                      checkNicksql += "nickname=? "
+                    }
+                    else{
+                      checkNicksql += "or nickname=? "
+                    }
+                  })
+                  con.query(checkNicksql, nickNames, (err, data) => {
+                      if(err) {
+                          return con.rollback(() => {
+                              con.release();
+                              console.log(err)
+                          });
+                      }
+                      let checkNick = [];
+                      data.forEach((value)=>{
+                        checkNick =[...checkNick, [value.username, username, 'post', atcnum, req.body.content]]
+                      })
+                      let historysql='insert into history(username, who, type, atcnum, content) values ?';
+                      con.query(historysql, [checkNick], (err, data) => {
+                          if(err) {
+                              return con.rollback(() => {
+                                  con.release();
+                                  console.log(err)
+                              });
+                          }
+                      });
+                  });
+                }
+
                 con.commit((err) => {
                   if (err) {
                       return con.rollback(() => {
@@ -319,7 +380,6 @@ router.post('/uploadPost', async (req, res) => {
                       });
                   }
                   con.release();
-
 
                   let sql = "select article.*, 0 as atclikecount, 0 as repliescount from article where atcnum = ?";
                   let params = [atcnum];

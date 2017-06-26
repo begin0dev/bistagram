@@ -6,7 +6,7 @@ const Videoview = ({media}) => {
         <div className="video_div">
           <video className="img_100"
             src={`/upload/${media.medianame}`}
-            type={media.mediatype} playsInline loop>
+            type={media.mediatype} playsInline preload='auto' loop>
           </video>
         </div>
       </div>

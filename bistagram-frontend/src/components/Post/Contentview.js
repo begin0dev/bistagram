@@ -1,8 +1,8 @@
 import React from 'react';
 
 function changeTag(text){
-  text=text.replace(/#(\S*)/g,'<a href="search/#$1">#$1</a>');
-  text=text.replace(/@(\S*)/g,'<a href="search/@$1">@$1</a>');
+  text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig,'<a href="search/#$1">#$1</a>');
+  text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig,'<a href="search/@$1">@$1</a>');
   return text;
 }
 

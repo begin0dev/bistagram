@@ -10,7 +10,6 @@ const initialState = {
   user: [],
   index: -1,
   start: 0,
-  pageload: false,
   isMore: true,
   requests: {
     recommendFollow: {
@@ -42,7 +41,6 @@ function post(state=initialState, action) {
     case FOLLOW.RECOMMEND_FOLLOW + "_PENDING":
       return{
         ...state,
-        pageloa: true,
         requests: {
           ...state.requests,
           recommendFollow: { ...pending }
@@ -54,7 +52,6 @@ function post(state=initialState, action) {
         user:[
           ...payload.data
         ],
-        pageload: false,
         isMore: payload.data.length < 10?false:true,
         requests: {
           ...state.requests,
@@ -64,7 +61,6 @@ function post(state=initialState, action) {
     case FOLLOW.RECOMMEND_FOLLOW + '_REJECTED':
       return {
         ...state,
-        pageload: false,
         requests: {
           ...state.requests,
           recommendFollow: { ...rejected, error: payload }

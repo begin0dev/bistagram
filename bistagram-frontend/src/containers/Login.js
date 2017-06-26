@@ -20,8 +20,10 @@ class Login extends Component {
         };
     }
     componentDidMount() {
-      const {setLoading} = this.props;
-      setLoading(true)
+      const {setLoading, setLoadingInitial} = this.props;
+      setLoading({name:"main", value:true});
+
+      setTimeout(()=>{ setLoadingInitial() }, 300);
     }
     componentWillMount(){
       this.timerID = setInterval(
@@ -42,7 +44,7 @@ class Login extends Component {
     render() {
       const {auth} = this.props;
       return(
-        <main className="login_main" role="main" style={{display:`${this.props.ui.loading?'none':''}`}}>
+        <main className="login_main" role="main" style={{display:`${this.props.ui.loading.main?'none':''}`}}>
           <article className="center_wrap">
             <div className="imgtotal_div">
               <div className="imgmargin_div" ref="imgdiv">
@@ -53,6 +55,7 @@ class Login extends Component {
                 <img className={'screenimg_style '+(this.state.imgNum===4?'screanimg-enter':'')+(this.state.imgNum===0?'screanimg-leave':'')} src={imgPath[4]} alt="screan_img"/>
               </div>
             </div>
+
             {this.state.isRegi ?
               <Signup
               auth={auth}
@@ -72,7 +75,9 @@ class Login extends Component {
               signIn={this.props.signIn}
               setSubmitStatus={this.props.setSubmitStatus}
               setErrorMessage={this.props.setErrorMessage}
-              />}
+              />
+            }
+
           </article>
         </main>
       );
@@ -98,7 +103,8 @@ const mapDispatchToProps = (dispatch) => ({
   signUp: (params) => dispatch(auth.signUp(params)),
   signIn: (params) => dispatch(auth.signIn(params)),
 
-	setLoading: (value) => dispatch(ui.setLoading(value))
+  setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
+  setLoading: (params) => dispatch(ui.setLoading(params))
 })
 
 

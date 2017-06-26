@@ -35,10 +35,8 @@ class App extends React.Component{
 	}
 
 	async componentDidMount() {
-		const {setLoading} = this.props;
 		window.addEventListener("scroll", this.handleScroll);
 		await this.props.checkSession().then(()=>this.handleCheckLogin());
-		setLoading(false)
   }
 
 	handleCheckLogin = () =>{
@@ -55,6 +53,7 @@ class App extends React.Component{
 	}
 
 	render(){
+		const {auth, ui} = this.props;
 		return(
 			<Router>
 				<section className="react-body">
@@ -62,7 +61,7 @@ class App extends React.Component{
 					<Header headDisplay={this.props.ui.header}
 					handleLogout={this.handleLogout}/>:
 					null}
-					{this.props.ui.loading?<div className="loding_div loding_lgimg"></div>:null}
+					{this.props.ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
 					<Switch>
 						<Route exact path="/" component={this.props.auth.session.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
@@ -83,8 +82,7 @@ const mapDispatchToProps = (dispatch) => ({
 	checkSession: () => dispatch(auth.checkSession()),
 	logout: () => dispatch(auth.logout()),
 
-	setHeader: (value) => dispatch(ui.setHeader(value)),
-	setLoading: (value) => dispatch(ui.setLoading(value))
+	setHeader: (value) => dispatch(ui.setHeader(value))
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

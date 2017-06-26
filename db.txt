@@ -96,20 +96,21 @@ delete from media where atcnum=old.atcnum;
 delete from hashtag where atcnum=old.atcnum;
 delete from atclike where atcnum=old.atcnum;
 delete from reply where atcnum=old.atcnum;
+delete from history where type='post' and atcnum=old.atcnum;
 end//
 
 create trigger clicklike after insert on atclike
 for each row
 begin
 select username into @username from article where atcnum=new.atcnum;
-insert into history(username, who, type, reference) values(@username, new.username, 'atclike', new.atcnum);
+insert into history(username, who, type, atcnum) values(@username, new.username, 'atclike', new.atcnum);
 end//
 
 
 create trigger clicknotlike before delete on atclike
 for each row
 begin
-delete from history where who=old.username and type='atclike' and reference=old.atcnum;
+delete from history where who=old.username and type='atclike' and atcnum=old.atcnum;
 end//
 
 delimiter ;
@@ -152,11 +153,9 @@ end//
 
 delimiter ;
 
-
 insert into follower(memid, followid) values('zzz0711@naver.com', '01055551234');
 
 delete from follower where memid='prosonic1@naver.com' and followid='01021020330';
-
 
 create table history
 (
@@ -164,9 +163,17 @@ hisnum int not null auto_increment,
 username varchar(25) not null,
 who varchar(25),
 type enum('atclike', 'follow', 'post', 'reply', 'register'),
-reference int,
+atcnum int,
+content text,
 `read` tinyint(1) not null default 0,
 primary key(hisnum, username),
 foreign key(username) references member(username),
-foreign key(who) references member(username)
+foreign key(who) references member(username),
+foreign key(atcnum) references article(atcnum)
 );
+
+select y.*, media.medianame, media.mediatype from
+(select x.*, member.nickname, member.profileimgname from
+(select * from history where username='test1@naver.com' order by hisnum desc limit 20)x
+join member on x.who=member.username)y
+left join media on y.atcnum=media.atcnum group by y.hisnum order by null;

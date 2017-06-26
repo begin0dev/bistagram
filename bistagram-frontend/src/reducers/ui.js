@@ -1,9 +1,16 @@
 import UI from '../actions/ActionTypes/ui';
 
+const loading = {
+  main: false,
+  explore: false,
+  history: false
+}
 
 const initialState = {
   header: true,
-  loading: true
+  loading: {
+    ...loading
+  }
 }
 
 function ui(state=initialState, action) {
@@ -16,10 +23,21 @@ function ui(state=initialState, action) {
         header: payload
       }
 
+    case UI.SET_LOADING_INITIAL:
+      return{
+        ...state,
+        loading: {
+          ...loading
+        }
+      }
+
     case UI.SET_LOADING:
       return{
         ...state,
-        loading: payload
+        loading: {
+          ...state.loading,
+          [payload.name]: payload.value
+        }
       }
 
     default:
