@@ -18,7 +18,7 @@ class Footer extends Component {
     }
 
     handleFocus = () =>{
-      this.contenttextarea.focus();
+      this.contenttextarea._rootDOMNode.focus();
     }
 
     handleGetReplies = () =>{

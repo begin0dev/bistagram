@@ -35,14 +35,17 @@ router.get('/getHistory', (req, res) => {
         if(err) {
           return res.status(500).json({message: err.message});
         }
-        let readsql = "update history set `read`=1 where username=? and hisnum<=?";
-        let readparam = [username, history[0].hisnum];
-        con.query(readsql, readparam, (err, rows) =>{
-          if(err) {
-            return res.status(500).json({message: err.message});
-          }
-          return res.json(history);
-        });
+        if(history.length>0){
+          let readsql = "update history set `read`=1 where username=? and hisnum<=?";
+          let readparam = [username, history[0].hisnum];
+          con.query(readsql, readparam, (err, rows) =>{
+            if(err) {
+              return res.status(500).json({message: err.message});
+            }
+          });
+        }
+        con.release();
+        return res.json({history});
       });
   });
 });

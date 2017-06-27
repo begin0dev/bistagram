@@ -1,7 +1,12 @@
 import React from 'react';
 
-function changeTag(text){
+const changeTag = (text) =>{
   text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig,'<a href="search/#$1">#$1</a>');
+  text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig,'<a href="search/@$1">@$1</a>');
+  return text;
+}
+
+const changeNick = (text) =>{
   text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig,'<a href="search/@$1">@$1</a>');
   return text;
 }
@@ -29,7 +34,7 @@ const Contentview = ({post, auth, hanedleDeleteReply, handleGetReplies}) => {
               }
               <a className="reply_li_id fontcolor_black">{contact.nickname}</a>
               <span>
-                <span dangerouslySetInnerHTML={{__html: contact.content}}></span>
+                <span dangerouslySetInnerHTML={{__html: changeNick(contact.content)}}></span>
               </span>
             </li>
           );

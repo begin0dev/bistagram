@@ -22,7 +22,6 @@ class App extends React.Component{
 		const {ui, setHeaderModal, getHistory} = this.props;
 		setHeaderModal();
 		if(!ui.headerModal){
-			console.log("히스토리불러올거임")
 			await getHistory();
 		}
 	}
@@ -51,31 +50,32 @@ class App extends React.Component{
 	}
 
 	async componentDidMount() {
-		window.addEventListener("scroll", this.handleScroll);
-		await this.props.checkSession().then(()=>this.handleCheckLogin());
-  }
-
-	handleCheckLogin = () =>{
 		const { auth } = this.props;
-		if(!auth.session.logged){ //not login
-			if(window.location.pathname === "/explore"){
-				document.location = "/"
+
+		window.addEventListener("scroll", this.handleScroll);
+
+		await this.props.checkSession().then(()=>{
+			if(!auth.userinfo.logged){ //not login
+				if(window.location.pathname === "/explore"){
+					document.location = "/"
+				}
 			}
-		}
-	}
+		});
+  }
 
 	componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
 	}
 
 	render(){
-		const {auth, ui} = this.props;
+		const {auth, ui, history} = this.props;
 		return(
 			<Router>
 				<section className="react-body">
-					{auth.session.logged ?
+					{auth.logged ?
 					<Header
 						ui={ui}
+						history={history}
 						userinfo={auth.userinfo}
 						headDisplay={ui.header}
 						handleHeaderModal={this.handleHeaderModal}
@@ -84,7 +84,7 @@ class App extends React.Component{
 					null}
 					{ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
 					<Switch>
-						<Route exact path="/" component={auth.session.logged?Posts:Login}/>
+						<Route exact path="/" component={auth.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
 						<Route component={NotFound}/>
 					</Switch>
@@ -97,7 +97,8 @@ class App extends React.Component{
 const mapStateToProps = (state) => ({
   auth: state.auth,
 	ui: state.ui,
-	post: state.post
+	post: state.post,
+	history: state.history
 });
 
 const mapDispatchToProps = (dispatch) => ({

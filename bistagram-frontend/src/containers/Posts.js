@@ -9,6 +9,7 @@ import * as ui from '../actions/ui';
 
 import FollowList from '../components/Follow/FollowList';
 import Postwrite from '../components/Post/Postwrite';
+import Nothingpost from '../components/Post/Nothingpost';
 import PostView from '../components/Post/PostView';
 import Postmodal from '../components/Post/Postmodal';
 
@@ -31,6 +32,7 @@ class Post extends Component{
 
 	componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
+		this.props.postformReset();
 	}
 
 	getPostData = async() =>{
@@ -96,7 +98,7 @@ class Post extends Component{
 
 	handleDeletePost = async() =>{
 		const {post, deletePost} = this.props;
-		await deletePost({atcnum: post.posts[post.index].atcnum}).then(()=>this.handleModal(-1));
+		await deletePost({atcnum: post.posts[post.index].atcnum, media: post.posts[post.index].media}).then(()=>this.handleModal(-1));
 	}
 
 	render(){
@@ -125,6 +127,10 @@ class Post extends Component{
 							handleFollowClick={this.handleFollowClick}
 							page='mainpost'
 						/>
+
+						{post.posts.length===0&&
+							<Nothingpost />
+						}
 
 						<div className="post_marginbt30px">
 

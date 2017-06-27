@@ -3,6 +3,8 @@ import multer from 'multer';
 import mysql from 'mysql';
 import passport from 'passport';
 import async from 'async';
+import fs from 'fs';
+
 import dbconfig from '../dbinfo/database';
 
 const router = new express.Router();
@@ -91,6 +93,20 @@ router.post('/SearchPosts', async (req, res) => {
   });
 });
 
+
+const deletefiles = (files) =>{
+  files.forEach((file)=>{
+    fs.unlink('upload/'+file.medianame, (err)=>{
+      if(err){
+        console.log(err);
+        return;
+      }
+    })
+  })
+}
+
+
+
 router.delete('/deletePost', async (req, res) => {
   let sql = "delete from article where atcnum=?";
   let params = [req.body.atcnum];
@@ -103,6 +119,7 @@ router.delete('/deletePost', async (req, res) => {
         return res.json({result: false});
       }
       else{
+        deletefiles(req.body.media)
         return res.json({result: true});
       }
     }
@@ -358,7 +375,7 @@ router.post('/uploadPost', (req, res) => {
                       }
                       let checkNick = [];
                       data.forEach((value)=>{
-                        checkNick =[...checkNick, [value.username, username, 'post', atcnum, req.body.content]]
+                        checkNick =[...checkNick, [value.username, username, 'call', atcnum, req.body.content]]
                       })
                       let historysql='insert into history(username, who, type, atcnum, content) values ?';
                       con.query(historysql, [checkNick], (err, data) => {

@@ -29,9 +29,11 @@ router.get('/check', async (req, res) => {
             state,
         };
         getHisCount(req.user.username, (err, value)=>{
-
-          res.json({sessionID: req.sessionID, user, hiscount: value});
+          res.json({sessionID: req.sessionID, user, hiscount: value, logged: true});
         });
+    }
+    else{
+      res.json({logged: false});
     }
 });
 

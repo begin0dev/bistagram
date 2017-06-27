@@ -46,10 +46,12 @@ const userinfo ={
     profileimgname: null,
     state: null
   },
+  hiscount: -1,
   followInfo: {
     followers: 0,
     following: 0
-  }
+  },
+  logged: false
 }
 
 const submitStatus = {
@@ -68,6 +70,7 @@ const initialState ={
     ...userinfo
   },
   session: {
+    logged: false
   },
   requests: {
     checkUserName: {
@@ -109,7 +112,6 @@ function auth(state=initialState, action) {
             }
         }
     case AUTH.CHECK_SESSION + "_FULFILLED":
-    console.log(payload)
         return {
             ...state,
             requests: {
@@ -124,11 +126,8 @@ function auth(state=initialState, action) {
                     ...payload.data.followInfo
                 }
             },
-            session: {
-              ...state.session,
-              logged: !payload.data.user ? false : true
+            logged: payload.data.logged
             }
-        }
     case AUTH.CHECK_SESSION + "_REJECTED":
         return {
             ...state,

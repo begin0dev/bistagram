@@ -1,28 +1,15 @@
 import React, { Component } from 'react';
 
-function login(auth, signIn) {
-  return new Promise(function(resolve, reject){
-	   signIn(auth.login);
-  });
-}
-
 class Signin extends Component {
-  constructor(props) {
-      super(props);
-      this.handleSubmit=this.handleSubmit.bind(this);
-  }
 
   handleChange = (e) =>{
     this.props.changeUserData({form:'login', name: e.target.name, value: e.target.value})
   }
 
-  async handleSubmit() {
+  handleSubmit = async () =>{
     const {auth, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
-
-    await login(auth, signIn);
-    
-    setSubmitStatus({name: 'signin', value: false});
+    await signIn(auth.login).then(()=>this.props.auth.session.logged?document.location = "/":setSubmitStatus({name: 'signin', value: false}))
   }
 
   handleKeyPress = (e) => {

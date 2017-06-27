@@ -25,12 +25,6 @@ delete from reply where username=old.username;
 delete from history where username=old.username or who=old.username;
 end//
 
-create trigger insertmember after insert on member
-for each row
-begin
-insert into history(username, type) values(new.username, 'register');
-end//
-
 delimiter ;
 
 
@@ -96,7 +90,7 @@ delete from media where atcnum=old.atcnum;
 delete from hashtag where atcnum=old.atcnum;
 delete from atclike where atcnum=old.atcnum;
 delete from reply where atcnum=old.atcnum;
-delete from history where type='post' and atcnum=old.atcnum;
+delete from history where atcnum=old.atcnum;
 end//
 
 create trigger clicklike after insert on atclike
@@ -162,9 +156,11 @@ create table history
 hisnum int not null auto_increment,
 username varchar(25) not null,
 who varchar(25),
-type enum('atclike', 'follow', 'post', 'reply', 'register'),
+type enum('atclike', 'follow', 'call', 'reply'),
 atcnum int,
+replynum int,
 content text,
+updateday datetime default current_timestamp,
 `read` tinyint(1) not null default 0,
 primary key(hisnum, username),
 foreign key(username) references member(username),

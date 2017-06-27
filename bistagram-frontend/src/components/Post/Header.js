@@ -11,12 +11,12 @@ class Header extends Component {
 
     handleResigerDayTitle = (date) => {
   		let actiondate = new Date(date);
-         	date = actiondate.getFullYear()+'년 '+(actiondate.getMonth()+1)+'월 '+actiondate.getDate()+'일';
+     	date = actiondate.getFullYear()+'년 '+(actiondate.getMonth()+1)+'월 '+actiondate.getDate()+'일';
   		return date;
   	}
   	handleResigerDayView = (date) => {
   		let actiondate = new Date(date);
-    		let today = new Date();
+  		let today = new Date();
    		if(today.getDate() === actiondate.getDate() && today.getMonth() === actiondate.getMonth() && today.getYear() === actiondate.getYear()){
        		let hourssince = today.getHours() - actiondate.getHours();
        		let minutessince = today.getMinutes() - actiondate.getMinutes();
@@ -31,14 +31,10 @@ class Header extends Component {
     		}else{
        		let oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
        		let diffDays = Math.round(Math.abs((today.getTime() - actiondate.getTime())/(oneDay)));
-       		if(diffDays >= 7){
-         			date = (actiondate.getMonth()+1)+'월 '+actiondate.getDate()+'일';
-       		}else{
-         			if(diffDays === '0'){
-            			diffDays = '1';
-         			}
-         			date = diffDays+'일 전';
-       		}
+     			if(diffDays === '0'){
+        			diffDays = '1';
+     			}
+     			date = diffDays+'일 전';
     		}
   		return date;
   	}

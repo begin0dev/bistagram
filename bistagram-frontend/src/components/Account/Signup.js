@@ -10,11 +10,6 @@ const regex ={
 
 class Register extends Component {
 
-  constructor(props) {
-      super(props);
-      this.handleSubmit=this.handleSubmit.bind(this);
-  }
-
   handleChange = (e) =>{
     this.props.changeUserData({form:'register', name: e.target.name, value: e.target.value})
   }
@@ -62,7 +57,7 @@ class Register extends Component {
 
   }
 
-  async handleSubmit(){
+  handleSubmit = async() =>{
     const {auth, signUp, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signup', value: true});
 
@@ -104,12 +99,8 @@ class Register extends Component {
       setErrorMessage({name: "register", msg:"6자 이상의 비밀번호를 만드세요."});
     }
     else{
-      await signUp(auth.register).then(()=>{
-        if(this.props.auth.session.logged){        
-          document.location.reload();
-        }});
+      await signUp(auth.register).then(()=>this.props.auth.session.logged?document.location = "/":setSubmitStatus({name: 'signup', value: false}))
     }
-    setSubmitStatus({name: 'signup', value: false});
   }
 
   handleKeyPress = (e) => {

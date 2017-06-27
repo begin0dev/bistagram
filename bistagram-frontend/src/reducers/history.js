@@ -7,7 +7,7 @@ const request = {
 }
 
 const initialState = {
-  history:[
+  histories:[
 
   ],
   requests: {
@@ -36,8 +36,8 @@ function history(state=initialState, action) {
     case HISTORY.GET_HISTORY + "_FULFILLED":
         return {
             ...state,
-            history:[
-                ...payload.data
+            histories:[
+                ...payload.data.history
             ],
             requests: {
                 ...state.requests,
