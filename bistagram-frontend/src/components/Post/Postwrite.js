@@ -6,11 +6,17 @@ import noimg from '../../img/noimg.jpg';
 
 import Dragitem from './Dragitem';
 
+const removeTag = (reply) => {
+	return reply.replace(/(<([^>]+)>)/gi, "");
+}
+
 @DragDropContext(HTML5Backend)
 class Postwrite extends Component {
     handleChangeContent = (e) =>{
-      const {setPostContent} = this.props;
-      setPostContent({value: e.target.value});
+      const {post, setPostContent} = this.props;
+      if(post.content.length < 1000){
+        setPostContent({value: e.target.value});
+      }
     }
     handleDragMedia = (lastX, nextX) =>{
       this.props.moveMedia({lastX:lastX, nextX:nextX});
@@ -40,7 +46,7 @@ class Postwrite extends Component {
       e.preventDefault();
       const {post, uploadPost, postformReset} = this.props;
       let formdata=new FormData();
-      formdata.append('content', post.content)
+      formdata.append('content', removeTag(post.content))
       post.media.forEach(function(file){
         formdata.append('media', file)
       })
