@@ -77,6 +77,7 @@ class Register extends Component {
 
     if(!username_val || !nickname_val || !password_val){
       setErrorMessage({name: "register", msg:"필수 항목입니다."});
+      setSubmitStatus({name: 'signup', value: false})
     }
     else if(!regex.regemail.test(username_val) && !regex.regphone.test(username_val)){
       if(regex.regnum){
@@ -85,18 +86,23 @@ class Register extends Component {
       else{
         setErrorMessage({name: "register", msg:"올바른 이메일 주소를 입력하세요."});
       }
+      setSubmitStatus({name: 'signup', value: false})
     }
     else if(!auth.register.checked.username){
       setErrorMessage({name: "register", msg:`다른 계정에서 ${username_val} 주소를 사용하고 있습니다.`});
+      setSubmitStatus({name: 'signup', value: false})
     }
     else if(!regex.regnickname.test(nickname_val)){
       setErrorMessage({name: "register", msg:"사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
+      setSubmitStatus({name: 'signup', value: false})
     }
     else if(!auth.register.checked.nickname){
       setErrorMessage({name: "register", msg:"다른 사람이 이용 중인 사용자 이름입니다."});
+      setSubmitStatus({name: 'signup', value: false})
     }
     else if(!regex.regpassword.test(password_val)){
       setErrorMessage({name: "register", msg:"6자 이상의 비밀번호를 만드세요."});
+      setSubmitStatus({name: 'signup', value: false})
     }
     else{
       await signUp(auth.register).then(()=>this.props.auth.session.logged?document.location = "/":setSubmitStatus({name: 'signup', value: false}))

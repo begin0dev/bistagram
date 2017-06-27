@@ -3,6 +3,10 @@ import Textarea from 'react-textarea-autosize';
 
 import Contentview from './Contentview'
 
+const removeTag = (reply) => {
+	return reply.replace(/(<([^>]+)>)/gi, "");
+}
+
 class Footer extends Component {
     constructor(props) {
       super(props);
@@ -40,7 +44,7 @@ class Footer extends Component {
       }
       if(e.charCode === 13){
         setPostIndex({index: index, replyindex: -1});
-        insertReply({atcnum: post.atcnum, content: this.state.reply});
+        insertReply({atcnum: post.atcnum, content: removeTag(this.state.reply)});
         this.setState({
           reply: ''
         });

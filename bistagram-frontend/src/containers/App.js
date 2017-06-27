@@ -19,10 +19,10 @@ import '../css/followUl.css';
 class App extends React.Component{
 
 	handleHeaderModal = async () =>{
-		const {ui, setHeaderModal, getHistory} = this.props;
+		const {ui, setHeaderModal, getHistory, changeUserData} = this.props;
 		setHeaderModal();
 		if(!ui.headerModal){
-			await getHistory();
+			await getHistory().then(()=>changeUserData({form:'userinfo', name:'hiscount', value:0}));
 		}
 	}
 
@@ -102,6 +102,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+	changeUserData: (params) => dispatch(auth.changeUserData(params)),
 	checkSession: () => dispatch(auth.checkSession()),
 	logout: () => dispatch(auth.logout()),
 
