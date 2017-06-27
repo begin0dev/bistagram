@@ -19,10 +19,14 @@ import '../css/followUl.css';
 class App extends React.Component{
 
 	handleHeaderModal = async () =>{
-		const {ui, setHeaderModal, getHistory, changeUserData} = this.props;
+		const {ui, setHeaderModal, getHistory, changeUserData, setLoading, setLoadingInitial} = this.props;
+		setLoading({name:"history", value:true});
 		setHeaderModal();
 		if(!ui.headerModal){
-			await getHistory().then(()=>changeUserData({form:'userinfo', name:'hiscount', value:0}));
+			await getHistory().then(()=>{
+				changeUserData({form:'userinfo', name:'hiscount', value:0});
+				setLoadingInitial();
+			});
 		}
 	}
 
@@ -53,7 +57,6 @@ class App extends React.Component{
 		const { auth } = this.props;
 
 		window.addEventListener("scroll", this.handleScroll);
-
 		await this.props.checkSession().then(()=>{
 			if(!auth.userinfo.logged){ //not login
 				if(window.location.pathname === "/explore"){
@@ -109,7 +112,10 @@ const mapDispatchToProps = (dispatch) => ({
 	setHeader: (value) => dispatch(ui.setHeader(value)),
 	setHeaderModal: () => dispatch(ui.setHeaderModal()),
 
-	getHistory: () => dispatch(history.getHistory())
+	getHistory: () => dispatch(history.getHistory()),
+
+	setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
+	setLoading: (params) => dispatch(ui.setLoading(params))
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

@@ -9,9 +9,7 @@ const conn = mysql.createConnection(dbconfig);
 
 router.post('/RecommedFollow', (req, res) => {
   if (!req.user) {
-    return res
-        .status(401)
-        .json({code: 0, message: 'NOT LOGGED IN'});
+    return res.status(401).json({code: 0, message: 'NOT LOGGED IN'});
   }
   let username=req.user.username;
   let sql = "select member.username, name, nickname, profileimgname, state, false as follow, convert(recommend.type using utf8) as type from member join "+
@@ -29,7 +27,7 @@ router.post('/RecommedFollow', (req, res) => {
   let params = [username, username, username, username, req.body.start, req.body.count];
   conn.query(sql, params, function(err, rows) {
     if(err) {
-      return res.status(500).json({message: err.message});
+      return res.status(400).json({code: 1, message: err.message});
     }
     else{
       return res.json(rows);

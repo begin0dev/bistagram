@@ -17,8 +17,10 @@ const TopInfoPart = ({ui, history, userinfo, handleLogout, handleHeaderModal}) =
 
           {ui.headerModal&&
             <Historymodal
-            userinfo={userinfo}
-            history={history}/>
+              ui={ui}
+              userinfo={userinfo}
+              history={history}
+            />
           }
 
 				</div>

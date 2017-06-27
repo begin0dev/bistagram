@@ -22,11 +22,11 @@ let position =	0;
 
 class Post extends Component{
 
-	async componentDidMount() {
+	componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
 		const {setLoadingInitial, setLoading} = this.props;
 		setLoading({name:"main", value:true});
-		await this.getPostData();
+		this.getPostData();
 		setTimeout(()=>{ setLoadingInitial() }, 200);
 	}
 
@@ -35,10 +35,15 @@ class Post extends Component{
 		this.props.postformReset();
 	}
 
-	getPostData = async() =>{
+	getPostData = async () =>{
 		const {searchPosts, recommendFollow} = this.props;
-		await recommendFollow({start:0, count:3})
-		await searchPosts({start:this.props.post.start});
+		try{
+			await recommendFollow({start:0, count:3});
+			await searchPosts({start:this.props.post.start});
+		}
+		catch(e){
+			document.location.reload();
+		}
 	}
 
 	handleScroll = () => {

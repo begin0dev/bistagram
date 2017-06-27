@@ -93,7 +93,6 @@ router.post('/SearchPosts', async (req, res) => {
   });
 });
 
-
 const deletefiles = (files) =>{
   files.forEach((file)=>{
     fs.unlink('upload/'+file.medianame, (err)=>{
@@ -104,8 +103,6 @@ const deletefiles = (files) =>{
     })
   })
 }
-
-
 
 router.delete('/deletePost', async (req, res) => {
   let sql = "delete from article where atcnum=?";
@@ -227,7 +224,6 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage: storage }).any();
 
-
 const getHashTag = params =>{
   let tagString=params.content;
   let atcnum=params.atcnum;
@@ -277,24 +273,76 @@ const getNickName = params =>{
 
 
 router.post('/insertReply', async (req, res) => {
-  let username=req.user.username;
-  let sql = "insert into reply(atcnum, username, content) values(?,?,?)";
-  let params = [req.body.atcnum, username, req.body.content];
-  conn.query(sql, params, function(err, rows) {
-    if(err) {
-      return res.status(500).json({message: err.message});
-    }
-    else{
-      if(rows.affectedRows===0){
-        return res.json({message: 'fail'});
-      }
-      else{
-        return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
-      }
-    }
-  });
+    let username=req.user.username;
+    let replynum=-1;
+    DBpool.getConnection((err, con) => {
+        if (err) {
+          callback(error => {
+              throw new Error('에러 발생')
+          });
+        }
+        con.beginTransaction(err => {
+            if (err) {
+                con.release();
+                console.log(err)
+            }
+            let insertsql = "insert into reply(atcnum, username, content) values(?,?,?)";
+            let params = [req.body.atcnum, username, req.body.content];
+            conn.query(insertsql, params, function(err, rows) {
+                if(err) {
+                  return res.status(500).json({message: err.message});
+                }
+                if(rows.affectedRows===0){
+                  return res.json({message: 'fail'});
+                }
+                replynum=rows.insertId;
+                let nickNames=getNickName({content:req.body.content});
+                if(nickNames.length>0){
+                  let checkNicksql="select username from member where "
+                  nickNames.forEach((value, i)=>{
+                    if(i===0){
+                      checkNicksql += "nickname=? "
+                    }
+                    else{
+                      checkNicksql += "or nickname=? "
+                    }
+                  })
+                  con.query(checkNicksql, nickNames, (err, data) => {
+                      if(err) {
+                          return con.rollback(() => {
+                              con.release();
+                              console.log(err)
+                          });
+                      }
+                      let checkNick = [];
+                      data.forEach((value)=>{
+                        checkNick =[...checkNick, [value.username, username, 'call', req.body.atcnum, replynum, req.body.content]]
+                      })
+                      let historysql='insert into history(username, who, type, atcnum, replynum, content) values ?';
+                      con.query(historysql, [checkNick], (err, data) => {
+                          if(err) {
+                              return con.rollback(() => {
+                                  con.release();
+                                  console.log(err)
+                              });
+                          }
+                      });
+                  });
+                }
+                con.commit((err) => {
+                  if (err) {
+                      return con.rollback(() => {
+                          con.release();
+                          console.log(err)
+                      });
+                  }
+                  con.release();
+                  return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
+                });
+            });
+        });
+    })
 });
-
 
 
 router.post('/uploadPost', (req, res) => {

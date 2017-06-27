@@ -10,10 +10,14 @@ import FollowLoader from '../components/Follow/FollowLoader';
 class Explore extends Component {
 
   async componentDidMount() {
-    const {setLoadingInitial, setLoading} = this.props;
+    const {setLoadingInitial, setLoading, recommendFollow} = this.props;
     setLoading({name:"explore", value:true});
-    await this.props.recommendFollow({start:0, count:20});
-    setTimeout(()=>{ setLoadingInitial() }, 200);
+    try{
+      await recommendFollow({start:0, count:20}).then(()=>{setTimeout(()=>{ setLoadingInitial() }, 100)});
+    }
+    catch(e){
+      document.location.reload();
+    }
 	}
 
   handleFollowClick = (num) => {

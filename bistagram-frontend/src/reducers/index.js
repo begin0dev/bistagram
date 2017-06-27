@@ -8,7 +8,12 @@ import history from './history';
 import ui from './ui';
 
 const reducers = {
-    auth, post, follow, form, ui, history
+    auth,
+    post,
+    follow,
+    form, 
+    ui,
+    history
 }
 
 export default combineReducers(reducers);
