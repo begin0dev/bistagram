@@ -292,57 +292,61 @@ router.post('/insertReply', async (req, res) => {
                 }
 
                 replynum=rows.insertId;
-                let inserthis = "insert into history(username, who, type, atcnum, replynum, content) values (?, ?, ?, ?, ?, ? )";
-                let inserthisparams = [postuser, username, 'reply', req.body.atcnum, replynum, req.body.content];
+                if(username!==postuser){
+                  let inserthis = "insert into history(username, who, type, atcnum, replynum, content) values (?, ?, ?, ?, ?, ? )";
+                  let inserthisparams = [postuser, username, 'reply', req.body.atcnum, replynum, req.body.content];
 
-                con.query(inserthis, inserthisparams, (err, rows) => {
-                    if(err) {
-                      return res.status(500).json({message: err.message});
+                  con.query(inserthis, inserthisparams, (err, rows) => {
+                      if(err) {
+                        return res.status(500).json({message: err.message});
+                      }
+
+                  });
+                }
+
+                let nickNames=getNickName({content:req.body.content, nickname:req.user.nickname, postnick: postnick});
+                if(nickNames.length>0){
+                  let checkNicksql="select username from member where "
+                  nickNames.forEach((value, i)=>{
+                    if(i===0){
+                      checkNicksql += "nickname=? "
                     }
-
-                    let nickNames=getNickName({content:req.body.content, nickname:req.user.nickname, postnick: postnick});
-                    if(nickNames.length>0){
-                      let checkNicksql="select username from member where "
-                      nickNames.forEach((value, i)=>{
-                        if(i===0){
-                          checkNicksql += "nickname=? "
-                        }
-                        else{
-                          checkNicksql += "or nickname=? "
-                        }
+                    else{
+                      checkNicksql += "or nickname=? "
+                    }
+                  })
+                  con.query(checkNicksql, nickNames, (err, data) => {
+                      if(err) {
+                          return con.rollback(() => {
+                              con.release();
+                              console.log(err)
+                          });
+                      }
+                      let checkNick = [];
+                      data.forEach((value)=>{
+                        checkNick =[...checkNick, [value.username, username, 'call', req.body.atcnum, replynum, req.body.content]]
                       })
-                      con.query(checkNicksql, nickNames, (err, data) => {
+                      let historysql='insert into history(username, who, type, atcnum, replynum, content) values ?';
+                      con.query(historysql, [checkNick], (err, data) => {
                           if(err) {
                               return con.rollback(() => {
                                   con.release();
                                   console.log(err)
                               });
                           }
-                          let checkNick = [];
-                          data.forEach((value)=>{
-                            checkNick =[...checkNick, [value.username, username, 'call', req.body.atcnum, replynum, req.body.content]]
-                          })
-                          let historysql='insert into history(username, who, type, atcnum, replynum, content) values ?';
-                          con.query(historysql, [checkNick], (err, data) => {
-                              if(err) {
-                                  return con.rollback(() => {
-                                      con.release();
-                                      console.log(err)
-                                  });
-                              }
-                          });
                       });
-                    }
-                    con.commit((err) => {
-                      if (err) {
-                          return con.rollback(() => {
-                              con.release();
-                              console.log(err)
-                          });
-                      }
-                      con.release();
-                      return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
-                    });
+                  });
+                }
+
+                con.commit((err) => {
+                  if (err) {
+                      return con.rollback(() => {
+                          con.release();
+                          console.log(err)
+                      });
+                  }
+                  con.release();
+                  return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
                 });
             });
         });
