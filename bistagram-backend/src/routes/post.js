@@ -161,8 +161,6 @@ router.delete('/notlikeAtc', async (req, res) => {
   });
 });
 
-
-
 router.delete('/deleteReply', async (req, res) => {
   let sql = "delete from reply where replynum=?";
   let params = [req.body.replynum];
@@ -256,13 +254,11 @@ const getNickName = params =>{
   for (let w in tmplist) {
       let hashSub = tmplist[ w ].split('@');
       for (let x in hashSub) {
-          if (hashSub[x] != "")
-          {
-              if (hashSub[x].substr(hashSub[x].length - 1) == ":")
-              {
+          if (hashSub[x] != ""){
+              if (hashSub[x].substr(hashSub[x].length - 1) == ":"){
                   hashSub[x] = hashSub[x].slice(0, -1);
               }
-              if (hashSub[x] != "") {
+              if (hashSub[x] != "" && hashSub[x]!==params.nickname && hashSub[x]!==params.postnick) {
                   tagListArray.push(hashSub[x]);
               }
           }
@@ -274,6 +270,8 @@ const getNickName = params =>{
 
 router.post('/insertReply', async (req, res) => {
     let username=req.user.username;
+    let postuser=req.body.username;
+    let postnick=req.body.nickname;
     let replynum=-1;
     DBpool.getConnection((err, con) => {
         if (err) {
@@ -288,56 +286,63 @@ router.post('/insertReply', async (req, res) => {
             }
             let insertsql = "insert into reply(atcnum, username, content) values(?,?,?)";
             let params = [req.body.atcnum, username, req.body.content];
-            conn.query(insertsql, params, function(err, rows) {
+            con.query(insertsql, params, (err, rows) => {
                 if(err) {
                   return res.status(500).json({message: err.message});
                 }
-                if(rows.affectedRows===0){
-                  return res.json({message: 'fail'});
-                }
+
                 replynum=rows.insertId;
-                let nickNames=getNickName({content:req.body.content});
-                if(nickNames.length>0){
-                  let checkNicksql="select username from member where "
-                  nickNames.forEach((value, i)=>{
-                    if(i===0){
-                      checkNicksql += "nickname=? "
+                let inserthis = "insert into history(username, who, type, atcnum, replynum, content) values (?, ?, ?, ?, ?, ? )";
+                let inserthisparams = [postuser, username, 'reply', req.body.atcnum, replynum, req.body.content];
+
+                con.query(inserthis, inserthisparams, (err, rows) => {
+                    if(err) {
+                      return res.status(500).json({message: err.message});
                     }
-                    else{
-                      checkNicksql += "or nickname=? "
-                    }
-                  })
-                  con.query(checkNicksql, nickNames, (err, data) => {
-                      if(err) {
-                          return con.rollback(() => {
-                              con.release();
-                              console.log(err)
-                          });
-                      }
-                      let checkNick = [];
-                      data.forEach((value)=>{
-                        checkNick =[...checkNick, [value.username, username, 'call', req.body.atcnum, replynum, req.body.content]]
+
+                    let nickNames=getNickName({content:req.body.content, nickname:req.user.nickname, postnick: postnick});
+                    if(nickNames.length>0){
+                      let checkNicksql="select username from member where "
+                      nickNames.forEach((value, i)=>{
+                        if(i===0){
+                          checkNicksql += "nickname=? "
+                        }
+                        else{
+                          checkNicksql += "or nickname=? "
+                        }
                       })
-                      let historysql='insert into history(username, who, type, atcnum, replynum, content) values ?';
-                      con.query(historysql, [checkNick], (err, data) => {
+                      con.query(checkNicksql, nickNames, (err, data) => {
                           if(err) {
                               return con.rollback(() => {
                                   con.release();
                                   console.log(err)
                               });
                           }
+                          let checkNick = [];
+                          data.forEach((value)=>{
+                            checkNick =[...checkNick, [value.username, username, 'call', req.body.atcnum, replynum, req.body.content]]
+                          })
+                          let historysql='insert into history(username, who, type, atcnum, replynum, content) values ?';
+                          con.query(historysql, [checkNick], (err, data) => {
+                              if(err) {
+                                  return con.rollback(() => {
+                                      con.release();
+                                      console.log(err)
+                                  });
+                              }
+                          });
                       });
-                  });
-                }
-                con.commit((err) => {
-                  if (err) {
-                      return con.rollback(() => {
-                          con.release();
-                          console.log(err)
-                      });
-                  }
-                  con.release();
-                  return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
+                    }
+                    con.commit((err) => {
+                      if (err) {
+                          return con.rollback(() => {
+                              con.release();
+                              console.log(err)
+                          });
+                      }
+                      con.release();
+                      return res.json({replynum: rows.insertId, username: username, nickname: req.user.nickname, content: req.body.content});
+                    });
                 });
             });
         });
@@ -403,7 +408,7 @@ router.post('/uploadPost', (req, res) => {
                   });
                 }
 
-                let nickNames=getNickName({content:req.body.content});
+                let nickNames=getNickName({content:req.body.content, username:username});
                 if(nickNames.length>0){
                   let checkNicksql="select username from member where "
                   nickNames.forEach((value, i)=>{

@@ -46,7 +46,8 @@ class Footer extends Component {
       }
       if(e.charCode === 13){
         setPostIndex({index: index, replyindex: -1});
-        insertReply({atcnum: post.atcnum, content: removeTag(this.state.reply)});
+				console.log(post)
+        insertReply({atcnum: post.atcnum, content: removeTag(this.state.reply), username:post.username, nickname: post.userinfo.nickname});
         this.setState({
           reply: ''
         });

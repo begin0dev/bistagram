@@ -33,12 +33,14 @@ export const notlikeAtc = ({atcnum}) => request({
     }
 });
 
-export const insertReply = ({atcnum, content}) => request({
+export const insertReply = ({atcnum, content, username, nickname}) => request({
     url: '/api/post/insertReply',
     method: 'post',
     data: {
       atcnum,
-      content
+      content,
+      username,
+      nickname
     }
 });
 

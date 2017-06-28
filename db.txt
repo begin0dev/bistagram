@@ -106,6 +106,12 @@ begin
 delete from history where who=old.username and type='atclike' and atcnum=old.atcnum;
 end//
 
+create trigger deletereply before delete on reply
+for each row
+begin
+delete from history where replynum=old.replynum;
+end//
+
 delimiter ;
 
 
@@ -164,7 +170,8 @@ updateday datetime default current_timestamp,
 primary key(hisnum, username),
 foreign key(username) references member(username),
 foreign key(who) references member(username),
-foreign key(atcnum) references article(atcnum)
+foreign key(atcnum) references article(atcnum),
+foreign key(replynum) references reply(replynum)
 );
 
 select y.*, media.medianame, media.mediatype from

@@ -61,10 +61,11 @@ const Historyli = ({history}) => {
         <a className="history_id_size history_id_bold">{history.nickname}</a>
         {`${history.type==='follow'?'님이 회원님을 팔로우하기 시작했습니다':''}`}
         {`${history.type==='call'?'님이 댓글에서 회원님을 언급했습니다: ':''}`}
-        {history.type==='call'?
+        {`${history.type==='atclike'?'님이 회원님의 게시물을 좋아합니다.':''}`}
+        {`${history.type==='reply'?'님이 댓글을 남겼습니다:':''}`}
+        {history.type==='call' || history.type==='reply'?
           <span dangerouslySetInnerHTML={{__html: changeTag(history.content)}}></span>:
         ''}
-        {`${history.type==='atclike'&&!history.mediatype?'님이 회원님의 게시물을 좋아합니다.':''}`}
         {`${history.type==='atclike'&&history.mediatype&&history.mediatype.match('video')?'님이 회원님의 동영상을 좋아합니다.':''}`}
         {`${history.type==='atclike'&&history.mediatype&&history.mediatype.match('image')?'님이 회원님의 사진을 좋아합니다.':''}`}
         <time className="history_time history_time_media"

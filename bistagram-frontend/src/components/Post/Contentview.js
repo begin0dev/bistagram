@@ -20,9 +20,12 @@ const Contentview = ({post, auth, hanedleDeleteReply, handleGetReplies}) => {
               <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
             </span>
         </li>
-        {post.repliescount > 4 && post.repliescount !== post.replies.length ?
+        {post.repliescount !== post.replies.length ?
         <li className="reply_li">
-            <button className="reply_morebtn point" onClick={handleGetReplies}>댓글 {post.repliescount}개 모두 보기</button>
+            <button className="reply_morebtn point"
+              onClick={handleGetReplies}>
+              댓글 {post.repliescount}개 모두 보기
+            </button>
         </li>
         :null}
         {post.replies.map((contact, i) => {
