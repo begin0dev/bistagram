@@ -105,7 +105,7 @@ class Register extends Component {
       setSubmitStatus({name: 'signup', value: false})
     }
     else{
-      await signUp(auth.register).then(()=>this.props.auth.session.logged?document.location = "/":setSubmitStatus({name: 'signup', value: false}))
+      await signUp(auth.register).then(()=>this.props.auth.session.logged?document.location.reload():setSubmitStatus({name: 'signup', value: false}))
     }
   }
 

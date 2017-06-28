@@ -9,7 +9,7 @@ class Signin extends Component {
   handleSubmit = async () =>{
     const {auth, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
-    await signIn(auth.login).then(()=>this.props.auth.session.logged?document.location = "/":setSubmitStatus({name: 'signin', value: false}))
+    await signIn(auth.login).then(()=>this.props.auth.session.logged?document.location.reload():setSubmitStatus({name: 'signin', value: false}))
   }
 
   handleKeyPress = (e) => {
