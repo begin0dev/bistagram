@@ -12,7 +12,7 @@ router.post('/RecommedFollow', (req, res) => {
     return res.status(401).json({code: 0, message: 'NOT LOGGED IN'});
   }
   let username=req.user.username;
-  let sql = "select member.username, name, nickname, profileimgname, state, false as follow, convert(recommend.type using utf8) as type from member join "+
+  let sql = "select member.username, name, nickname, profileimgname, state, convert(recommend.type using utf8) as type from member join "+
 					  "(select * from ("+
 						"(select following as username, '나를 팔로우중인 사람' as type, 1 as rank  from following where username = ?) "+
 						"UNION (select follower as username, concat('함께 아는 사람 ', count(follower)) as type, 2 as rank from follower where username in "+
@@ -45,10 +45,10 @@ router.post('/following', (req, res) => {
     }
     else{
       if(rows.affectedRows===0){
-        return res.json({result: false});
+        return res.status(500).json({message: 'fail'});
       }
       else{
-        return res.json({result: true});
+        return res.json({username: req.body.follower});
       }
     }
   });
@@ -64,10 +64,10 @@ router.delete('/unfollow', (req, res) => {
     }
     else{
       if(rows.affectedRows===0){
-        return res.json({result: false});
+        return res.status(500).json({message: 'fail'});
       }
       else{
-        return res.json({result: true});
+        return res.json({username: req.body.follower});
       }
     }
   });

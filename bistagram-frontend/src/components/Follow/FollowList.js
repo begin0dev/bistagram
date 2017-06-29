@@ -8,7 +8,7 @@ const imgsize ={
   height: '56px'
 }
 
-const FollowList = ({follow, page, handleFollowClick}) => {
+const FollowList = ({auth, page, handleFollowClick}) => {
     return (
       <ul className={`border_gray2 ${page === 'mainpost' ?'post_marginbt30px':'post_marginbt60px'}`}>
 				{/*팔로우추천부분*/}
@@ -20,7 +20,7 @@ const FollowList = ({follow, page, handleFollowClick}) => {
               }
             </div>
 					</li>
-					{follow.user.map((contact, i) => {
+					{auth.recommend.users.map((contact, i) => {
 						return(
 							<li className="follow_recommend" key={"flli"+i}>
 								<div className="li_wrap_div">
@@ -37,18 +37,18 @@ const FollowList = ({follow, page, handleFollowClick}) => {
 									</div>
 									<div className="folloew_btn_div">
 										<span className="follow_btn_span">
-											{contact.follow === 1?
-											(<button className="whitebtn btnstyle point"
-                      disabled={follow.index === i && true}
-                      onClick={(e) => handleFollowClick(i)}>
-                      팔로잉
-                      </button>):
-											(<button className={`bluebtn btnstyle point ${follow.index === i ? 'bluebtn_disable':''}`}
-                      disabled={follow.index === i && true}
-                      onClick={(e) => handleFollowClick(i)}>
-                      팔로우
-                      </button>)}
-                      {follow.index === i &&
+                      {auth.userinfo.followInfo.follower.indexOf(contact.username) !== -1?
+											<button className="whitebtn btnstyle point"
+                        disabled={auth.recommend.index === i && true}
+                        onClick={(e) => handleFollowClick(i)}>
+                        팔로잉
+                      </button>:
+											<button className={`bluebtn btnstyle point ${auth.recommend.index === i ? 'bluebtn_disable':''}`}
+                        disabled={auth.recommend.index === i && true}
+                        onClick={(e) => handleFollowClick(i)}>
+                        팔로우
+                      </button>}
+                      {auth.recommend.index === i &&
                         <div className='loding_div loding_img'></div>
                       }
 										</span>

@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import AUTH from './ActionTypes/auth';
+
 import * as service from '../services/auth';
 
 
@@ -24,5 +25,28 @@ export const logout = () => ({
   type: AUTH.LOGOUT,
   payload: {
     promise: service.logout()
+  }
+})
+
+export const recommendFollow = (params) => ({
+  type: AUTH.RECOMMEND_FOLLOW,
+  payload: {
+    promise: service.recommendFollow(params)
+  }
+})
+
+export const setFollowIndex = createAction(AUTH.SET_FOLLOW_INDEX);
+
+export const following = (params) => ({
+  type: AUTH.FOLLOWING,
+  payload: {
+    promise: service.following(params)
+  }
+})
+
+export const unfollow = (params) => ({
+  type: AUTH.UNFOLLOW,
+  payload: {
+    promise: service.unfollow(params)
   }
 })

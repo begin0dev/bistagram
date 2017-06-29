@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as follow from '../actions/follow';
+import * as auth from '../actions/auth';
 import * as ui from '../actions/ui';
 
 import FollowList from '../components/Follow/FollowList';
@@ -13,7 +13,9 @@ class Explore extends Component {
     const {setLoadingInitial, setLoading, recommendFollow} = this.props;
     setLoading({name:"explore", value:true});
     try{
-      await recommendFollow({start:0, count:20}).then(()=>{setTimeout(()=>{ setLoadingInitial() }, 100)});
+      await recommendFollow({start:0, count:20}).then(()=>{
+        setTimeout(()=>{ setLoadingInitial() }, 100)
+      });
     }
     catch(e){
       document.location.reload();
@@ -21,12 +23,12 @@ class Explore extends Component {
 	}
 
   handleFollowClick = (num) => {
-		const {follow, setFollowClickIndex, following, unfollow} = this.props;
-		setFollowClickIndex(num);
-		if(follow.user[num].follow === 0){
-			following({follower:follow.user[num].username});
+		const {auth, setFollowIndex, following, unfollow} = this.props;
+		setFollowIndex(num);
+		if(auth.userinfo.followInfo.follower.indexOf(auth.recommend.users[num].username)!==-1){
+			unfollow({follower:auth.recommend.users[num].username});
 		}else{
-			unfollow({follower:follow.user[num].username});
+			following({follower:auth.recommend.users[num].username});
 		}
 	}
 
@@ -35,9 +37,10 @@ class Explore extends Component {
         <main className="post_body">
 			    <section className="post_wrapper">
           {this.props.ui.loading.explore?
-            <FollowLoader />:
+            <FollowLoader />
+            :
             <FollowList
-              follow={this.props.follow}
+              auth={auth}
               handleFollowClick={this.handleFollowClick}
               page='explore'
             />
@@ -55,10 +58,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  recommendFollow: (params) => dispatch(follow.recommendFollow(params)),
-	setFollowClickIndex: (index) => dispatch(follow.setFollowClickIndex(index)),
-	following: (params) => dispatch(follow.following(params)),
-	unfollow: (params) => dispatch(follow.unfollow(params)),
+  recommendFollow: (params) => dispatch(auth.recommendFollow(params)),
+	setFollowIndex: (index) => dispatch(auth.setFollowIndex(index)),
+	following: (params) => dispatch(auth.following(params)),
+	unfollow: (params) => dispatch(auth.unfollow(params)),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))

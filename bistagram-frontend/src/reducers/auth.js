@@ -14,20 +14,22 @@ const userinfo ={
     profileimgname: null,
     state: null
   },
-  hiscount: -1,
   followInfo: {
-    followers: 0,
-    following: 0
+    followers: [],
+    following: []
   },
-  histories:[
-
-  ],
+  hiscount: -1,
+  histories:[ ],
   logged: false
 }
 
 const initialState ={
   userinfo: {
     ...userinfo
+  },
+  recommend:{
+    index: -1,
+    users: []
   },
   requests: {
     checkSession: {
@@ -38,6 +40,15 @@ const initialState ={
     },
     getHistory: {
         ...request
+    },
+    recommendFollow: {
+      ...request
+    },
+    following: {
+      ...request
+    },
+    unfollow: {
+      ...request
     }
   }
 }
@@ -156,8 +167,132 @@ function auth(state=initialState, action) {
           logout: { ...rejected, error: payload }
         }
       };
-  default:
-    return state;
+
+
+    case AUTH.SET_FOLLOW_INDEX:
+      return{
+        ...state,
+        recommend: {
+          ...state.recommend,
+          index: payload
+        }
+      }
+
+    case AUTH.RECOMMEND_FOLLOW + "_PENDING":
+      return{
+        ...state,
+        requests: {
+          ...state.requests,
+          recommendFollow: { ...pending }
+        }
+      }
+    case AUTH.RECOMMEND_FOLLOW + '_FULFILLED':
+      return {
+        ...state,
+        recommend:{
+          ...state.recommend,
+          users: [...payload.data]
+        },
+        requests: {
+          ...state.requests,
+          recommendFollow: { ...fulfilled }
+        }
+      }
+    case AUTH.RECOMMEND_FOLLOW + '_REJECTED':
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          recommendFollow: { ...rejected, error: payload }
+        }
+      };
+
+    case AUTH.FOLLOWING + "_PENDING":
+      return{
+        ...state,
+        requests: {
+          ...state.requests,
+          following: { ...pending }
+        }
+      }
+    case AUTH.FOLLOWING + '_FULFILLED':
+      return {
+        ...state,
+        userinfo: {
+          ...state.userinfo,
+          followInfo:{
+            ...state.userinfo.followInfo,
+            follower: [
+              ...state.userinfo.followInfo.follower,
+              payload.data.username
+            ]
+          }
+        },
+        recommend: {
+          ...state.recommend,
+          index: -1,
+        },
+        requests: {
+          ...state.requests,
+          following: { ...fulfilled }
+        }
+      }
+    case AUTH.FOLLOWING + '_REJECTED':
+      return {
+        ...state,
+        recommend: {
+          ...state.recommend,
+          index: -1,
+        },
+        requests: {
+          ...state.requests,
+          following: { ...rejected, error: payload }
+        }
+      };
+
+    case AUTH.UNFOLLOW + "_PENDING":
+      return{
+        ...state,
+        requests: {
+          ...state.requests,
+          following: { ...pending }
+        }
+      }
+    case AUTH.UNFOLLOW + '_FULFILLED':
+      let filteredArray = state.userinfo.followInfo.follower.filter(item => item !== payload.data.username)
+      return {
+        ...state,
+        userinfo: {
+          ...state.userinfo,
+          followInfo:{
+            ...state.userinfo.followInfo,
+            follower: filteredArray
+          }
+        },
+        recommend: {
+          ...state.recommend,
+          index: -1,
+        },
+        requests: {
+          ...state.requests,
+          following: { ...fulfilled }
+        }
+      }
+    case AUTH.UNFOLLOW + '_REJECTED':
+      return {
+        ...state,
+        recommend: {
+          ...state.recommend,
+          index: -1,
+        },
+        requests: {
+          ...state.requests,
+          following: { ...rejected, error: payload }
+        }
+      };
+
+    default:
+      return state;
   }
 }
 
