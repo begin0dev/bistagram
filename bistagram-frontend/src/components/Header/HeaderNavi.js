@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Historymodal from './Historymodal';
 
-const TopInfoPart = ({ui, history, userinfo, handleLogout, handleHeaderModal}) => {
+const TopInfoPart = ({ui, userinfo, handleLogout, handleHeaderModal}) => {
   return (
 		<div className="top_menuwrapper">
 			<div className="top_menu">
@@ -19,7 +19,6 @@ const TopInfoPart = ({ui, history, userinfo, handleLogout, handleHeaderModal}) =
             <Historymodal
               ui={ui}
               userinfo={userinfo}
-              history={history}
             />
           }
 

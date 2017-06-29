@@ -51,6 +51,9 @@ const userinfo ={
     followers: 0,
     following: 0
   },
+  histories:[
+
+  ],
   logged: false
 }
 
@@ -90,6 +93,9 @@ const initialState ={
     },
     logout: {
         ...request
+    },
+    getHistory: {
+        ...request
     }
   },
   submitStatus: { ...submitStatus }
@@ -123,7 +129,7 @@ function auth(state=initialState, action) {
                 user: !payload.data.user ? {...userinfo.user} : payload.data.user,
                 hiscount: payload.data.hiscount,
                 followInfo: {
-                    ...payload.data.followInfo
+                  ...payload.data.followInfo
                 }
             },
             logged: payload.data.logged
@@ -136,6 +142,38 @@ function auth(state=initialState, action) {
                 checkSession: { ...rejected, error: payload }
             }
         }
+
+    case AUTH.GET_HISTORY + "_PENDING":
+        return {
+            ...state,
+            requests: {
+                ...state.requests,
+                getHistory: { ...pending }
+            }
+        }
+    case AUTH.GET_HISTORY + "_FULFILLED":
+        return {
+            ...state,
+            userinfo:{
+              ...state.userinfo,
+              histories:[
+                  ...payload.data.history
+              ]
+            },
+            requests: {
+                ...state.requests,
+                getHistory: { ...fulfilled }
+            }
+        }
+    case AUTH.GET_HISTORY + "_REJECTED":
+        return {
+            ...state,
+            requests: {
+                ...state.requests,
+                getHistory: { ...rejected, error: payload }
+            }
+        }
+
 
     case AUTH.CHANGE_USERDATA:
       return {

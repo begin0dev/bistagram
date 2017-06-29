@@ -11,6 +11,14 @@ export const checkSession = () => ({
   }
 })
 
+export const getHistory = (username) => ({
+  type: AUTH.GET_HISTORY,
+  payload: {
+    promise: service.getHistory()
+  }
+})
+
+
 /*
     payload: {
         form,

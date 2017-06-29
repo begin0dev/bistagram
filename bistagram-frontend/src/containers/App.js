@@ -10,7 +10,6 @@ import NotFound from './NotFound';
 
 import * as auth from '../actions/auth';
 import * as ui from '../actions/ui';
-import * as history from '../actions/history';
 
 import '../css/basic.css';
 import '../css/header.css';
@@ -71,14 +70,13 @@ class App extends React.Component{
 	}
 
 	render(){
-		const {auth, ui, history} = this.props;
+		const {auth, ui} = this.props;
 		return(
 			<Router>
 				<section className="react-body">
 					{auth.logged ?
 					<Header
 						ui={ui}
-						history={history}
 						userinfo={auth.userinfo}
 						headDisplay={ui.header}
 						handleHeaderModal={this.handleHeaderModal}
@@ -108,11 +106,10 @@ const mapDispatchToProps = (dispatch) => ({
 	changeUserData: (params) => dispatch(auth.changeUserData(params)),
 	checkSession: () => dispatch(auth.checkSession()),
 	logout: () => dispatch(auth.logout()),
+	getHistory: () => dispatch(auth.getHistory()),
 
 	setHeader: (value) => dispatch(ui.setHeader(value)),
 	setHeaderModal: () => dispatch(ui.setHeaderModal()),
-
-	getHistory: () => dispatch(history.getHistory()),
 
 	setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
 	setLoading: (params) => dispatch(ui.setLoading(params))

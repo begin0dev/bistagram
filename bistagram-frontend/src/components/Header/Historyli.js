@@ -47,7 +47,7 @@ const changeTag = (text) =>{
   return text;
 }
 
-const Historyli = ({history}) => {
+const Historyli = ({history, followinfo}) => {
   return (
     <li className="history_li point">
   		<div className="history_img_div">
@@ -75,17 +75,20 @@ const Historyli = ({history}) => {
         </time>
       </div>
       <div className="history_right_div">
-        {history.type==='follow' ?
-        <span className="history_button_span">
-          <button className="whitebtn btnstyle point">팔로잉</button>
-        </span>
+        {history.type==='follow'?
+          <span className="history_button_span">
+            {followinfo.follower.indexOf(history.username)!==-1 ?
+              <button className="whitebtn btnstyle point">팔로잉</button>:
+              <button className="bluebtn btnstyle point">팔로우</button>
+            }
+          </span>
         :
-        <a className="inlineblock">
-          {history.mediatype&&history.mediatype.match("image")&&
-          <img className="history_imgsize" src={"/upload/"+history.medianame} alt=""></img>}
-          {history.mediatype&&history.mediatype.match("video")&&
-          <video className="history_imgsize" src={"/upload/"+history.medianame}></video>}
-        </a>
+          <a className="inlineblock">
+            {history.mediatype&&history.mediatype.match("image")&&
+            <img className="history_imgsize" src={"/upload/"+history.medianame} alt=""></img>}
+            {history.mediatype&&history.mediatype.match("video")&&
+            <video className="history_imgsize" src={"/upload/"+history.medianame}></video>}
+          </a>
         }
       </div>
     </li>

@@ -5,6 +5,10 @@ export const checkSession = () => request({
     url: '/api/account/check'
 });
 
+export const getHistory = () => request({
+    url: '/api/history/getHistory'
+});
+
 export const checkUserName = (username) => {
   return request({
     url: '/api/account/checkUserName/' + username

@@ -1,5 +1,6 @@
 import express from 'express';
 import mysql from 'mysql';
+import Promise from 'bluebird';
 import passport from 'passport';
 import dbconfig from '../dbinfo/database';
 
@@ -7,19 +8,56 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-const getHisCount = (username, callback) =>{
-    let countsql = "select count(hisnum)as count from history where username=? and `read`=0;";
+const getHisCount = (username) =>{
+  return new Promise((resolve, reject)=>{
+    let sql = "select count(hisnum)as count from history where username=? and `read`=0";
     let params = [username];
-    conn.query(countsql, params, function(err, rows) {
+    conn.query(sql, params, (err, rows) =>{
       if(err) {
-        callback (err, null);
+        reject(err);
       }
-        callback (null, rows[0].count)
+        resolve(rows[0].count);
     });
+  })
+}
+
+const getFollower = (username) =>{
+  return new Promise((resolve, reject)=>{
+    let sql = "select follower from follower where username=?";
+    let params = [username];
+    conn.query(sql, params, (err, rows) =>{
+      if(err) {
+        reject(err);
+      }
+      const follower = [];
+      rows.forEach((row)=>{
+        follower.push(row.follower)
+      })
+      resolve(follower);
+    });
+  })
+}
+
+const getFollowing = (username) =>{
+  return new Promise((resolve, reject)=>{
+    let sql = "select following from following where username=?";
+    let params = [username];
+    conn.query(sql, params, (err, rows) =>{
+      if(err) {
+        reject(err);
+      }
+        const following = [];
+        rows.forEach((row)=>{
+          following.push(row.following)
+        })
+        resolve(following);
+    });
+  })
 }
 
 router.get('/check', async (req, res) => {
     let user = null;
+    let followInfo = null;
     let hiscount = null;
     if (req.user) {
         const { username, nickname, state} = req.user;
@@ -28,9 +66,14 @@ router.get('/check', async (req, res) => {
             nickname,
             state,
         };
-        getHisCount(req.user.username, (err, value)=>{
-          res.json({sessionID: req.sessionID, user, hiscount: value, logged: true});
-        });
+        const hiscount=await getHisCount(req.user.username);
+        const follower=await getFollower(req.user.username);
+        const following=await getFollowing(req.user.username);
+        followInfo ={
+          follower: follower,
+          following: following
+        }
+        res.json({sessionID: req.sessionID, user, followInfo, hiscount: hiscount, logged: true});
     }
     else{
       res.json({logged: false});
