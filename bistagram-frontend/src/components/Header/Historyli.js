@@ -77,7 +77,7 @@ const Historyli = ({history, followinfo}) => {
       <div className="history_right_div">
         {history.type==='follow'?
           <span className="history_button_span">
-            {followinfo.follower.indexOf(history.username)!==-1 ?
+            {followinfo.follower.indexOf(history.who)!==-1 ?
               <button className="whitebtn btnstyle point">팔로잉</button>:
               <button className="bluebtn btnstyle point">팔로우</button>
             }

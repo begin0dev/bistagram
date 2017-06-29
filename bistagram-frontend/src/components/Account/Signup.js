@@ -58,20 +58,20 @@ class Register extends Component {
   }
 
   handleSubmit = async() =>{
-    const {auth, signUp, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
+    const {form, signUp, changeCheck, setErrorMessage, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signup', value: true});
 
-    let username_val=auth.register.username;
-    let nickname_val=auth.register.nickname;
-    let password_val=auth.register.password;
+    let username_val=form.register.username;
+    let nickname_val=form.register.nickname;
+    let password_val=form.register.password;
 
-    if(auth.register.checked.username === undefined){
+    if(form.register.checked.username === undefined){
       changeCheck({name: 'username', value:false});
     }
-    if(auth.register.checked.nickname === undefined){
+    if(form.register.checked.nickname === undefined){
       changeCheck({name: 'nickname', value:false});
     }
-    if(auth.register.checked.password === undefined){
+    if(form.register.checked.password === undefined){
       changeCheck({name: 'password', value:false});
     }
 
@@ -88,7 +88,7 @@ class Register extends Component {
       }
       setSubmitStatus({name: 'signup', value: false})
     }
-    else if(!auth.register.checked.username){
+    else if(!form.register.checked.username){
       setErrorMessage({name: "register", msg:`다른 계정에서 ${username_val} 주소를 사용하고 있습니다.`});
       setSubmitStatus({name: 'signup', value: false})
     }
@@ -96,7 +96,7 @@ class Register extends Component {
       setErrorMessage({name: "register", msg:"사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
       setSubmitStatus({name: 'signup', value: false})
     }
-    else if(!auth.register.checked.nickname){
+    else if(!form.register.checked.nickname){
       setErrorMessage({name: "register", msg:"다른 사람이 이용 중인 사용자 이름입니다."});
       setSubmitStatus({name: 'signup', value: false})
     }
@@ -105,7 +105,7 @@ class Register extends Component {
       setSubmitStatus({name: 'signup', value: false})
     }
     else{
-      await signUp(auth.register).then(()=>this.props.auth.session.logged?document.location.reload():setSubmitStatus({name: 'signup', value: false}))
+      await signUp(form.register).then(()=>this.props.form.submitStatus.logged?document.location.reload():setSubmitStatus({name: 'signup', value: false}))
     }
   }
 
@@ -116,7 +116,7 @@ class Register extends Component {
   }
 
   render() {
-    const {auth, panelChange} = this.props;
+    const {form, panelChange} = this.props;
     return(
       <div className="loginwrap_div">
         <div className="border_div border_gray">
@@ -130,13 +130,13 @@ class Register extends Component {
                   aria-describedby="" aria-label="휴대폰 번호 또는 이메일 주소"
                   aria-required="true" autoCapitalize="off" autoCorrect="off"
                   placeholder="휴대폰 번호 또는 이메일 주소"
-                  value={auth.register.username}
+                  value={form.register.username}
                   ref={(input) => { this.InputUserName = input; }}
                   onBlur={this.handleBlur}
                   onChange={this.handleChange}/>
                   <div className="inputinfo_div">
-                  {auth.register.checked.username !== undefined &&
-                    <span className={`input_img ${auth.register.checked.username?"inputAceept_img":"inputError_img"}`}></span>
+                  {form.register.checked.username !== undefined &&
+                    <span className={`input_img ${form.register.checked.username?"inputAceept_img":"inputError_img"}`}></span>
                   }
                   </div>
                 </div>
@@ -145,7 +145,7 @@ class Register extends Component {
                   name="name" maxLength="20"
                   aria-describedby="" aria-label="성명" aria-required="true"
                   autoCapitalize="off" autoCorrect="off" placeholder="성명"
-                  value={auth.register.name}
+                  value={form.register.name}
                   onChange={this.handleChange}/>
                 </div>
                 <div className="logininput_div">
@@ -153,13 +153,13 @@ class Register extends Component {
                   name="nickname" maxLength="20"
                   aria-describedby="" aria-label="사용자 이름" aria-required="true"
                   autoCapitalize="off" autoCorrect="off" placeholder="사용자 이름"
-                  value={auth.register.nickname}
+                  value={form.register.nickname}
                   ref={(input) => { this.InputNickName = input; }}
                   onBlur={this.handleBlur}
                   onChange={this.handleChange}/>
                   <div className="inputinfo_div">
-                  {auth.register.checked.nickname !== undefined &&
-                      <span className={`input_img ${auth.register.checked.nickname?"inputAceept_img":"inputError_img"}`}></span>
+                  {form.register.checked.nickname !== undefined &&
+                      <span className={`input_img ${form.register.checked.nickname?"inputAceept_img":"inputError_img"}`}></span>
                   }
                   </div>
                 </div>
@@ -168,33 +168,33 @@ class Register extends Component {
                   name="password" maxLength="15"
                   aria-describedby="" aria-label="비밀번호" aria-required="true"
                   autoCapitalize="off" autoCorrect="off" placeholder="비밀번호"
-                  value={auth.register.password}
+                  value={form.register.password}
                   ref={(input) => { this.InputPassword = input; }}
                   onBlur={this.handleBlur}
                   onChange={this.handleChange}
                   onKeyPress={this.handleKeyPress}/>
                   <div className="inputinfo_div">
-                  {auth.register.checked.password !== undefined &&
-                      <span className={`input_img ${auth.register.checked.password?"inputAceept_img":"inputError_img"}`}></span>
+                  {form.register.checked.password !== undefined &&
+                      <span className={`input_img ${form.register.checked.password?"inputAceept_img":"inputError_img"}`}></span>
                   }
                   </div>
                 </div>
                 <div>
                   <span className="regiinput_btn_span">
                     <button type="button"
-                    className={`bluebtn btnstyle point ${auth.submitStatus.signup?"bluebtn_disable":""}`}
+                    className={`bluebtn btnstyle point ${form.submitStatus.signup?"bluebtn_disable":""}`}
                     onClick={this.handleSubmit}
-                    disabled={auth.submitStatus.signup&&"true"}>
+                    disabled={form.submitStatus.signup&&"true"}>
                     가입
                     </button>
-                    {auth.submitStatus.signup&&
+                    {form.submitStatus.signup&&
                     <div className='loding_div loding_img'></div>
                     }
                   </span>
                 </div>
-                {auth.register.status.error &&
+                {form.register.status.error &&
                 <div className="alert_div">
-                  <p aria-atomic="true" role="alert">{auth.register.status.message}</p>
+                  <p aria-atomic="true" role="alert">{form.register.status.message}</p>
                 </div>
                 }
                 <p className="p_style ">가입하면 Bistagram의 <a className="fontcolor_gray fontbold" href="/">약관</a>

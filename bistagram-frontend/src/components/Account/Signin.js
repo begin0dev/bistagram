@@ -7,9 +7,9 @@ class Signin extends Component {
   }
 
   handleSubmit = async () =>{
-    const {auth, signIn, setSubmitStatus} = this.props;
+    const {form, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
-    await signIn(auth.login).then(()=>this.props.auth.session.logged?document.location.reload():setSubmitStatus({name: 'signin', value: false}))
+    await signIn(form.login).then(()=>this.props.form.submitStatus.logged?document.location.reload():setSubmitStatus({name: 'signin', value: false}))
   }
 
   handleKeyPress = (e) => {
@@ -19,7 +19,7 @@ class Signin extends Component {
   }
 
   render() {
-    const {auth, panelChange} = this.props;
+    const {form, panelChange} = this.props;
     return(
       <div className="loginwrap_div">
         <div className="border_div border_gray">
@@ -31,13 +31,13 @@ class Signin extends Component {
                 aria-describedby="" aria-label="휴대폰 번호 또는 이메일 주소"
                 aria-required="true" autoCapitalize="off" autoCorrect="off"
                 placeholder="휴대폰 번호 또는 이메일 주소"
-                value={auth.login.username} onChange={this.handleChange}/>
+                value={form.login.username} onChange={this.handleChange}/>
               </div>
               <div className="logininput_div">
                 <input type="password" className="logininput_txt" name="password" maxLength="15"
                 aria-describedby="" aria-label="비밀번호" aria-required="true"
                 autoCapitalize="off" autoCorrect="off" placeholder="비밀번호"
-                value={auth.login.password} onChange={this.handleChange}
+                value={form.login.password} onChange={this.handleChange}
                 onKeyPress={this.handleKeyPress}/>
                 <div className="inputinfo_div">
                   <a className="">비밀번호를 잊으셨나요?</a>
@@ -45,18 +45,18 @@ class Signin extends Component {
               </div>
               <span className="logininput_btn_span logininput_btn_block">
                 <button type="button"
-                className={`bluebtn btnstyle point ${auth.submitStatus.signin?"bluebtn_disable":""}`}
+                className={`bluebtn btnstyle point ${form.submitStatus.signin?"bluebtn_disable":""}`}
                 onClick={this.handleSubmit}
-                disabled={auth.submitStatus.signin&&"true"}>
+                disabled={form.submitStatus.signin&&"true"}>
                 로그인
                 </button>
-                {auth.submitStatus.signin&&
+                {form.submitStatus.signin&&
                 <div className='loding_div loding_img'></div>
                 }
               </span>
-              {auth.login.status.error &&
+              {form.login.status.error &&
               <div className="alert_div">
-                <p aria-atomic="true" role="alert">{auth.login.status.message}</p>
+                <p aria-atomic="true" role="alert">{form.login.status.message}</p>
               </div>
               }
             </form>

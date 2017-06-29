@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as auth from '../actions/auth';
+import * as form from '../actions/form';
 import * as ui from '../actions/ui';
 
 import '../css/login.css';
@@ -36,13 +36,13 @@ class Login extends Component {
       }
     }
     handlePanelChange =(e)=> {
-      this.props.authDataReset();
+      this.props.formDataReset();
       this.setState({
         isRegi: !this.state.isRegi
       });
     }
     render() {
-      const {auth, ui} = this.props;
+      const {form, ui} = this.props;
       return(
         <main className="login_main" role="main" style={{display:`${ui.loading.main?'none':''}`}}>
           <article className="center_wrap">
@@ -58,7 +58,7 @@ class Login extends Component {
 
             {this.state.isRegi ?
               <Signup
-              auth={auth}
+              form={form}
               panelChange={this.handlePanelChange}
               changeUserData={this.props.changeUserData}
               checkUserName={this.props.checkUserName}
@@ -69,7 +69,7 @@ class Login extends Component {
               setErrorMessage={this.props.setErrorMessage}
               /> :
               <Signin
-              auth={auth}
+              form={form}
               panelChange={this.handlePanelChange}
               changeUserData={this.props.changeUserData}
               signIn={this.props.signIn}
@@ -85,23 +85,20 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  form: state.form,
   ui: state.ui
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeUserData: (formname, name, value) => dispatch(auth.changeUserData(formname, name, value)),
-
-  checkUserName: (username) => dispatch(auth.checkUserName(username)),
-  checkNickName: (nickname) => dispatch(auth.checkNickName(nickname)),
-  changeCheck: (name, value) => dispatch(auth.changeCheck(name, value)),
-
-  authDataReset: () => dispatch(auth.authDataReset()),
-  setSubmitStatus: (name, value) => dispatch(auth.setSubmitStatus(name, value)),
-  setErrorMessage: (name, msg) => dispatch(auth.setErrorMessage(name, msg)),
-
-  signUp: (params) => dispatch(auth.signUp(params)),
-  signIn: (params) => dispatch(auth.signIn(params)),
+  changeUserData: (formname, name, value) => dispatch(form.changeUserData(formname, name, value)),
+  checkUserName: (username) => dispatch(form.checkUserName(username)),
+  checkNickName: (nickname) => dispatch(form.checkNickName(nickname)),
+  changeCheck: (name, value) => dispatch(form.changeCheck(name, value)),
+  formDataReset: () => dispatch(form.formDataReset()),
+  setSubmitStatus: (name, value) => dispatch(form.setSubmitStatus(name, value)),
+  setErrorMessage: (name, msg) => dispatch(form.setErrorMessage(name, msg)),
+  signUp: (params) => dispatch(form.signUp(params)),
+  signIn: (params) => dispatch(form.signIn(params)),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))

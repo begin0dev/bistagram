@@ -10,7 +10,6 @@ const initialState = {
   user: [],
   index: -1,
   start: 0,
-  isMore: true,
   requests: {
     recommendFollow: {
       ...request

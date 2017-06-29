@@ -121,7 +121,7 @@ router.post('/signup', async (req, res, next) => {
         if (err) {
             return res.status(500).json({code: err.code, message: err.message});
         }
-        res.send(req.session);
+        res.json(true);
     });
   })(req, res, next);
 });
@@ -140,7 +140,7 @@ router.post('/signin', async (req, res, next) => {
                   if (err) {
                       return res.status(500).json({code: err.code, message: err.message});
                   }
-                  res.send(req.session);
+                  res.json(true);
               });
             }
         }
