@@ -10,7 +10,7 @@ export const setPostMedia = createAction(FORM.SET_POST_MEDIA);
 export const moveMedia = createAction(FORM.MOVE_MEDIA);
 export const deleteMedia = createAction(FORM.DELETE_MEDIA);
 
-export const changeUserData = createAction(FORM.CHANGE_USERDATA);
+export const changeFormData = createAction(FORM.CHANGE_FORMDATA);
 
 export const checkUserName = (username) => ({
   type: FORM.CHECK_USERNAME,

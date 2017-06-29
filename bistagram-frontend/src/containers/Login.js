@@ -60,7 +60,7 @@ class Login extends Component {
               <Signup
               form={form}
               panelChange={this.handlePanelChange}
-              changeUserData={this.props.changeUserData}
+              changeFormData={this.props.changeFormData}
               checkUserName={this.props.checkUserName}
               checkNickName={this.props.checkNickName}
               changeCheck={this.props.changeCheck}
@@ -71,7 +71,7 @@ class Login extends Component {
               <Signin
               form={form}
               panelChange={this.handlePanelChange}
-              changeUserData={this.props.changeUserData}
+              changeFormData={this.props.changeFormData}
               signIn={this.props.signIn}
               setSubmitStatus={this.props.setSubmitStatus}
               setErrorMessage={this.props.setErrorMessage}
@@ -90,7 +90,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeUserData: (formname, name, value) => dispatch(form.changeUserData(formname, name, value)),
+  changeFormData: (formname, name, value) => dispatch(form.changeFormData(formname, name, value)),
   checkUserName: (username) => dispatch(form.checkUserName(username)),
   checkNickName: (nickname) => dispatch(form.checkNickName(nickname)),
   changeCheck: (name, value) => dispatch(form.changeCheck(name, value)),

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Signin extends Component {
 
   handleChange = (e) =>{
-    this.props.changeUserData({form:'login', name: e.target.name, value: e.target.value})
+    this.props.changeFormData({form:'login', name: e.target.name, value: e.target.value})
   }
 
   handleSubmit = async () =>{

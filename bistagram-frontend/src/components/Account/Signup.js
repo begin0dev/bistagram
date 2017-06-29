@@ -11,7 +11,7 @@ const regex ={
 class Register extends Component {
 
   handleChange = (e) =>{
-    this.props.changeUserData({form:'register', name: e.target.name, value: e.target.value})
+    this.props.changeFormData({form:'register', name: e.target.name, value: e.target.value})
   }
 
   handleBlur = (e) => {

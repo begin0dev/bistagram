@@ -166,7 +166,7 @@ function form(state=initialState, action) {
         }
       }
 
-    case FORM.CHANGE_USERDATA:
+    case FORM.CHANGE_FORMDATA:
       return {
         ...state,
         [payload.form]: {

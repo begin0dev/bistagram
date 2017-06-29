@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions';
+
 import AUTH from './ActionTypes/auth';
 import * as service from '../services/auth';
 
@@ -15,6 +17,8 @@ export const getHistory = (username) => ({
     promise: service.getHistory()
   }
 })
+
+export const changeUserData = createAction(AUTH.CHANGE_USERDATA);
 
 export const logout = () => ({
   type: AUTH.LOGOUT,

@@ -50,6 +50,15 @@ function auth(state=initialState, action) {
   const payload = action.payload
   switch (action.type) {
 
+    case AUTH.CHANGE_USERDATA:
+      return {
+        ...state,
+        [payload.form]: {
+          ...state[payload.form],
+          [payload.name]: payload.value
+        }
+      }
+
     case AUTH.CHECK_SESSION + "_PENDING":
         return {
             ...state,
