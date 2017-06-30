@@ -35,7 +35,7 @@ export const recommendFollow = (params) => ({
   }
 })
 
-export const setFollowIndex = createAction(AUTH.SET_FOLLOW_INDEX);
+export const setFollowUser = createAction(AUTH.SET_FOLLOW_USER);
 
 export const following = (params) => ({
   type: AUTH.FOLLOWING,

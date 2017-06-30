@@ -53,17 +53,28 @@ class App extends React.Component{
 		}
 	}
 
-	async componentDidMount() {
-		const { auth } = this.props;
+	handleFollowClick = (username) => {
+		const {auth, setFollowUser, following, unfollow} = this.props;
+		setFollowUser(username);
+		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
+			unfollow({follower: username});
+		}else{
+			following({follower: username});
+		}
+	}
 
+	async componentDidMount() {
+		const { checkSession } = this.props;
 		window.addEventListener("scroll", this.handleScroll);
-		await this.props.checkSession().then(()=>{
-			if(!auth.userinfo.logged){ //not login
-				if(window.location.pathname === "/explore"){
+		try{
+			await checkSession().then(()=>{
+				if(!this.props.auth.userinfo.logged && window.location.pathname === "/explore"){
 					document.location = "/"
 				}
-			}
-		});
+			});
+		}catch(e){
+			document.location = "/"
+		}
   }
 
 	componentWillUnmount() {
@@ -75,18 +86,19 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{auth.logged ?
+					{auth.userinfo.logged ?
 					<Header
 						ui={ui}
-						userinfo={auth.userinfo}
+						auth={auth}
 						headDisplay={ui.header}
 						handleHeaderModal={this.handleHeaderModal}
+						handleFollowClick={this.handleFollowClick}
 						handleLogout={this.handleLogout}
 					/>:
 					null}
 					{ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
 					<Switch>
-						<Route exact path="/" component={auth.logged?Posts:Login}/>
+						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
 						<Route path="/Search/tags/:keyword" component={Search}/>
 						<Route component={NotFound}/>
@@ -109,6 +121,10 @@ const mapDispatchToProps = (dispatch) => ({
 	checkSession: () => dispatch(auth.checkSession()),
 	logout: () => dispatch(auth.logout()),
 	getHistory: () => dispatch(auth.getHistory()),
+
+	setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
+	following: (params) => dispatch(auth.following(params)),
+	unfollow: (params) => dispatch(auth.unfollow(params)),
 
 	setHeader: (value) => dispatch(ui.setHeader(value)),
 	setHeaderModal: () => dispatch(ui.setHeaderModal()),

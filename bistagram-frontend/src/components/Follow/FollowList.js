@@ -38,17 +38,21 @@ const FollowList = ({auth, page, handleFollowClick}) => {
 									<div className="folloew_btn_div">
 										<span className="follow_btn_span">
                       {auth.userinfo.followInfo.follower.indexOf(contact.username) !== -1?
-											<button className="whitebtn btnstyle point"
-                        disabled={auth.recommend.index === i && true}
-                        onClick={(e) => handleFollowClick(i)}>
-                        팔로잉
-                      </button>:
-											<button className={`bluebtn btnstyle point ${auth.recommend.index === i ? 'bluebtn_disable':''}`}
-                        disabled={auth.recommend.index === i && true}
-                        onClick={(e) => handleFollowClick(i)}>
-                        팔로우
-                      </button>}
-                      {auth.recommend.index === i &&
+  											<button
+                          className="whitebtn btnstyle point"
+                          disabled={contact.username===auth.recommend.clickUser ?true:''}
+                          onClick={() => handleFollowClick(contact.username)}>
+                          팔로잉
+                        </button>
+                        :
+  											<button
+                          className={`bluebtn btnstyle point ${contact.username===auth.recommend.clickUser ? 'bluebtn_disable':''}`}
+                          disabled={contact.username===auth.recommend.clickUser ?true:''}
+                          onClick={() => handleFollowClick(contact.username)}>
+                          팔로우
+                        </button>
+                      }
+                      {contact.username===auth.recommend.clickUser &&
                         <div className='loding_div loding_img'></div>
                       }
 										</span>

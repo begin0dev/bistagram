@@ -13,9 +13,9 @@ const removeTag = (reply) => {
 @DragDropContext(HTML5Backend)
 class Postwrite extends Component {
     handleChangeContent = (e) =>{
-      const {post, setPostContent} = this.props;
+      const {post, changeFormData} = this.props;
       if(post.content.length < 1000){
-        setPostContent({value: e.target.value});
+        changeFormData({form: 'post', name: 'content', value: e.target.value});
       }
     }
     handleDragMedia = (lastX, nextX) =>{

@@ -28,7 +28,7 @@ const initialState ={
     ...userinfo
   },
   recommend:{
-    index: -1,
+    clickUser: '',
     users: []
   },
   requests: {
@@ -91,13 +91,17 @@ function auth(state=initialState, action) {
                 hiscount: payload.data.hiscount,
                 followInfo: {
                   ...payload.data.followInfo
-                }
-            },
-            logged: payload.data.logged
+                },
+                logged: payload.data.logged
             }
+        }
     case AUTH.CHECK_SESSION + "_REJECTED":
         return {
             ...state,
+            userinfo: {
+                ...state.userinfo,
+                logged: false
+            },
             requests: {
                 ...state.requests,
                 checkSession: { ...rejected, error: payload }
@@ -169,12 +173,12 @@ function auth(state=initialState, action) {
       };
 
 
-    case AUTH.SET_FOLLOW_INDEX:
+    case AUTH.SET_FOLLOW_USER:
       return{
         ...state,
         recommend: {
           ...state.recommend,
-          index: payload
+          clickUser: payload
         }
       }
 
@@ -230,7 +234,7 @@ function auth(state=initialState, action) {
         },
         recommend: {
           ...state.recommend,
-          index: -1,
+          clickUser:''
         },
         requests: {
           ...state.requests,
@@ -242,7 +246,7 @@ function auth(state=initialState, action) {
         ...state,
         recommend: {
           ...state.recommend,
-          index: -1,
+          clickUser:''
         },
         requests: {
           ...state.requests,
@@ -271,7 +275,7 @@ function auth(state=initialState, action) {
         },
         recommend: {
           ...state.recommend,
-          index: -1,
+          clickUser:''
         },
         requests: {
           ...state.requests,
@@ -283,7 +287,7 @@ function auth(state=initialState, action) {
         ...state,
         recommend: {
           ...state.recommend,
-          index: -1,
+          clickUser:''
         },
         requests: {
           ...state.requests,

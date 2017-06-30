@@ -10,11 +10,13 @@ import FollowLoader from '../components/Follow/FollowLoader';
 class Explore extends Component {
 
   async componentDidMount() {
-    const {setLoadingInitial, setLoading, recommendFollow} = this.props;
+    const {setLoading, recommendFollow, setLoadingInitial} = this.props;
     setLoading({name:"explore", value:true});
     try{
       await recommendFollow({start:0, count:20}).then(()=>{
-        setTimeout(()=>{ setLoadingInitial() }, 100)
+        setTimeout(()=>{
+          setLoadingInitial()
+        }, 200)
       });
     }
     catch(e){
@@ -22,17 +24,18 @@ class Explore extends Component {
     }
 	}
 
-  handleFollowClick = (num) => {
-		const {auth, setFollowIndex, following, unfollow} = this.props;
-		setFollowIndex(num);
-		if(auth.userinfo.followInfo.follower.indexOf(auth.recommend.users[num].username)!==-1){
-			unfollow({follower:auth.recommend.users[num].username});
+  handleFollowClick = (username) => {
+		const {auth, setFollowUser, following, unfollow} = this.props;
+		setFollowUser(username);
+		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
+			unfollow({follower: username});
 		}else{
-			following({follower:auth.recommend.users[num].username});
+			following({follower: username});
 		}
 	}
 
   render() {
+    const {auth} = this.props;
 		return(
         <main className="post_body">
 			    <section className="post_wrapper">
@@ -40,8 +43,8 @@ class Explore extends Component {
             <FollowLoader />
             :
             <FollowList
-              auth={auth}
-              handleFollowClick={this.handleFollowClick}
+							auth={auth}
+							handleFollowClick={this.handleFollowClick}
               page='explore'
             />
           }
@@ -59,7 +62,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   recommendFollow: (params) => dispatch(auth.recommendFollow(params)),
-	setFollowIndex: (index) => dispatch(auth.setFollowIndex(index)),
+  setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
 	following: (params) => dispatch(auth.following(params)),
 	unfollow: (params) => dispatch(auth.unfollow(params)),
 

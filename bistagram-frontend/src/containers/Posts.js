@@ -61,6 +61,16 @@ class Post extends Component{
 		}
 	}
 
+	handleFollowClick = (username) => {
+		const {auth, setFollowUser, following, unfollow} = this.props;
+		setFollowUser(username);
+		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
+			unfollow({follower: username});
+		}else{
+			following({follower: username});
+		}
+	}
+
 	handleLikeClick = (num) => {
 		const {post, setPostIndex, likeAtc, notlikeAtc} = this.props;
 		setPostIndex({index: num, replyindex: -1});
@@ -68,16 +78,6 @@ class Post extends Component{
 			notlikeAtc({atcnum: post.posts[num].atcnum});
 		}else{
 			likeAtc({atcnum: post.posts[num].atcnum});
-		}
-	}
-
-	handleFollowClick = (num) => {
-		const {auth, setFollowIndex, following, unfollow} = this.props;
-		setFollowIndex(num);
-		if(auth.userinfo.followInfo.follower.indexOf(auth.recommend.users[num].username)!==-1){
-			unfollow({follower:auth.recommend.users[num].username});
-		}else{
-			following({follower:auth.recommend.users[num].username});
 		}
 	}
 
@@ -109,7 +109,7 @@ class Post extends Component{
 	render(){
 		const {post, auth, form, ui, setPostIndex, insertReply,
 			deleteReply, getAllReplies, setPostMedia, moveMedia,
-			deleteMedia, setPostContent, uploadPost, postformReset} = this.props;			 
+			deleteMedia, changeFormData, uploadPost, postformReset} = this.props;
 
 		return(
 				<main className="post_body" style={{display:`${ui.loading.main?'none':''}`}}>
@@ -118,7 +118,7 @@ class Post extends Component{
 						<Postwrite
 							post={form.post}
 							upload={post.status.uploadPost}
-							setPostContent={setPostContent}
+							changeFormData={changeFormData}
 							setPostMedia={setPostMedia}
 							moveMedia={moveMedia}
 							deleteMedia={deleteMedia}
@@ -190,14 +190,13 @@ const mapDispatchToProps = (dispatch) => ({
 	uploadPost: (params) => dispatch(post.uploadPost(params)),
 
 	postformReset: () => dispatch(form.postformReset()),
-	setPostContent: (value) => dispatch(form.setPostContent(value)),
+	changeFormData: (formname, name, value) => dispatch(form.changeFormData(formname, name, value)),
 	setPostMedia: (params) => dispatch(form.setPostMedia(params)),
 	moveMedia: (params) => dispatch(form.moveMedia(params)),
 	deleteMedia: (index) => dispatch(form.deleteMedia(index)),
 
-
 	recommendFollow: (params) => dispatch(auth.recommendFollow(params)),
-	setFollowIndex: (index) => dispatch(auth.setFollowIndex(index)),
+	setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
 	following: (params) => dispatch(auth.following(params)),
 	unfollow: (params) => dispatch(auth.unfollow(params)),
 

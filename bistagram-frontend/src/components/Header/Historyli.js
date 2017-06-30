@@ -47,7 +47,7 @@ const changeTag = (text) =>{
   return text;
 }
 
-const Historyli = ({history, followinfo}) => {
+const Historyli = ({history, auth, handleFollowClick}) => {
   return (
     <li className="history_li point">
   		<div className="history_img_div">
@@ -77,9 +77,20 @@ const Historyli = ({history, followinfo}) => {
       <div className="history_right_div">
         {history.type==='follow'?
           <span className="history_button_span">
-            {followinfo.follower.indexOf(history.who)!==-1 ?
-              <button className="whitebtn btnstyle point">팔로잉</button>:
-              <button className="bluebtn btnstyle point">팔로우</button>
+            {auth.userinfo.followInfo.follower.indexOf(history.who)!==-1 ?
+              <button className="whitebtn btnstyle point"
+              disabled={history.who===auth.recommend.clickUser ?true:''}
+              onClick={(e)=>handleFollowClick(history.who)}>
+              팔로잉
+              </button>:
+              <button className={`bluebtn btnstyle point ${history.who===auth.recommend.clickUser ? 'bluebtn_disable':''}`}
+              disabled={history.who===auth.recommend.clickUser ?true:''}
+              onClick={(e)=>handleFollowClick(history.who)}>
+              팔로우
+              </button>
+            }
+            {history.who===auth.recommend.clickUser &&
+              <div className='loding_div loding_img'></div>
             }
           </span>
         :

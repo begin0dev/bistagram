@@ -5,10 +5,6 @@ export const checkSession = () => request({
     url: '/api/account/check'
 });
 
-export const getHistory = () => request({
-    url: '/api/history/getHistory'
-});
-
 export const checkUserName = (username) => {
   return request({
     url: '/api/account/checkUserName/' + username
@@ -45,6 +41,12 @@ export const logout = () => request({
     url: '/api/account/logout',
     method: 'delete'
 });
+
+
+export const getHistory = () => request({
+    url: '/api/history/getHistory'
+});
+
 
 export const recommendFollow = ({start, count}) => request({
     url: '/api/follow/RecommedFollow',

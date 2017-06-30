@@ -94,15 +94,6 @@ function form(state=initialState, action) {
         }
       }
 
-    case FORM.SET_POST_CONTENT:
-      return{
-        ...state,
-        post: {
-          ...state.post,
-          content: payload.value
-        }
-      }
-
     case FORM.SET_POST_MEDIA_RESET:
       return{
         ...state,

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Historymodal from './Historymodal';
 
-const TopInfoPart = ({ui, userinfo, handleLogout, handleHeaderModal}) => {
+const TopInfoPart = ({ui, auth, handleLogout, handleFollowClick, handleHeaderModal}) => {
   return (
 		<div className="top_menuwrapper">
 			<div className="top_menu">
@@ -12,13 +12,14 @@ const TopInfoPart = ({ui, userinfo, handleLogout, handleHeaderModal}) => {
 				</div>
 				<div className="top_items">
 					<a className="clickscimg top_menuimgsize imgblock top_menuimg2 point" onClick={handleHeaderModal}>
-            {userinfo.hiscount > 0 && <span className="span_alert">활동 피드</span>}
+            {auth.userinfo.hiscount > 0 && <span className="span_alert">활동 피드</span>}
           </a>
 
           {ui.headerModal&&
             <Historymodal
               ui={ui}
-              userinfo={userinfo}
+              auth={auth}
+              handleFollowClick={handleFollowClick}
             />
           }
 
