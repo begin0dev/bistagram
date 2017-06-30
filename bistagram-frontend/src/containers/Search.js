@@ -6,11 +6,6 @@ import '../css/search.css';
 
 class Search extends Component {
 
-  componentDidMount() {
-
-	}
-
-
   render() {
 		return(
         <main className="search_body">
@@ -25,8 +20,26 @@ class Search extends Component {
             </header>
             <div className="search_hotpost_mb">
               <h2 className="search_h2">인기 게시물</h2>
+              <div className="search_post_wrap">
+                <a className="search_box_wrap search_box_block">
+                  <div className="search_box_media_wrap">
 
+                  dddd
+                  </div>
+                </a>
+                <a className="search_box_wrap">
+                  <div className="search_box_media_wrap">
 
+                  dddd
+                  </div>
+                </a>
+                <a className="search_box_wrap">
+                  <div className="search_box_media_wrap">
+
+                  dddd
+                  </div>
+                </a>
+              </div>
             </div>
             <h2 className="search_h2">최근 사진</h2>
           </article>

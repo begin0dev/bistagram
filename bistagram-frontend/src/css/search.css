@@ -46,6 +46,31 @@ text-transform: capitalize;
 .search_hotpost_mb{
 margin-bottom: 74px;
 }
+.search_post_wrap{
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: space-around;
+align-content: space-around;
+align-items: flex-start;
+}
+.search_box_wrap{
+-webkit-box-flex: 1;
+-webkit-flex: 1 0 0%;
+-ms-flex: 1 0 0%;
+flex: 1 0 0%;
+}
+.search_box_block{
+display: block;
+position: relative;
+width: 100%;
+}
+.search_box_media_wrap{
+background-color: #efefef;
+display: block;
+width: 100%;
+}
 @media (min-width: 736px){
   .search_wrap{
     -webkit-box-sizing: content-box;

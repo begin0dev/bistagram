@@ -4,6 +4,8 @@ import mysql from 'mysql';
 import passport from 'passport';
 import async from 'async';
 import fs from 'fs';
+import gm from 'gm';
+import ffmpeg from 'fluent-ffmpeg';
 
 import dbconfig from '../dbinfo/database';
 
@@ -94,7 +96,17 @@ router.post('/SearchPosts', async (req, res) => {
 });
 
 const deletefiles = (files) =>{
-  files.forEach((file)=>{
+  files.forEach((file, i)=>{
+    if(i===0){
+      let _lastDot = file.medianame.lastIndexOf('.');
+      let imgfilename = file.medianame.substring(0, _lastDot)
+      fs.unlink('upload/thumb/'+imgfilename+'.png', (err)=>{
+        if(err){
+          console.log(err);
+          return;
+        }
+      })
+    }
     fs.unlink('upload/'+file.medianame, (err)=>{
       if(err){
         console.log(err);
@@ -353,6 +365,29 @@ router.post('/insertReply', async (req, res) => {
     })
 });
 
+const thumbnail = (filename) => {
+  let _lastDot = filename.lastIndexOf('.');
+  let imgfilename = filename.substring(0, _lastDot)
+  gm('upload/'+filename)
+    .thumb(400, 400, 'upload/thumb/'+imgfilename+'.png', (err) => {
+      if (err) console.error(err);
+      console.log('done - thumb');
+    });
+}
+
+const videothumbnail = (filename) => {
+  let _lastDot = filename.lastIndexOf('.');
+  let imgfilename = filename.substring(0, _lastDot)
+
+  let proc = new ffmpeg('upload/'+filename)
+  .setFfmpegPath('E://java/react/ffmpeg/bin/ffmpeg.exe')
+  .setFfprobePath('E://java/react/ffmpeg/bin/ffprobe.exe')
+  .takeScreenshots({count: 1, timemarks: [ '00:00:00.010' ], size: '?x400', filename: imgfilename+'.png'}, 'upload/thumb', (err) => {
+    if (err) console.error(err);
+    console.log('screenshots were saved')
+  });
+}
+
 
 router.post('/uploadPost', (req, res) => {
   upload(req, res, (err) =>{
@@ -381,6 +416,13 @@ router.post('/uploadPost', (req, res) => {
                 atcnum=data.insertId;
                 let insertfiles = [];
                 if(req.files.length>0){
+                  if(req.files[0].mimetype.match('image')){
+                    thumbnail(req.files[0].filename);
+                  }
+                  else{
+                    videothumbnail(req.files[0].filename);
+                  }
+
                   req.files.forEach(function(md){
                     insertfiles=[...insertfiles, [atcnum, md.filename, md.mimetype]]
                   })

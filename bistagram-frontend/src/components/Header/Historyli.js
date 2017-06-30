@@ -96,7 +96,7 @@ const Historyli = ({history, auth, handleFollowClick}) => {
         :
           <a className="inlineblock">
             {history.mediatype&&history.mediatype.match("image")&&
-            <img className="history_imgsize" src={"/upload/"+history.medianame} alt=""></img>}
+            <img className="history_imgsize" src={"/upload/thumb/"+history.medianame} alt=""></img>}
             {history.mediatype&&history.mediatype.match("video")&&
             <video className="history_imgsize" src={"/upload/"+history.medianame}></video>}
           </a>

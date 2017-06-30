@@ -97,7 +97,10 @@ create trigger clicklike after insert on atclike
 for each row
 begin
 select username into @username from article where atcnum=new.atcnum;
+if @username != new.username
+then
 insert into history(username, who, type, atcnum) values(@username, new.username, 'atclike', new.atcnum);
+end if;
 end//
 
 create trigger clicknotlike before delete on atclike

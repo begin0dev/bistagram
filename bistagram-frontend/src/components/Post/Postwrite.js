@@ -33,6 +33,7 @@ class Postwrite extends Component {
       for(let i=0; i<files.length; i++){
         this.handleMedieRender(files[i]);
       }
+			e.target.value='';
     }
     handleMedieRender = (file) =>{
       const {setPostMedia} = this.props;
