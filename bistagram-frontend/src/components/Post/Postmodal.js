@@ -22,7 +22,7 @@ class Postmodal extends Component {
                     {deletePossible &&
                     <li className="modal_LiStyle">
                        <button className="modal_listBtn"
-                       ref={(button) => { this.deletebtn = button; }}
+                       ref={(button) => { this.deletebtn = button }}
                        onClick={handleDeletePost}
                        disabled={`${lodingpost?true:''}`}>삭제</button>
                     </li>

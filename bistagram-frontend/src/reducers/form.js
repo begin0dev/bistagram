@@ -45,6 +45,12 @@ const post = {
   media_url: []
 }
 
+const search ={
+  keyword:'',
+  data: [],
+  loading: false
+}
+
 const submitStatus = {
   signup: false,
   signin: false,
@@ -60,6 +66,9 @@ const initialState = {
   },
   post:{
     ...post
+  },
+  search:{
+    ...search
   },
   requests: {
     checkUserName: {

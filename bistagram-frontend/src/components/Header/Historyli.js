@@ -40,6 +40,11 @@ const DayView = (date) => {
     }
   return date;
 }
+const changeFileName = (filename) =>{
+  let _lastDot = filename.lastIndexOf('.');
+  let imgfilename = filename.substring(0, _lastDot)
+  return imgfilename;
+}
 
 const changeTag = (text) =>{
   text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig,'<a href="search/#$1">#$1</a>');
@@ -61,7 +66,7 @@ const Historyli = ({history, auth, handleFollowClick}) => {
         <a className="history_id_size history_id_bold">{history.nickname}</a>
         {`${history.type==='follow'?'님이 회원님을 팔로우하기 시작했습니다':''}`}
         {`${history.type==='call'?'님이 댓글에서 회원님을 언급했습니다: ':''}`}
-        {`${history.type==='atclike'?'님이 회원님의 게시물을 좋아합니다.':''}`}
+        {`${history.type==='atclike'&&!history.mediatype?'님이 회원님의 게시물을 좋아합니다.':''}`}
         {`${history.type==='reply'?'님이 댓글을 남겼습니다:':''}`}
         {history.type==='call' || history.type==='reply'?
           <span dangerouslySetInnerHTML={{__html: changeTag(history.content)}}></span>:
@@ -96,9 +101,10 @@ const Historyli = ({history, auth, handleFollowClick}) => {
         :
           <a className="inlineblock">
             {history.mediatype&&history.mediatype.match("image")&&
-            <img className="history_imgsize" src={"/upload/thumb/"+history.medianame} alt=""></img>}
+            <img className="history_imgsize" src={`/upload/thumb/${changeFileName(history.medianame)}.png`} alt=""></img>}
             {history.mediatype&&history.mediatype.match("video")&&
-            <video className="history_imgsize" src={"/upload/"+history.medianame}></video>}
+            <img className="history_imgsize" src={`/upload/thumb/${changeFileName(history.medianame)}.png`} alt=""></img>
+            }
           </a>
         }
       </div>

@@ -24,10 +24,9 @@ class Post extends Component{
 
 	componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
-		const {setLoadingInitial, setLoading} = this.props;
+		const {setLoading} = this.props;
 		setLoading({name:"main", value:true});
 		this.getPostData();
-		setTimeout(()=>{ setLoadingInitial() }, 200);
 	}
 
 	componentWillUnmount() {
@@ -36,10 +35,11 @@ class Post extends Component{
 	}
 
 	getPostData = async () =>{
-		const {searchPosts, recommendFollow} = this.props;
+		const {searchPosts, setLoadingInitial, recommendFollow} = this.props;
 		try{
 			await recommendFollow({start:0, count:3});
 			await searchPosts({start:this.props.post.start});
+			setTimeout(()=>{ setLoadingInitial() }, 300);
 		}
 		catch(e){
 			document.location.reload();

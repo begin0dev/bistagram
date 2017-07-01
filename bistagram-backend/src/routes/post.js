@@ -382,7 +382,8 @@ const videothumbnail = (filename) => {
   let proc = new ffmpeg('upload/'+filename)
   .setFfmpegPath('E://java/react/ffmpeg/bin/ffmpeg.exe')
   .setFfprobePath('E://java/react/ffmpeg/bin/ffprobe.exe')
-  .takeScreenshots({count: 1, timemarks: [ '00:00:00.010' ], size: '?x400', filename: imgfilename+'.png'}, 'upload/thumb', (err) => {
+  .applyAutopadding(true, 'white')
+  .takeScreenshots({count: 1, timemarks: [ '00:00:00.010' ], size: '400x400', filename: imgfilename+'.png'}, 'upload/thumb', (err) => {
     if (err) console.error(err);
     console.log('screenshots were saved')
   });
