@@ -7,7 +7,6 @@ const request = {
 }
 const initialState = {
   posts: [],
-  start: 0,
   isMore: true,
   index: -1,
   replyindex: -1,
@@ -92,7 +91,6 @@ function post(state=initialState, action) {
           ...state.posts,
           ...payload.data
         ],
-        start: state.start + payload.data.length,
         isMore: payload.data.length<5 ?false:true,
         status:{
           ...state.status,
@@ -150,7 +148,7 @@ function post(state=initialState, action) {
         ...state,
         status:{
           ...state.status,
-          post: false          
+          post: false
         },
         requests: {
           ...state.requests,

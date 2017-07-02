@@ -10,6 +10,7 @@ import Explore from './Explore';
 import NotFound from './NotFound';
 
 import * as auth from '../actions/auth';
+import * as form from '../actions/form';
 import * as ui from '../actions/ui';
 
 import '../css/basic.css';
@@ -17,6 +18,24 @@ import '../css/header.css';
 import '../css/followUl.css';
 
 class App extends React.Component{
+
+	async componentDidMount() {
+		const { checkSession } = this.props;
+		window.addEventListener("scroll", this.handleScroll);
+		try{
+			await checkSession().then(()=>{
+				if(!this.props.auth.userinfo.logged && window.location.pathname === "/explore"){
+					document.location = "/"
+				}
+			});
+		}catch(e){
+			document.location = "/"
+		}
+  }
+
+	componentWillUnmount() {
+		window.removeEventListener("scroll", this.handleScroll);
+	}
 
 	handleHeaderModal = async () =>{
 		const {ui, setHeaderModal, getHistory, changeUserData, setLoading, setLoadingInitial} = this.props;
@@ -33,6 +52,10 @@ class App extends React.Component{
 	handleLogout = async () =>{
 		const {logout} = this.props;
 		await logout().then(() => document.location = "/");
+	}
+
+	handleChangeSearch = (content) =>{
+		this.props.changeFormData({form: 'search', name: 'keyword', value: content});
 	}
 
 	handleScroll = () => {
@@ -63,26 +86,8 @@ class App extends React.Component{
 		}
 	}
 
-	async componentDidMount() {
-		const { checkSession } = this.props;
-		window.addEventListener("scroll", this.handleScroll);
-		try{
-			await checkSession().then(()=>{
-				if(!this.props.auth.userinfo.logged && window.location.pathname === "/explore"){
-					document.location = "/"
-				}
-			});
-		}catch(e){
-			document.location = "/"
-		}
-  }
-
-	componentWillUnmount() {
-		window.removeEventListener("scroll", this.handleScroll);
-	}
-
 	render(){
-		const {auth, ui} = this.props;
+		const {auth, ui, form} = this.props;
 		return(
 			<Router>
 				<section className="react-body">
@@ -90,10 +95,12 @@ class App extends React.Component{
 					<Header
 						ui={ui}
 						auth={auth}
+						form={form}
 						headDisplay={ui.header}
 						handleHeaderModal={this.handleHeaderModal}
 						handleFollowClick={this.handleFollowClick}
 						handleLogout={this.handleLogout}
+						handleChangeSearch={this.handleChangeSearch}
 					/>:
 					null}
 					{ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
@@ -113,7 +120,8 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 	ui: state.ui,
 	post: state.post,
-	history: state.history
+	history: state.history,
+	form: state.form
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -128,9 +136,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 	setHeader: (value) => dispatch(ui.setHeader(value)),
 	setHeaderModal: () => dispatch(ui.setHeaderModal()),
-
 	setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
-	setLoading: (params) => dispatch(ui.setLoading(params))
+	setLoading: (params) => dispatch(ui.setLoading(params)),
+
+	changeFormData: (formname, name, value) => dispatch(form.changeFormData(formname, name, value))
 })
 
 App = connect(mapStateToProps, mapDispatchToProps)(App)

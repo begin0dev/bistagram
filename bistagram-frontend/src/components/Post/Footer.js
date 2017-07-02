@@ -46,7 +46,6 @@ class Footer extends Component {
       }
       if(e.charCode === 13){
         setPostIndex({index: index, replyindex: -1});
-				console.log(post)
         insertReply({atcnum: post.atcnum, content: removeTag(this.state.reply), username:post.username, nickname: post.userinfo.nickname});
         this.setState({
           reply: ''
@@ -55,7 +54,7 @@ class Footer extends Component {
     }
 
     handleKeyPress = (e) => {
-      if(e.charCode ===13 ){
+      if(e.charCode === 13){
         e.preventDefault();
       }
     }

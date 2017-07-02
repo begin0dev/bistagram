@@ -24,7 +24,7 @@ class Post extends Component{
 
 	componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
-		const {setLoading} = this.props;
+		const {post, setLoading} = this.props;
 		setLoading({name:"main", value:true});
 		this.getPostData();
 	}
@@ -35,10 +35,12 @@ class Post extends Component{
 	}
 
 	getPostData = async () =>{
-		const {searchPosts, setLoadingInitial, recommendFollow} = this.props;
+		const {post, searchPosts, setLoadingInitial, recommendFollow} = this.props;
 		try{
 			await recommendFollow({start:0, count:3});
-			await searchPosts({start:this.props.post.start});
+			if(post.posts.length===0){
+				await searchPosts({atcnum: -1});
+			}
 			setTimeout(()=>{ setLoadingInitial() }, 300);
 		}
 		catch(e){
@@ -56,7 +58,7 @@ class Post extends Component{
 
 		if (windowBottom >= docHeight) {
 			if(post.isMore && !post.status.post){
-				searchPosts({start:post.start});
+				searchPosts({atcnum: post.posts[post.posts.length-1].atcnum});
 			}
 		}
 	}

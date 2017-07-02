@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ScInput from './ScInput';
 import HeaderNavi from './HeaderNavi';
 
-const Header = ({ui, auth, headDisplay, handleHeaderModal, handleFollowClick, handleLogout}) => {
+const Header = ({ui, auth, form, headDisplay, handleHeaderModal, handleFollowClick, handleLogout, handleChangeSearch}) => {
   return (
 		<nav className="topNavi">
       <div className="topframe"></div>
@@ -16,7 +16,10 @@ const Header = ({ui, auth, headDisplay, handleHeaderModal, handleFollowClick, ha
 								<Link to="/" className="top_titleimg imgblock" title="Bistagram">Bistagram</Link>
 							</div>
 						</div>
-						<ScInput />
+						<ScInput
+              form={form}
+              handleChangeSearch={handleChangeSearch}
+            />
 						<HeaderNavi
               ui={ui}
               auth={auth}

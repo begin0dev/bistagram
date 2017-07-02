@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Searchbox from '../components/Search/Searchbox';
 
 import '../css/search.css';
 
 class Search extends Component {
-
   render() {
 		return(
         <main className="search_body">
@@ -21,66 +21,19 @@ class Search extends Component {
             <div className="search_hotpost_mb">
               <h2 className="search_h2">인기 게시물</h2>
               <div className="grid_wrap">
-                <div className="search_box">
-                  <a>
-                    <div className="search_box_media_wrap">
-                      <div className="search_box_media_frame">
-                        <img className="search_box_img" src="/upload/thumb/test1@naver.com1498824335047.png" alt=""></img>
-                      </div>
-                    </div>
-                    <div className="search_video_icon_div">
-                      <div>
-                        <span className="imgs search_video_icon"></span>
-                      </div>
-                    </div>
-                    <div className="search_box_mask">
-                      <ul className="search_box_ul">
-                        <li className="search_box_li search_box_like_mg">
-                          <span className="imgs search_like_img">좋아요</span>
-                          <span>200</span>개
-                        </li>
-                        <li className="search_box_li search_box_reply_mg">
-                          <span className="imgs search_reply_img">댓글</span>
-                          <span>2011</span>개
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
 
-                <div>
-                  <a>
-                    <div className="search_box_media_wrap">
-                      <div className="search_box_media_frame">
-                        <img className="search_box_img" src="/upload/thumb/test1@naver.com1498824335047.png" alt=""></img>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-
-                <div>
-                  <a>
-                    <div className="search_box_media_wrap">
-                      <div className="search_box_media_frame">
-                        <img className="search_box_img" src="/upload/thumb/test1@naver.com1498824335047.png" alt=""></img>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-
-                <div>
-                  <a>
-                    <div className="search_box_media_wrap">
-                      <div className="search_box_media_frame">
-                        <img className="search_box_img" src="/upload/thumb/test1@naver.com1498824335047.png" alt=""></img>
-                      </div>
-                    </div>
-                  </a>
-                </div>
+                <Searchbox/>
+                <Searchbox/>
+                <Searchbox/>
+                <Searchbox/>
+                <Searchbox/>
+                <Searchbox/>
+                <Searchbox/>
 
               </div>
             </div>
             <h2 className="search_h2">최근 사진</h2>
+
           </article>
         </main>
     );

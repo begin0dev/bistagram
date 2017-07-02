@@ -50,7 +50,7 @@ foreign key(atcnum) references article(atcnum)
 create table hashtag
 (
 atcnum int not null,
-hashtag varchar(10) not null,
+tag varchar(10) not null,
 foreign key(atcnum) references article(atcnum)
 );
 
@@ -182,3 +182,29 @@ select y.*, media.medianame, media.mediatype from
 (select * from history where username='test1@naver.com' order by hisnum desc limit 20)x
 join member on x.who=member.username)y
 left join media on y.atcnum=media.atcnum group by y.hisnum order by null;
+
+
+
+//post count
+select count(*) as atccount from
+(select hashtag.atcnum from hashtag left join media
+on hashtag.atcnum=media.atcnum where hashtag.tag = '오연서'
+and media.medianame is not null group by hashtag.atcnum order by null)x;
+
+//인기 게시물 가져오기 9개
+select y.*, media.medianame, media.mediatype from (
+select x.*, count(reply.atcnum)as replycount from (
+select hashtag.*, count(atclike.username)as likecount from hashtag left join atclike
+on hashtag.atcnum=atclike.atcnum
+where hashtag.tag = '오연서' group by hashtag.atcnum order by likecount desc limit 9)x
+left join reply on x.atcnum=reply.atcnum group by x.atcnum order by null)y
+left join media on y.atcnum=media.atcnum where media.medianame is not null group by y.atcnum order by null;
+
+//인기 게시물을 제외한 게시물 가져오기
+select y.*, media.medianame, media.mediatype from (
+select x.*, count(reply.atcnum)as replycount from (
+select hashtag.*, count(atclike.username)as likecount from hashtag left join atclike
+on hashtag.atcnum=atclike.atcnum
+where hashtag.tag = '오연서' and hashtag.atcnum not in (?,?,?,?,?,?,?,?,?) group by hashtag.atcnum order by atcnum desc limit 9)x
+left join reply on x.atcnum=reply.atcnum group by x.atcnum order by null)y
+left join media on y.atcnum=media.atcnum where media.medianame is not null group by y.atcnum order by null;

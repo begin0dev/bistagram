@@ -1,7 +1,6 @@
 import express from 'express';
 import multer from 'multer';
 import mysql from 'mysql';
-import passport from 'passport';
 import async from 'async';
 import fs from 'fs';
 import gm from 'gm';
@@ -68,16 +67,32 @@ const getPostData = (username) =>{
 
 router.post('/SearchPosts', async (req, res) => {
   let username=req.user.username;
-  let sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
+  let sql ="";
+  let params = [];
+  if(req.body.atcnum===-1){
+      sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
             "(select y.*, count(reply.atcnum) as repliescount from "+
             "(select * from article where username in "+
             "(select username from ("+
             "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
             "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
-            "union (select username from member where username=?))x) order by atcnum desc limit ?, ?"+
+            "union (select username from member where username=?))x) order by atcnum desc limit ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
             ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
-  let params = [username, username, username, username, req.body.start, 10];
+      params = [username, username, username, username, 10];
+  }else{
+      sql = "select z.*, count(atclike.atcnum) as atclikecount from "+
+            "(select y.*, count(reply.atcnum) as repliescount from "+
+            "(select * from article where username in "+
+            "(select username from ("+
+            "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
+            "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
+            "union (select username from member where username=?))x) and atcnum<? order by atcnum desc limit ?"+
+            ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
+            ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
+      params = [username, username, username, username, req.body.atcnum, 10];
+  }
+
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -444,7 +459,7 @@ router.post('/uploadPost', (req, res) => {
 
                 let hashtags=getHashTag({atcnum:atcnum, content:req.body.content});
                 if(hashtags.length>0){
-                  let hashtagsql='insert into hashtag(atcnum, hashtag) values ?';
+                  let hashtagsql='insert into hashtag(atcnum, tag) values ?';
                   con.query(hashtagsql, [hashtags], (err, data) => {
                       if(err) {
                           return con.rollback(() => {

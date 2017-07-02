@@ -1,10 +1,10 @@
 import request from '../helpers/request';
 
-export const searchPosts = ({start}) => request({
+export const searchPosts = ({atcnum}) => request({
     url: '/api/post/SearchPosts',
     method: 'post',
     data: {
-      start
+      atcnum
     }
 });
 

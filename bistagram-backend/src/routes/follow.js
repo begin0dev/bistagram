@@ -1,6 +1,5 @@
 import express from 'express';
 import mysql from 'mysql';
-import passport from 'passport';
 import dbconfig from '../dbinfo/database';
 
 const router = new express.Router();
