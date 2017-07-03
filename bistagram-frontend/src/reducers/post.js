@@ -6,7 +6,9 @@ const request = {
     error: null
 }
 const initialState = {
-  posts: [],
+  posts: [
+
+  ],
   isMore: true,
   index: -1,
   replyindex: -1,
@@ -72,6 +74,12 @@ function post(state=initialState, action) {
         }
       }
 
+    case POST.POSTS_RESET:
+      return{
+        ...state,
+        posts:[]
+      }
+
     case POST.SEARCH_POSTS + "_PENDING":
       return{
         ...state,
@@ -113,6 +121,7 @@ function post(state=initialState, action) {
           searchPosts: { ...rejected, error: payload }
         }
       };
+
 
     case POST.DELETE_POST + "_PENDING":
       return{

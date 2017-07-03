@@ -10,10 +10,13 @@ const PostView = ({post, auth, handleLikeClick, insertReply, deleteReply, getAll
         {post.posts.map((contact, i) => {
           return(
             <article className="postview_wrapper postview_bt60px" key={i}>
+
               <Header post={contact}/>
+
               {contact.media.length > 0 &&
               <MediaView post={contact}/>
               }
+
               <Footer
                 post={contact}
                 auth={auth}
@@ -27,6 +30,7 @@ const PostView = ({post, auth, handleLikeClick, insertReply, deleteReply, getAll
                 getAllReplies={getAllReplies}
                 handleModal={handleModal}
               />
+
             </article>
           );
         })}

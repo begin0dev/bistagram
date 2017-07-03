@@ -48,14 +48,9 @@ margin-bottom: 74px;
 }
 .grid_wrap{
 display: grid;
-grid-template-columns: auto auto auto;
-background-color: #fff;
-color: #444;
+grid-template-columns: repeat(3, minmax(auto, 293px));
 }
 .search_box{
-justify-content: center;
-align-items: center;
-max-width: 293px;
 max-height: 293px;
 }
 .search_box_media_wrap{
@@ -171,7 +166,31 @@ margin-right: 30px;
 .search_box:hover .search_box_mask{
 display: flex;
 }
-
+.loading_position{
+position: relative;
+margin-top: 30px;
+}
+.moreview_btn{
+border-radius: 3px;
+border-style: solid;
+border-width: 1px;
+color: #fff;
+display: inline-block;
+font-size: 16px;
+font-weight: 600;
+line-height: 32px;
+margin: 60px auto 0;
+overflow: hidden;
+padding: 0 48px;
+text-align: center;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+.moreview_btn_style{
+background: #3897f0;
+border-color: #3897f0;
+color: #fff;
+}
 @media (min-width: 736px){
   .search_wrap{
     -webkit-box-sizing: content-box;
@@ -199,6 +218,11 @@ display: flex;
   .search_box_reply_mg{
     margin-left: 0px;
   }
+  .moreview_btn{
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+  }
 }
 @media (max-width: 735px){
   .search_header{
@@ -209,6 +233,9 @@ display: flex;
   .search_h1{
     font-size: 21px;
     padding-bottom: 8px;
+  }
+  .search_h2{
+    margin-left: 8px;
   }
   .search_hotpost_mb{
     margin-bottom: 32px;
@@ -232,5 +259,9 @@ display: flex;
     width: 22px;
     right: 2px;
     top: 3px;
+  }
+  .moreview_btn{
+    font-size: 14px;
+    margin: 20px 20px 0;
   }
 }

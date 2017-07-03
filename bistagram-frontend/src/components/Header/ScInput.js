@@ -38,13 +38,8 @@ export default class ScInput extends React.Component{
 			isEdit: !this.state.isEdit
 		});
 	}
-	handleEnter = e =>{
-		if(e.charCode===13){
-
-		}
-	}
 	render(){
-		const {form}=this.props;
+		const {form, handleSubmitSearch}=this.props;
 		const mask=(
 				<div className="inputmask_div inputmask_position boxing100" onClick={this.handleEditable}>
 					<div className="inputmask_wrapper">
@@ -61,7 +56,7 @@ export default class ScInput extends React.Component{
 					ref={(ref) => { this.inputKeyword = ref }}
 					value={form.search.keyword}
 					onChange={this.handleChange}
-					onKeyPress={this.handleEnter}
+					onKeyPress={handleSubmitSearch}
 				/>
 				<span className="clickscimg clickscimg_position"></span>
 				{!this.state.isEdit ? mask : clear}

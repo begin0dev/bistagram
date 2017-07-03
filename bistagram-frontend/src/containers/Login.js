@@ -6,6 +6,8 @@ import * as ui from '../actions/ui';
 
 import '../css/login.css';
 
+import Loading from '../components/Loading';
+
 import Signin from '../components/Account/Signin';
 import Signup from '../components/Account/Signup';
 
@@ -20,10 +22,9 @@ class Login extends Component {
         };
     }
     componentDidMount() {
-      const {setLoading, setLoadingInitial} = this.props;
-      setLoading({name:"main", value:true});
-
-      setTimeout(()=>{ setLoadingInitial() }, 700);
+      const {setLoading} = this.props;
+      setLoading({name:"login", value:true});
+      setTimeout(()=>{ setLoading({name:"login", value:false}) }, 400);
     }
     componentWillMount(){
       this.timerID = setInterval(
@@ -44,8 +45,10 @@ class Login extends Component {
     render() {
       const {form, ui} = this.props;
       return(
-        <main className="login_main" role="main" style={{display:`${ui.loading.main?'none':''}`}}>
-          <article className="center_wrap">
+        <main className="login_main" role="main">
+
+          {ui.loading.login||ui.loading.post ? <Loading />:null}
+          <article className="center_wrap" style={{display:`${ui.loading.login||ui.loading.post?'none':''}`}}>
             <div className="imgtotal_div">
               <div className="imgmargin_div" ref="imgdiv">
                 <img className={'screenimg_style '+(this.state.imgNum===0?'screanimg-enter':'')+(this.state.imgNum===1?'screanimg-leave':'')} src={imgPath[0]} alt="screan_img"/>
@@ -79,6 +82,7 @@ class Login extends Component {
             }
 
           </article>
+
         </main>
       );
     }

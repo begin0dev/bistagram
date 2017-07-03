@@ -6,6 +6,7 @@ import * as form from '../actions/form';
 import * as auth from '../actions/auth';
 import * as ui from '../actions/ui';
 
+import Loading from '../components/Loading';
 
 import FollowList from '../components/Follow/FollowList';
 import Postwrite from '../components/Post/Postwrite';
@@ -22,30 +23,24 @@ let position =	0;
 
 class Post extends Component{
 
-	componentDidMount() {
+	async componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
-		const {post, setLoading} = this.props;
-		setLoading({name:"main", value:true});
-		this.getPostData();
+		const {setLoading, searchPosts, setLoadingInitial, recommendFollow} = this.props;
+		setLoading({name:"post", value:true});
+		try{
+			await recommendFollow({start:0, count:3});
+			await searchPosts({atcnum: -1});
+			setTimeout(()=>{ setLoadingInitial() }, 400);
+		}
+		catch(e){
+			document.location.reload();
+		}
 	}
 
 	componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
 		this.props.postformReset();
-	}
-
-	getPostData = async () =>{
-		const {post, searchPosts, setLoadingInitial, recommendFollow} = this.props;
-		try{
-			await recommendFollow({start:0, count:3});
-			if(post.posts.length===0){
-				await searchPosts({atcnum: -1});
-			}
-			setTimeout(()=>{ setLoadingInitial() }, 300);
-		}
-		catch(e){
-			document.location.reload();
-		}
+		this.props.postsReset();
 	}
 
 	handleScroll = () => {
@@ -57,7 +52,7 @@ class Post extends Component{
 		const windowBottom = windowHeight + window.pageYOffset;
 
 		if (windowBottom >= docHeight) {
-			if(post.isMore && !post.status.post){
+			if(post.isMore && !post.status.post && post.posts.length!==0){
 				searchPosts({atcnum: post.posts[post.posts.length-1].atcnum});
 			}
 		}
@@ -114,8 +109,11 @@ class Post extends Component{
 			deleteMedia, changeFormData, uploadPost, postformReset} = this.props;
 
 		return(
-				<main className="post_body" style={{display:`${ui.loading.main?'none':''}`}}>
-					<section className="post_wrapper">
+				<main className="post_body" >
+
+					{ui.loading.post&&<Loading />}
+
+					<section className="post_wrapper" style={{display:`${ui.loading.post?'none':''}`}}>
 
 						<Postwrite
 							post={form.post}
@@ -180,6 +178,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+	postsReset: () => dispatch(post.postsReset()),
 	searchPosts: (params) => dispatch(post.searchPosts(params)),
 	deletePost: (params) => dispatch(post.deletePost(params)),
 	setPostIndex: (parmas) => dispatch(post.setPostIndex(parmas)),

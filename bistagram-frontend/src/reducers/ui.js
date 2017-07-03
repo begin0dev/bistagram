@@ -1,9 +1,11 @@
 import UI from '../actions/ActionTypes/ui';
 
 const loading = {
-  main: false,
+  login:false,
+  post: false,
   explore: false,
-  history: false
+  history: false,
+  search: false
 }
 
 const initialState = {

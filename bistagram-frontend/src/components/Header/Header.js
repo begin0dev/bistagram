@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ScInput from './ScInput';
 import HeaderNavi from './HeaderNavi';
 
-const Header = ({ui, auth, form, headDisplay, handleHeaderModal, handleFollowClick, handleLogout, handleChangeSearch}) => {
+const Header = ({ui, auth, form, headDisplay, handleHeaderModal, handleFollowClick, handleLogout, handleChangeSearch, handleSubmitSearch}) => {
   return (
 		<nav className="topNavi">
       <div className="topframe"></div>
@@ -19,6 +19,7 @@ const Header = ({ui, auth, form, headDisplay, handleHeaderModal, handleFollowCli
 						<ScInput
               form={form}
               handleChangeSearch={handleChangeSearch}
+              handleSubmitSearch={handleSubmitSearch}
             />
 						<HeaderNavi
               ui={ui}

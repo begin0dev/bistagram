@@ -8,8 +8,7 @@ const router = new express.Router();
 
 const conn = mysql.createConnection(dbconfig);
 
-
-const getPostData = (keyword, atcnum) =>{
+const getPostData = (keyword) =>{
   return (item, callback) =>{
     async.waterfall([
       function(callback){
@@ -18,7 +17,7 @@ const getPostData = (keyword, atcnum) =>{
                   "(select hashtag.atcnum, count(atclike.username) as likecount from hashtag left join atclike "+
                   "on hashtag.atcnum = atclike.atcnum where hashtag.tag = ? group by hashtag.atcnum order by null)x "+
                   "left join reply on x.atcnum = reply.atcnum group by x.atcnum order by null)y "+
-                  "left join media on y.atcnum = media.atcnum where media.medianame is not null group by y.atcnum order by y.likecount desc limit 9";
+                  "left join media on y.atcnum = media.atcnum where media.medianame is not null group by y.atcnum order by y.likecount desc, y.replycount desc limit 9";
         let params = [keyword];
         conn.query(sql, params, function(err, rows){
           if(err) console.log(err);
@@ -46,6 +45,7 @@ const getPostData = (keyword, atcnum) =>{
             callback(null, item);
           })
         }else{
+          arg1.recent=[];
           callback(null, arg1);
         }
       }
@@ -54,7 +54,6 @@ const getPostData = (keyword, atcnum) =>{
     });
   }
 }
-
 
 router.post('/SearchHash', async (req, res) => {
   let sql = "select count(x.atcnum) as atccount from"+
@@ -67,12 +66,12 @@ router.post('/SearchHash', async (req, res) => {
       return res.status(500).json({message: err.message});
     }
     else{
-      async.map(rows, getPostData(req.body.keyword, req.body.atcnum), function(err, posts){
+      async.map(rows, getPostData(req.body.keyword), function(err, posts){
         if(err){
           return res.status(500).json({message: err.message});
         }
         else{
-          return res.json(posts);
+          return res.json(...posts);
         }
       })
     }
@@ -91,7 +90,6 @@ router.post('/addHash', async (req, res) => {
   req.body.atcnums.forEach(value=>{
     params=[...params, value]
   })
-  console.log(params)
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -99,5 +97,55 @@ router.post('/addHash', async (req, res) => {
     return res.json(rows);
   });
 });
+
+
+
+const getModalData = (atcnum) =>{
+  return (item, callback) =>{
+    async.waterfall([
+      function(callback){
+        let sql = "select medianame, mediatype from media where atcnum=?";
+        let params = [atcnum];
+        conn.query(sql, params, function(err, rows){
+          if(err) console.log(err);
+          let media=JSON.stringify(rows);
+          item.media=JSON.parse(media);
+          callback(null, item);
+        })
+      },
+      function(arg1, callback){
+        let sql = "select member.username, member.nickname, reply.replynum, reply.content from reply join member on reply.username=member.username where atcnum=?";
+        let params = [atcnum];
+        conn.query(sql, params, function(err, rows){
+          let replies=JSON.stringify(rows);
+          item.replies=JSON.parse(replies);
+          callback(null, item);
+        })
+      }
+    ], function (err, result) {
+      callback(err, result);
+    });
+  }
+}
+
+router.post('/getModalPost', async (req, res) => {
+  let sql = "select article.atcnum, article.username, member.nickname, member.profileimgname, article.content, "+
+            "article.registerday from article join member on article.username=member.username where atcnum = ?";
+  let params = [req.body.atcnum];
+  conn.query(sql, params, function(err, rows) {
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    async.map(rows, getModalData(req.body.atcnum), function(err, posts){
+      if(err){
+        return res.status(500).json({message: err.message});
+      }
+      else{
+        return res.json(...posts);
+      }
+    })
+  });
+});
+
 
 module.exports = router;

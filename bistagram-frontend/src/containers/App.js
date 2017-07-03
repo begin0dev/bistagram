@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Login from './Login';
 import Posts from './Posts';
-import Search from './Search';
+import SearchHash from './SearchHash';
 import Explore from './Explore';
 import NotFound from './NotFound';
 
@@ -58,6 +58,19 @@ class App extends React.Component{
 		this.props.changeFormData({form: 'search', name: 'keyword', value: content});
 	}
 
+	handleSubmitSearch = (e) =>{
+		const {form} = this.props;
+		let regex = /@([a-z0-9][a-z0-9\-_]*)/ig;
+		let change = /[ {}[\]/?.,;:|)*~`!^\-_+┼<>@#$%&'"(=]/gi;
+		if(e.charCode === 13 && form.search.keyword.length>0 ){
+			if(regex.test(form.search.keyword)){
+
+			}else{
+				document.location = "/search/tags/"+form.search.keyword.replace(change, '');
+			}
+		}
+	}
+
 	handleScroll = () => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
 		const {ui, post, setHeader} = this.props;
@@ -91,7 +104,7 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{auth.userinfo.logged ?
+					{auth.userinfo.logged || window.location.pathname !== "/"?
 					<Header
 						ui={ui}
 						auth={auth}
@@ -101,13 +114,13 @@ class App extends React.Component{
 						handleFollowClick={this.handleFollowClick}
 						handleLogout={this.handleLogout}
 						handleChangeSearch={this.handleChangeSearch}
+						handleSubmitSearch={this.handleSubmitSearch}
 					/>:
 					null}
-					{ui.loading.main?<div className="loding_div loding_lgimg"></div>:null}
 					<Switch>
 						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
-						<Route path="/Search/tags/:keyword" component={Search}/>
+						<Route path="/Search/tags/:keyword" component={SearchHash}/>
 						<Route component={NotFound}/>
 					</Switch>
 				</section>

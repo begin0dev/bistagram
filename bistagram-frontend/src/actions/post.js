@@ -3,6 +3,8 @@ import { createAction } from 'redux-actions';
 import POST from './ActionTypes/post';
 import * as service from '../services/post';
 
+export const postsReset = createAction(POST.POSTS_RESET);
+
 export const searchPosts = (params) => ({
   type: POST.SEARCH_POSTS,
   payload: {
