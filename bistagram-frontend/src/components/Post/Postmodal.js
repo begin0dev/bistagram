@@ -33,8 +33,7 @@ class Postmodal extends Component {
                   </ul>
                 </div>
               </div>
-              <button className="modal_canclebtn"
-              >닫기</button>
+              <button className="modal_canclebtn">닫기</button>
             </div>
           </div>
         );
