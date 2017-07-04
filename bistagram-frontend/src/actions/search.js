@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions';
+
 import * as service from '../services/search';
 import SEARCH from './ActionTypes/search';
 
@@ -14,3 +16,12 @@ export const addHash = (params) => ({
     promise: service.addHash(params)
   }
 })
+
+export const getModalPost = (params) => ({
+  type: SEARCH.GET_MODAL_POST,
+  payload: {
+    promise: service.getModalPost(params)
+  }
+})
+
+export const setModalInit = createAction(SEARCH.SET_MODAL_INIT);

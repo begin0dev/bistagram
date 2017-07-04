@@ -31,12 +31,12 @@ class Login extends Component {
         () => this.imgAnimation(), 5000
       );
     }
-    imgAnimation =(e)=> {
+    imgAnimation = (e) =>{
       if(this.refs.imgdiv){
         this.setState({imgNum: this.state.imgNum===4?0:this.state.imgNum+1});
       }
     }
-    handlePanelChange =(e)=> {
+    handlePanelChange = (e) =>{
       this.props.formDataReset();
       this.setState({
         isRegi: !this.state.isRegi
@@ -48,6 +48,7 @@ class Login extends Component {
         <main className="login_main" role="main">
 
           {ui.loading.login||ui.loading.post ? <Loading />:null}
+
           <article className="center_wrap" style={{display:`${ui.loading.login||ui.loading.post?'none':''}`}}>
             <div className="imgtotal_div">
               <div className="imgmargin_div" ref="imgdiv">
@@ -70,7 +71,8 @@ class Login extends Component {
               signUp={this.props.signUp}
               setSubmitStatus={this.props.setSubmitStatus}
               setErrorMessage={this.props.setErrorMessage}
-              /> :
+              />
+              :
               <Signin
               form={form}
               panelChange={this.handlePanelChange}

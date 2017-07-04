@@ -17,7 +17,6 @@ import Postmodal from '../components/Post/Postmodal';
 import '../css/posts.css';
 import '../css/postview.css';
 import '../css/postwrite.css';
-import '../css/modalList.css';
 
 let position =	0;
 

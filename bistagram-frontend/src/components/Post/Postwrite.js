@@ -29,9 +29,14 @@ class Postwrite extends Component {
     }
     handleFileChange = (e) =>{
       e.preventDefault();
+			const {post} = this.props;
       let files = e.target.files;
       for(let i=0; i<files.length; i++){
-        this.handleMedieRender(files[i]);
+				if(post.media.length<7 && post.media.length+i+1<7){
+					this.handleMedieRender(files[i]);
+				}else{
+					alert("최대 업로드 갯수는 6개입니다.")
+				}
       }
 			e.target.value='';
     }

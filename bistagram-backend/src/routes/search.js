@@ -98,9 +98,7 @@ router.post('/addHash', async (req, res) => {
   });
 });
 
-
-
-const getModalData = (atcnum) =>{
+const getModalData = (atcnum, user) =>{
   return (item, callback) =>{
     async.waterfall([
       function(callback){
@@ -114,11 +112,29 @@ const getModalData = (atcnum) =>{
         })
       },
       function(arg1, callback){
-        let sql = "select member.username, member.nickname, reply.replynum, reply.content from reply join member on reply.username=member.username where atcnum=?";
+        let sql = "select member.username, member.nickname, reply.replynum, reply.content "+
+                  "from reply join member on reply.username=member.username where atcnum=?";
         let params = [atcnum];
         conn.query(sql, params, function(err, rows){
           let replies=JSON.stringify(rows);
           item.replies=JSON.parse(replies);
+          callback(null, item);
+        })
+      },
+      function(arg1, callback){
+        let sql = "";
+        let params = [];
+        if(user){
+          sql = "select count(atcnum) as likecount, exists(select username from atclike where atcnum=? and username=?) as `like` "+
+                "from atclike where atcnum=?";
+          params = [atcnum, user.username, atcnum];
+        }else{
+          sql = "select count(atcnum) as likecount, 0 as `like` from atclike where atcnum=? ";
+          params = [atcnum];
+        }
+        conn.query(sql, params, function(err, rows){
+          let atclike=JSON.stringify(rows[0]);
+          item.atclike=JSON.parse(atclike);
           callback(null, item);
         })
       }
@@ -136,7 +152,7 @@ router.post('/getModalPost', async (req, res) => {
     if(err) {
       return res.status(500).json({message: err.message});
     }
-    async.map(rows, getModalData(req.body.atcnum), function(err, posts){
+    async.map(rows, getModalData(req.body.atcnum, req.user), (err, posts) =>{
       if(err){
         return res.status(500).json({message: err.message});
       }

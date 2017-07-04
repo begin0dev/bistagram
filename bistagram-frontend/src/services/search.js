@@ -16,3 +16,11 @@ export const addHash = ({keyword, atcnums}) => request({
       atcnums
     }
 });
+
+export const getModalPost = ({atcnum}) => request({
+    url: '/api/search/getModalPost',
+    method: 'post',
+    data: {
+      atcnum
+    }
+});

@@ -147,6 +147,9 @@ background-position: 0 0;
 .postview_bodywraper:hover .media_afterbefore_btn, .postview_bodywraper:hover .media_play_btn_hover{
 opacity: 1;
 }
+.modal_media_frame:hover .media_afterbefore_btn, .modal_media_frame:hover .media_play_btn_hover{
+opacity: 1;
+}
 .postview_bodyimg{
 -webkit-user-select: none;
 -moz-user-select: none;

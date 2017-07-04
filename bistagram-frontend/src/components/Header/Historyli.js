@@ -84,13 +84,13 @@ const Historyli = ({history, auth, handleFollowClick}) => {
           <span className="history_button_span">
             {auth.userinfo.followInfo.follower.indexOf(history.who)!==-1 ?
               <button className="whitebtn btnstyle point"
-              disabled={history.who===auth.recommend.clickUser ?true:''}
-              onClick={(e)=>handleFollowClick(history.who)}>
-              팔로잉
+                disabled={history.who===auth.recommend.clickUser ?true:''}
+                onClick={(e)=>handleFollowClick(history.who)}>
+                팔로잉
               </button>:
               <button className={`bluebtn btnstyle point ${history.who===auth.recommend.clickUser ? 'bluebtn_disable':''}`}
-              disabled={history.who===auth.recommend.clickUser ?true:''}
-              onClick={(e)=>handleFollowClick(history.who)}>
+                disabled={history.who===auth.recommend.clickUser ?true:''}
+                onClick={(e)=>handleFollowClick(history.who)}>
               팔로우
               </button>
             }

@@ -6,10 +6,10 @@ const fileName = filename =>{
   return imgfilename;
 }
 
-const Searchbox = ({post}) => {
+const Searchbox = ({post, index, handleSearchModal}) => {
     return (
       <div className="search_box">
-        <a>
+        <a onClick={(e)=>handleSearchModal(index)}>
           <div className="search_box_media_wrap">
             <div className="search_box_media_frame">
               <img className="search_box_img" src={`/upload/thumb/${fileName(post.medianame)}.png`} alt=""></img>

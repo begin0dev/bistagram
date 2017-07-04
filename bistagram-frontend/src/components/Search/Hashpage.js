@@ -5,7 +5,7 @@ import Loading from '../Loading';
 
 import Searchbox from './Searchbox';
 
-const Hashpage = ({keyword, search, ui, addHashPost}) => {
+const Hashpage = ({keyword, search, ui, addHashPost, handleSearchModal}) => {
     return (
       <article className="search_wrap" style={{display:`${ui.loading.search?'none':''}`}}>
         <header className="search_header">
@@ -24,7 +24,9 @@ const Hashpage = ({keyword, search, ui, addHashPost}) => {
               return(
                 <Searchbox
                   post={contact}
-                  key={contact.atcnum}
+                  handleSearchModal={handleSearchModal}
+                  index={i}
+                  key={i}
                 />
               );
             })}
@@ -41,7 +43,9 @@ const Hashpage = ({keyword, search, ui, addHashPost}) => {
                 return(
                   <Searchbox
                     post={contact}
-                    key={contact.atcnum}
+                    handleSearchModal={handleSearchModal}
+                    index={i+9}
+                    key={i}
                   />
                 );
               })}
@@ -49,8 +53,8 @@ const Hashpage = ({keyword, search, ui, addHashPost}) => {
           </div>
         }
         <div className="loading_position">
-          {search.moreView && search.isMore ? <Loading />:null}
-          {!search.moreView && search.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addHashPost}>더 읽어들이기</a>:null}
+          {search.posts.moreView && search.posts.isMore ? <Loading />:null}
+          {!search.posts.moreView && search.posts.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addHashPost}>더 읽어들이기</a>:null}
         </div>
       </article>
     )

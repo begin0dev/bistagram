@@ -31,9 +31,12 @@ const Contentview = ({post, auth, hanedleDeleteReply, handleGetReplies}) => {
         {post.replies.map((contact, i) => {
           return(
             <li className="reply_li" key={"reply"+i}>
-              {contact.username === auth.userinfo.user.username &&
+              {contact.username === auth.userinfo.user.username || post.username===auth.userinfo.user.username?
               <button className="reply_delbtn" title="댓글 삭제"
-              onClick={(e) => hanedleDeleteReply(i)}>댓글 삭제</button>
+                onClick={(e) => hanedleDeleteReply(i)}>
+                댓글 삭제
+              </button>
+              :null
               }
               <a className="reply_li_id fontcolor_black">{contact.nickname}</a>
               <span>

@@ -16,6 +16,7 @@ import * as ui from '../actions/ui';
 import '../css/basic.css';
 import '../css/header.css';
 import '../css/followUl.css';
+import '../css/modal.css';
 
 class App extends React.Component{
 
@@ -73,13 +74,13 @@ class App extends React.Component{
 
 	handleScroll = () => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-		const {ui, post, setHeader} = this.props;
+		const {ui, post, search, setHeader} = this.props;
 		let result=true;
 		if(ui.headerModal){
 			result=true;
 		}else if(scrollTop > 90){
 			result=false;
-		}else if(post.status.modal){
+		}else if(post.status.modal || search.modalState.modal){
 			result=false;
 		}else{
 			result=true;
@@ -134,7 +135,8 @@ const mapStateToProps = (state) => ({
 	ui: state.ui,
 	post: state.post,
 	history: state.history,
-	form: state.form
+	form: state.form,
+	search: state.search
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,12 +1,12 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 
 class Postmodal extends Component {
-  handleClickOutside = (e) =>{
-      const { handleModal } = this.props;
-      if(this.deletebtn !== e.target) {
-        handleModal(-1);
-      }
-  }
+    handleClickOutside = (e) =>{
+        const { handleModal } = this.props;
+        if(this.deletebtn !== e.target) {
+          handleModal(-1);
+        }
+    }
     render() {
         const style={
           position: 'relative',
