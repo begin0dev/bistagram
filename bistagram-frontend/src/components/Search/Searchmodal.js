@@ -25,7 +25,7 @@ class Searchmodal extends Component {
           position: 'relative',
           zIndex: 2
         }
-        const {search, auth, atcindex, handleBfAfModal} = this.props;
+        const {search, auth, atcindex, handleBfAfModal, handleFollowClick} = this.props;
         return(
           <div style={modalstyle}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -52,15 +52,13 @@ class Searchmodal extends Component {
               </div>
 
               <div className="modal_post_body">
-                <div className="modal_post_position modal_post_style"
-                  ref={(div) => { this.modaldiv = div }}
-                  style={{maxWidth: "815px"}}
-                >
+                <div className="modal_post_position modal_post_style" ref={(div) => { this.modaldiv = div }}>
                   <article className="modal_article">
 
                     <Modalheader
                       auth={auth}
                       search={search}
+                      handleFollowClick={handleFollowClick}
                     />
 
                     <Modalmedia
@@ -78,6 +76,7 @@ class Searchmodal extends Component {
                   </article>
                 </div>
               </div>
+              <button className="modal_canclebtn">닫기</button>
             </div>
           </div>
         );

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import * as search from '../actions/search';
 import * as ui from '../actions/ui';
+import * as auth from '../actions/auth';
 
 import Loading from '../components/Loading';
 
@@ -105,6 +106,19 @@ class SearchHash extends Component {
       await getModalPost({atcnum: atcnum});
   }
 
+  handleFollowClick = (username) => {
+		const {auth, setFollowUser, following, unfollow} = this.props;
+    if(auth.userinfo.user.username===null){
+      document.location = "/"
+    }
+		setFollowUser(username);
+		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
+			unfollow({follower: username});
+		}else{
+			following({follower: username});
+		}
+	}
+
   render() {
     const {search, ui, auth, getModalPost} = this.props;
 		return(
@@ -124,6 +138,7 @@ class SearchHash extends Component {
               atcindex={this.state.atcindex}
               handleSearchModal={this.handleSearchModal}
               handleBfAfModal={this.handleBfAfModal}
+              handleFollowClick={this.handleFollowClick}
               getModalPost={getModalPost}
             />
           }
@@ -143,6 +158,10 @@ const mapDispatchToProps = (dispatch) => ({
   addHash: (params) => dispatch(search.addHash(params)),
   getModalPost: (params) => dispatch(search.getModalPost(params)),
   setModalInit: () => dispatch(search.setModalInit()),
+
+  setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
+	following: (params) => dispatch(auth.following(params)),
+	unfollow: (params) => dispatch(auth.unfollow(params)),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))
