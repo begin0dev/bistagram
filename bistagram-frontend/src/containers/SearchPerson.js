@@ -7,7 +7,7 @@ import * as auth from '../actions/auth';
 
 import Loading from '../components/Loading';
 
-import Hashpage from '../components/Search/Hashpage';
+import Personpage from '../components/Search/Personpage';
 import Searchmodal from '../components/Search/Searchmodal';
 import Innermodal from '../components/Search/Innermodal';
 
@@ -15,7 +15,7 @@ import '../css/search.css';
 
 let position =	0;
 
-class SearchHash extends Component {
+class SearchPerson extends Component {
 
   async componentDidMount() {
     const {searchHash, setLoading, setLoadingInitial} = this.props;
@@ -124,7 +124,8 @@ class SearchHash extends Component {
     const {search, ui, auth, getModalPost, modalPostInsertReply, modalPostDeleteReply} = this.props;
 		return(
         <main className="search_body">
-          <Hashpage
+
+          <Personpage
             ui={ui}
             keyword={this.props.match.params.keyword}
             search={search}
@@ -186,5 +187,5 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-SearchHash = connect(mapStateToProps, mapDispatchToProps)(SearchHash)
-export default SearchHash;
+SearchPerson = connect(mapStateToProps, mapDispatchToProps)(SearchPerson)
+export default SearchPerson;

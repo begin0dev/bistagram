@@ -11,6 +11,13 @@ export const searchHash = (params) => ({
   }
 })
 
+export const searchPerson = (params) => ({
+  type: SEARCH.SEARCH_PERSON,
+  payload: {
+    promise: service.searchPerson(params)
+  }
+})
+
 export const setModalPostIndex = createAction(SEARCH.SET_MODAL_POST_INDEX);
 
 export const addHash = (params) => ({

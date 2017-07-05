@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const changeTag = (text) =>{
   text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig, '<a href="search/tags/$1">#$1</a>');
@@ -15,7 +16,9 @@ const Contentview = ({post, auth, hanedleDeleteReply, handleGetReplies}) => {
     return (
       <ul className="reply_ul_mgpd">
         <li className="reply_li">
-            <a className="reply_li_id fontcolor_black">{post.userinfo.nickname}</a>
+            <Link to={`/search/${post.userinfo.nickname}`}
+             className="reply_li_id fontcolor_black">{post.userinfo.nickname}
+            </Link>
             <span>
               <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
             </span>
@@ -38,7 +41,9 @@ const Contentview = ({post, auth, hanedleDeleteReply, handleGetReplies}) => {
               </button>
               :null
               }
-              <a className="reply_li_id fontcolor_black">{contact.nickname}</a>
+              <Link to={`/search/${contact.nickname}`}
+                className="reply_li_id fontcolor_black">{contact.nickname}
+              </Link>
               <span>
                 <span dangerouslySetInnerHTML={{__html: changeNick(contact.content)}}></span>
               </span>

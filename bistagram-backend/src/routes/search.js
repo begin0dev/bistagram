@@ -125,7 +125,7 @@ const getPersonPostData = () =>{
   }
 }
 
-router.post('/Searchperson', async (req, res) => {
+router.post('/SearchPerson', async (req, res) => {
   let sql = "select y.*, count(following.username) as followingcount from "+
             "(select x.*, count(follower.username) as followercount from "+
             "(select member.*, count(article.username) as atccount "+
@@ -147,8 +147,6 @@ router.post('/Searchperson', async (req, res) => {
     })
   });
 });
-
-
 
 
 const getModalData = (atcnum, user) =>{

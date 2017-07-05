@@ -25,12 +25,15 @@ const FollowList = ({auth, page, handleFollowClick}) => {
 							<li className="follow_recommend" key={"flli"+i}>
 								<div className="li_wrap_div">
 									<div className="profile_wrap_div">
-										<a className="profile_img_a profile_img_circle li_circleimg" style={imgsize}>
+										<Link to={`/search/${contact.nickname}`} className="profile_img_a profile_img_circle li_circleimg" style={imgsize}>
 											<img src={noimg} className="img_100" alt=""></img>
-										</a>
+										</Link>
 										<div className="profile_info_wrap">
 											<div className="profile_nickname_div">
-												<a className="profile_info_nick profile_info_nickwrap" title={contact.nickname}>{contact.nickname}</a>
+												<Link to={`/search/${contact.nickname}`}
+                          className="profile_info_nick profile_info_nickwrap"
+                          title={contact.nickname}>{contact.nickname}
+                        </Link>
 											</div>
 											<div className="profile_info_name">{contact.name}</div>
 										</div>

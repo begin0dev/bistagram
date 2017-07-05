@@ -8,6 +8,14 @@ export const searchHash = ({keyword}) => request({
     }
 });
 
+export const searchPerson = ({nickname}) => request({
+    url: '/api/search/SearchPerson',
+    method: 'post',
+    data: {
+      nickname
+    }
+});
+
 export const addHash = ({keyword, atcnums}) => request({
     url: '/api/search/addHash',
     method: 'post',

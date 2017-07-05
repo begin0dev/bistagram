@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import noimg from '../../img/noimg.jpg';
 
@@ -43,18 +44,21 @@ class Header extends Component {
       const {post} =this.props;
       return(
         <header className="postview_head">
-          <a className="profile_img_a profile_img_circle" style={imgsize}>
+          <Link to={`/search/${post.userinfo.nickname}`}
+            className="profile_img_a profile_img_circle" style={imgsize}>
             <img src={noimg} className="postview_profileimg img_100" alt=""></img>
-          </a>
+          </Link>
           <div className="postview_iddiv">
-            <a className="postview_id_a postview_idwrap">{post.userinfo.nickname}</a>
+            <Link to={`/search/${post.userinfo.nickname}`}
+              className="postview_id_a postview_idwrap">{post.userinfo.nickname}
+            </Link>
           </div>
-            <a className="postview_day_a">
+            <Link to={`/search/${post.userinfo.nickname}`} className="postview_day_a">
               <time dateTime={new Date(post.registerday)}
               title={this.handleResigerDayTitle(post.registerday)}>
               {this.handleResigerDayView(post.registerday)}
               </time>
-            </a>
+            </Link>
         </header>
       );
     }

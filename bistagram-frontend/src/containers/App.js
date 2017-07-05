@@ -6,6 +6,7 @@ import Header from '../components/Header/Header';
 import Login from './Login';
 import Posts from './Posts';
 import SearchHash from './SearchHash';
+import SearchPerson from './SearchPerson';
 import Explore from './Explore';
 import NotFound from './NotFound';
 
@@ -123,8 +124,9 @@ class App extends React.Component{
 					null}
 					<Switch>
 						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
-						<Route path="/explore" component={Explore}/>
+						<Route path="/explore" component={Explore}/>						
 						<Route path="/Search/tags/:keyword" component={SearchHash}/>
+						<Route path="/Search/:keyword" component={SearchPerson}/>
 						<Route component={NotFound}/>
 					</Switch>
 				</section>

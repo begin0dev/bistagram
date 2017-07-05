@@ -9,6 +9,7 @@ const request = {
 const posts = {
   atcindex: -1,
   atccount: -1,
+  persondata: [],
   popular: [],
   recent: [],
   moreView: false,
