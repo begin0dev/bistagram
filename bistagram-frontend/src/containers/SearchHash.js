@@ -59,7 +59,7 @@ class SearchHash extends Component {
   }
 
   handleSearchModal = async(index) =>{
-    const { setModalInit, search, getModalPost } = this.props;
+    const { setModalInit, search, getModalPost, setModalPostIndex } = this.props;
     let doc = document.documentElement;
     let atcnum = -1;
     if(index !== -1){
@@ -69,10 +69,7 @@ class SearchHash extends Component {
       }else{
         atcnum=search.posts.recent[index-9].atcnum;
       }
-      this.setState({
-        ...this.state,
-        atcindex: index
-      });
+      setModalPostIndex(index);
       await getModalPost({atcnum: atcnum}).then(()=>{
         document.body.style.position= 'fixed';
         document.body.style.top= -position+'px';
@@ -82,27 +79,21 @@ class SearchHash extends Component {
     else{
       document.body.style='';
       window.scrollTo(0, position);
-      this.setState({
-        ...this.state,
-        atcindex: index
-      });
       setModalInit();
     }
   }
 
   handleBfAfModal = async(plusvalue) =>{
-    const { search, getModalPost } = this.props;
+    const { search, getModalPost, setModalPostIndex } = this.props;
     let atcnum = -1;
-    let nextindex = this.state.atcindex+plusvalue;
+    let nextindex = search.posts.atcindex+plusvalue;
       if(nextindex<9){
         atcnum=search.posts.popular[nextindex].atcnum;
       }else{
         atcnum=search.posts.recent[nextindex-9].atcnum;
       }
-      this.setState({
-        ...this.state,
-        atcindex: nextindex
-      });
+
+      setModalPostIndex(nextindex);
       await getModalPost({atcnum: atcnum});
   }
 
@@ -117,6 +108,18 @@ class SearchHash extends Component {
 		}else{
 			following({follower: username});
 		}
+	}
+
+	handleModalLikeClick = (atcnum) =>{
+    const {auth, search, modalPostLike, modalPostNotLike} = this.props;
+    if(auth.userinfo.user.username===null){
+      document.location = "/"
+    }
+    if(search.modalpost.atclike.like===1){
+      modalPostNotLike({atcnum: atcnum});
+    }else{
+      modalPostLike({atcnum: atcnum});
+    }
 	}
 
   render() {
@@ -135,10 +138,11 @@ class SearchHash extends Component {
             <Searchmodal
               auth={auth}
               search={search}
-              atcindex={this.state.atcindex}
+              atcindex={search.posts.atcindex}
               handleSearchModal={this.handleSearchModal}
               handleBfAfModal={this.handleBfAfModal}
               handleFollowClick={this.handleFollowClick}
+              handleModalLikeClick={this.handleModalLikeClick}
               getModalPost={getModalPost}
             />
           }
@@ -158,6 +162,9 @@ const mapDispatchToProps = (dispatch) => ({
   addHash: (params) => dispatch(search.addHash(params)),
   getModalPost: (params) => dispatch(search.getModalPost(params)),
   setModalInit: () => dispatch(search.setModalInit()),
+  modalPostLike: (params) => dispatch(search.modalPostLike(params)),
+  modalPostNotLike: (params) => dispatch(search.modalPostNotLike(params)),
+  setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
 
   setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
 	following: (params) => dispatch(auth.following(params)),

@@ -3,15 +3,17 @@ import Textarea from 'react-textarea-autosize';
 
 import Modalcontent from './Modalcontent';
 
-const Modalfooter = ({search}) => {
+const Modalfooter = ({search, handleKeyPress, handleModalLikeClick}) => {
     return (
       <div className="modal_footer_root">
 
         <section className="modal_likeclick_section">
-          <button className="like_abtn like_abtn_mgpd" disabled>
+          <button className="like_abtn like_abtn_mgpd" disabled={`${search.modalState.likeLoading?true:''}`}>
             {search.modalpost.atclike.like===1 ?
-              (<span className="imgs like_abtn_onoffimg like_abtn_img">좋아요</span>):
-              (<span className="imgs like_abtn_onoffimg notlike_abtn_img">안좋아요</span>)
+              (<span className="imgs like_abtn_onoffimg like_abtn_img"
+              onClick={()=>handleModalLikeClick(search.modalpost.atcnum)}>좋아요</span>):
+              (<span className="imgs like_abtn_onoffimg notlike_abtn_img"
+              onClick={()=>handleModalLikeClick(search.modalpost.atcnum)}>안좋아요</span>)
             }
           </button>
           <a className="reply_abtn" role="button" aria-disabled="false">
@@ -37,7 +39,9 @@ const Modalfooter = ({search}) => {
             <div className='loding_div loding_img'></div>
 
             <Textarea name="content" className="modal_reply_ta"
-              aria-label="댓글 달기..." placeholder="댓글 달기...">
+              aria-label="댓글 달기..." placeholder="댓글 달기..."
+              onKeyPress={handleKeyPress}
+            >
             </Textarea>
           </form>
         </section>

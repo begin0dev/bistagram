@@ -7,6 +7,7 @@ const request = {
 }
 
 const posts = {
+  atcindex: -1,
   atccount: -1,
   popular: [],
   recent: [],
@@ -16,7 +17,8 @@ const posts = {
 }
 
 const modalState = {
-  modal: false
+  modal: false,
+  likeLoading: false
 }
 
 const initialState = {
@@ -36,6 +38,12 @@ const initialState = {
     },
     getModalPost: {
         ...request
+    },
+    modalPostLike: {
+        ...request
+    },
+    modalPostNotLike: {
+        ...request
     }
   }
 }
@@ -47,6 +55,28 @@ const rejected = {fetching: false, fetched: false}
 function search(state=initialState, action) {
   const payload = action.payload;
   switch (action.type) {
+
+    case SEARCH.SET_MODAL_INIT:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          atcindex: -1
+        },
+        modalState: {
+          ...modalState
+        },
+        modalpost: {}
+      };
+
+    case SEARCH.SET_MODAL_POST_INDEX:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          atcindex: payload
+        }
+      };
 
     case SEARCH.SEARCH_HASH + "_PENDING":
       return {
@@ -162,14 +192,97 @@ function search(state=initialState, action) {
       };
 
 
-    case SEARCH.SET_MODAL_INIT:
+    case SEARCH.MODAL_POST_LIKE + "_PENDING":
       return {
         ...state,
         modalState: {
-          ...modalState
+          ...state.modalState,
+          likeLoading: true
         },
-        modalpost: {}
+        requests: {
+            ...state.requests,
+            modalPostLike: { ...pending }
+        }
+      }
+    case SEARCH.MODAL_POST_LIKE + '_FULFILLED':
+      return {
+        ...state,
+        modalpost: {
+          ...state.modalpost,
+          atclike:{
+            ...state.modalpost.atclike,
+            like: payload?1:0,
+            likecount: state.modalpost.atclike.likecount + (payload?1:0)
+          }
+        },
+        modalState: {
+          ...state.modalState,
+          likeLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostLike: { ...fulfilled }
+        }
+      }
+    case SEARCH.MODAL_POST_LIKE + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          likeLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostLike: { ...rejected, error: payload }
+        }
       };
+
+
+    case SEARCH.MODAL_POST_NOTLIKE + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          likeLoading: true
+        },
+        requests: {
+          ...state.requests,
+          modalPostNotLike: { ...pending }
+        }
+      }
+    case SEARCH.MODAL_POST_NOTLIKE + '_FULFILLED':
+      return {
+        ...state,
+        modalpost: {
+          ...state.modalpost,
+          atclike:{
+            ...state.modalpost.atclike,
+            like: payload?0:1,
+            likecount: state.modalpost.atclike.likecount - (payload?1:0)
+          }
+        },
+        modalState: {
+          ...state.modalState,
+          likeLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostNotLike: { ...fulfilled }
+        }
+      }
+    case SEARCH.MODAL_POST_NOTLIKE + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          likeLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostNotLike: { ...rejected, error: payload }
+        }
+      };
+
 
     default:
       return state;

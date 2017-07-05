@@ -20,12 +20,17 @@ class Searchmodal extends Component {
           handleSearchModal(-1);
       }
     }
+    handleKeyPress = (e) => {
+      if(e.charCode === 13){
+        e.preventDefault();
+      }
+    }
     render() {
         const modalstyle={
           position: 'relative',
           zIndex: 2
         }
-        const {search, auth, atcindex, handleBfAfModal, handleFollowClick} = this.props;
+        const {search, auth, atcindex, handleBfAfModal, handleFollowClick, handleModalLikeClick} = this.props;
         return(
           <div style={modalstyle}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -67,12 +72,16 @@ class Searchmodal extends Component {
 
                     <Modalfooter
                       search={search}
+                      handleModalLikeClick={handleModalLikeClick}
+                      handleKeyPress={this.handleKeyPress}
                     />
+
                     <div className="modal_more_div">
                       <button className="imgs more_btn more_btn_img more_btn_display">
                         옵션 더 보기
                       </button>
                     </div>
+
                   </article>
                 </div>
               </div>

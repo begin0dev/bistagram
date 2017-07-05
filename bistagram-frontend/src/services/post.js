@@ -21,7 +21,7 @@ export const likeAtc = ({atcnum}) => request({
     url: '/api/post/likeAtc',
     method: 'post',
     data: {
-      atcnum,
+      atcnum
     }
 });
 
@@ -29,7 +29,7 @@ export const notlikeAtc = ({atcnum}) => request({
     url: '/api/post/notlikeAtc',
     method: 'delete',
     data: {
-      atcnum,
+      atcnum
     }
 });
 
