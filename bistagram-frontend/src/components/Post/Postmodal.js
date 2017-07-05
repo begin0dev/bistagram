@@ -10,7 +10,7 @@ class Postmodal extends Component {
     render() {
         const style={
           position: 'relative',
-          zIndex: 2
+          zIndex: 3
         }
         const {deletePossible, lodingpost, handleDeletePost}=this.props;
         return(

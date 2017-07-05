@@ -59,3 +59,5 @@ export const modalPostDeleteReply = (params) => ({
     replyindex: params.replyindex
   }
 })
+
+export const setInnerModal = createAction(SEARCH.SET_INNER_MODAL);

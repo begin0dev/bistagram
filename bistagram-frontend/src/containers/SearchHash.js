@@ -7,8 +7,11 @@ import * as auth from '../actions/auth';
 
 import Loading from '../components/Loading';
 
+import Personpage from '../components/Search/Personpage';
+
 import Hashpage from '../components/Search/Hashpage';
 import Searchmodal from '../components/Search/Searchmodal';
+import Innermodal from '../components/Search/Innermodal';
 
 import '../css/search.css';
 
@@ -116,18 +119,28 @@ class SearchHash extends Component {
       modalPostLike({atcnum: atcnum});
     }
 	}
-
+  handleInnerModal = () =>{
+    this.props.setInnerModal();
+  }
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply, modalPostDeleteReply} = this.props;
 		return(
         <main className="search_body">
-          <Hashpage
+{/*          <Hashpage
+            ui={ui}
+            keyword={this.props.match.params.keyword}
+            search={search}
+            addHashPost={this.addHashPost}
+            handleSearchModal={this.handleSearchModal}
+          />*/}
+          <Personpage
             ui={ui}
             keyword={this.props.match.params.keyword}
             search={search}
             addHashPost={this.addHashPost}
             handleSearchModal={this.handleSearchModal}
           />
+
           {ui.loading.search && <Loading />}
           {search.modalState.modal &&
             <Searchmodal
@@ -138,9 +151,16 @@ class SearchHash extends Component {
               handleBfAfModal={this.handleBfAfModal}
               handleFollowClick={this.handleFollowClick}
               handleModalLikeClick={this.handleModalLikeClick}
+              handleInnerModal={this.handleInnerModal}
               modalPostInsertReply={modalPostInsertReply}
               modalPostDeleteReply={modalPostDeleteReply}
               getModalPost={getModalPost}
+            />
+          }
+          {search.modalState.innermodal&&
+            <Innermodal
+              handleInnerModal={this.handleInnerModal}
+              handleSearchModal={this.handleSearchModal}
             />
           }
         </main>
@@ -164,6 +184,7 @@ const mapDispatchToProps = (dispatch) => ({
   modalPostInsertReply: (params) => dispatch(search.modalPostInsertReply(params)),
   modalPostDeleteReply: (params) => dispatch(search.modalPostDeleteReply(params)),
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
+  setInnerModal: () => dispatch(search.setInnerModal()),
 
   setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
 	following: (params) => dispatch(auth.following(params)),

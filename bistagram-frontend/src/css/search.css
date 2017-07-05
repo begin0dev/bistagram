@@ -24,6 +24,13 @@ width: 100%;
 color: #262626;
 text-align: center;
 }
+.person_header{
+-webkit-box-orient: horizontal;
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
 .search_h1{
 font-weight: 300;
 overflow: hidden;
@@ -163,8 +170,10 @@ height: 100%;
 .search_box_mg{
 margin-right: 30px;
 }
-.search_box:hover .search_box_mask{
-display: flex;
+@media (hover: hover) {
+  .search_box:hover .search_box_mask{
+    display: flex;
+  }
 }
 .loading_position{
 position: relative;
@@ -191,6 +200,13 @@ background: #3897f0;
 border-color: #3897f0;
 color: #fff;
 }
+
+.person_profile_div{
+-webkit-flex-shrink: 0;
+-ms-flex-negative: 0;
+flex-shrink: 0;
+}
+
 @media (min-width: 736px){
   .search_wrap{
     -webkit-box-sizing: content-box;
@@ -198,10 +214,17 @@ color: #fff;
     padding: 0 20px;
     width: calc(100% - 40px);
   }
+  .search_wrap_pdtop{
+    padding-top: 60px;
+  }
   .search_header{
     font-size: 16px;
     line-height: 24px;
     margin-top: 56px;
+    margin-bottom: 44px;
+  }
+  .person_header{
+    padding: 0;
     margin-bottom: 44px;
   }
   .search_h1{
@@ -223,12 +246,30 @@ color: #fff;
     -ms-flex-item-align: center;
     align-self: center;
   }
+  .person_profile_div{
+    -webkit-flex-basis: 0;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    margin-right: 30px;
+  }
 }
 @media (max-width: 735px){
   .search_header{
     font-size: 14px;
     margin-top: 31px;
     margin-bottom: 31px;
+  }
+  .person_header{
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 30px;
+    margin-bottom: 24px;
+    border-bottom: none;
+    padding-bottom: 0;
   }
   .search_h1{
     font-size: 21px;
@@ -263,5 +304,8 @@ color: #fff;
   .moreview_btn{
     font-size: 14px;
     margin: 20px 20px 0;
+  }
+  .person_profile_div{
+    margin-right: 28px;
   }
 }

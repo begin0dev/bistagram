@@ -23,9 +23,9 @@ class Searchmodal extends Component {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
     handleClickOutside = (e) =>{
-      const {handleSearchModal} = this.props;
+      const {search, handleSearchModal} = this.props;
       const {modaldiv, bfmodalbtn, afmodalbtn} = this;
-      if (modaldiv && !modaldiv.contains(e.target) && bfmodalbtn!==e.target && afmodalbtn!==e.target) {
+      if (!search.modalState.innermodal && modaldiv && !modaldiv.contains(e.target) && bfmodalbtn!==e.target && afmodalbtn!==e.target) {
           handleSearchModal(-1);
       }
     }
@@ -65,7 +65,7 @@ class Searchmodal extends Component {
           position: 'relative',
           zIndex: 2
         }
-        const {search, auth, atcindex, handleBfAfModal, handleFollowClick, handleModalLikeClick} = this.props;
+        const {search, auth, atcindex, handleBfAfModal, handleFollowClick, handleModalLikeClick, handleInnerModal} = this.props;
         return(
           <div style={modalstyle}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -117,7 +117,7 @@ class Searchmodal extends Component {
                     />
 
                     <div className="modal_more_div">
-                      <button className="imgs more_btn more_btn_img more_btn_display">
+                      <button className="imgs more_btn more_btn_img more_btn_display" onClick={handleInnerModal}>
                         옵션 더 보기
                       </button>
                     </div>

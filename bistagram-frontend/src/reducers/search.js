@@ -19,7 +19,8 @@ const posts = {
 const modalState = {
   modal: false,
   likeLoading: false,
-  replyLoading: false
+  replyLoading: false,
+  innermodal: false
 }
 
 const initialState = {
@@ -452,6 +453,15 @@ function search(state=initialState, action) {
         requests: {
           ...state.requests,
           modalPostDeleteReply: { ...rejected, error: payload }
+        }
+      };
+
+    case SEARCH.SET_INNER_MODAL:
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          innermodal: !state.modalState.innermodal
         }
       };
 

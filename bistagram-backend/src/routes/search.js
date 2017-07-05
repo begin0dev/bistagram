@@ -98,6 +98,59 @@ router.post('/addHash', async (req, res) => {
   });
 });
 
+
+
+const getPersonPostData = () =>{
+  return (item, callback) =>{
+    async.waterfall([
+      function(callback){
+        let sql = "select y.*, count(reply.atcnum)as replycount from "+
+                  "(select x.*, count(atclike.username) as likecount from "+
+                  "(select article.atcnum, media.medianame, media.mediatype "+
+                  "from article join media on article.atcnum=media.atcnum "+
+                  "where username=? group by article.atcnum order by article.atcnum desc limit 12)x "+
+                  "left join atclike on x.atcnum = atclike.atcnum group by x.atcnum order by null)y "+
+                  "left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"
+        let params = [item.username];
+        conn.query(sql, params, function(err, rows){
+          if(err) console.log(err);
+          let posts=JSON.stringify(rows);
+          item.posts=JSON.parse(posts);
+          callback(null, item);
+        })
+      }
+    ], function (err, result) {
+      callback(err, result);
+    });
+  }
+}
+
+router.post('/Searchperson', async (req, res) => {
+  let sql = "select y.*, count(following.username) as followingcount from "+
+            "(select x.*, count(follower.username) as followercount from "+
+            "(select member.*, count(article.username) as atccount "+
+            "from article join member on member.username=article.username "+
+            "where member.nickname=?)x join follower on "+
+            "x.username=follower.username)y join following on y.username=following.username";
+  let params = [req.body.nickname];
+  conn.query(sql, params, (err, rows) =>{
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    async.map(rows, getPersonPostData(), (err, persondata) =>{
+      if(err){
+        return res.status(500).json({message: err.message});
+      }
+      else{
+        return res.json(...persondata);
+      }
+    })
+  });
+});
+
+
+
+
 const getModalData = (atcnum, user) =>{
   return (item, callback) =>{
     async.waterfall([
