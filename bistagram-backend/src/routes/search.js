@@ -145,15 +145,19 @@ const getModalData = (atcnum, user) =>{
 }
 
 router.post('/getModalPost', async (req, res) => {
-  let sql = "select article.atcnum, article.username, member.nickname, member.profileimgname, article.content, "+
-            "article.registerday from article join member on article.username=member.username where atcnum = ?";
+  let sql = "select x.*, count(reply.atcnum) as replycount from "+
+            "(select article.atcnum, article.username, member.nickname, member.profileimgname, article.content, "+
+            "article.registerday from article join member on article.username=member.username where atcnum = ?)x "+
+            "join reply on x.atcnum=reply.atcnum";
   let params = [req.body.atcnum];
   conn.query(sql, params, function(err, rows) {
     if(err) {
+      console.log(err)
       return res.status(500).json({message: err.message});
     }
     async.map(rows, getModalData(req.body.atcnum, req.user), (err, posts) =>{
       if(err){
+        console.log(err)
         return res.status(500).json({message: err.message});
       }
       else{

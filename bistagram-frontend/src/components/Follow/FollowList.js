@@ -10,7 +10,7 @@ const imgsize ={
 
 const FollowList = ({auth, page, handleFollowClick}) => {
     return (
-      <ul className={`border_gray2 ${page === 'mainpost' ?'post_marginbt30px':'post_marginbt60px'}`}>
+      <ul className={`border_gray2 ${page === 'mainpost' ?'post_marginbt20px':'post_marginbt60px'}`}>
 				{/*팔로우추천부분*/}
 					<li className="follow_recommend">
 						<div className="follow_li_titlediv">

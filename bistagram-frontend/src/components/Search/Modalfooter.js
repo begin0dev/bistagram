@@ -3,7 +3,7 @@ import Textarea from 'react-textarea-autosize';
 
 import Modalcontent from './Modalcontent';
 
-const Modalfooter = ({search, handleKeyPress, handleModalLikeClick}) => {
+const Modalfooter = ({search, auth, reply, handleKeyPress, handleModalLikeClick, handleChangeReply, handleReplySubmit, handleReplyDelete}) => {
     return (
       <div className="modal_footer_root">
 
@@ -31,16 +31,21 @@ const Modalfooter = ({search, handleKeyPress, handleModalLikeClick}) => {
 
         <Modalcontent
           post={search.modalpost}
+          auth={auth}
+          handleReplyDelete={handleReplyDelete}
         />
 
         <section className="modal_replyta_section">
-          <form className="modal_reply_form" autoComplete="off" >
+          <form className="modal_reply_form" autoComplete="off" onKeyPress={handleReplySubmit}>
 
-            <div className='loding_div loding_img'></div>
+            {search.modalState.replyLoading && <div className='loding_div loding_img'></div>}
 
             <Textarea name="content" className="modal_reply_ta"
               aria-label="댓글 달기..." placeholder="댓글 달기..."
+              onChange={handleChangeReply}
               onKeyPress={handleKeyPress}
+              disabled={`${search.modalState.replyLoading?true:''}`}
+              value={reply}
             >
             </Textarea>
           </form>

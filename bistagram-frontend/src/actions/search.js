@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import * as service from '../services/search';
-import * as post from '../services/post';
+import * as postservice from '../services/post';
 import SEARCH from './ActionTypes/search';
 
 export const searchHash = (params) => ({
@@ -32,13 +32,30 @@ export const setModalInit = createAction(SEARCH.SET_MODAL_INIT);
 export const modalPostLike = (params) => ({
   type: SEARCH.MODAL_POST_LIKE,
   payload: {
-    promise: post.likeAtc(params)
+    promise: postservice.likeAtc(params)
   }
 })
 
 export const modalPostNotLike = (params) => ({
   type: SEARCH.MODAL_POST_NOTLIKE,
   payload: {
-    promise: post.notlikeAtc(params)
+    promise: postservice.notlikeAtc(params)
+  }
+})
+
+export const modalPostInsertReply = (params) => ({
+  type: SEARCH.MODAL_POST_INSERT_REPLY,
+  payload: {
+    promise: postservice.insertReply(params)
+  }
+})
+
+export const modalPostDeleteReply = (params) => ({
+  type: SEARCH.MODAL_POST_DELETE_REPLY,
+  payload: {
+    promise: postservice.deleteReply(params)
+  },
+  meta: {
+    replyindex: params.replyindex
   }
 })

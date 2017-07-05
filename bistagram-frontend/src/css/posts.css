@@ -27,6 +27,9 @@ align-self: center;
 color: #262626;
 text-align: center;
 }
+.post_marginbt30px{
+	margin-bottom: 30px;
+}
 @media (min-width: 640px){
 	.nothing_border{
 		background-color: #fff;
@@ -41,11 +44,8 @@ text-align: center;
 	.post_marginbt60px{
 		margin-bottom: 60px;
 	}
-	.post_marginbt30px{
-		margin-bottom: 30px;
-	}
-	.post_marginbt30px{
-		margin-bottom: 30px;
+	.post_marginbt20px{
+		margin-bottom: 20px;
 	}
 }
 @media (max-width: 735px){
@@ -64,7 +64,7 @@ text-align: center;
 	.nothing_bold_text{
 		font-weight: 600;
 		margin: 20px 0 15px;
-	}	
+	}
 }
 @media (min-width: 736px){
 	.nothing_border{

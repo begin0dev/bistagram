@@ -18,7 +18,8 @@ const posts = {
 
 const modalState = {
   modal: false,
-  likeLoading: false
+  likeLoading: false,
+  replyLoading: false
 }
 
 const initialState = {
@@ -44,6 +45,12 @@ const initialState = {
     },
     modalPostNotLike: {
         ...request
+    },
+    modalPostInsertReply: {
+        ...request
+    },
+    modalPostDeleteReply: {
+        ...request
     }
   }
 }
@@ -54,6 +61,7 @@ const rejected = {fetching: false, fetched: false}
 
 function search(state=initialState, action) {
   const payload = action.payload;
+  const meta = action.meta;
   switch (action.type) {
 
     case SEARCH.SET_MODAL_INIT:
@@ -205,8 +213,28 @@ function search(state=initialState, action) {
         }
       }
     case SEARCH.MODAL_POST_LIKE + '_FULFILLED':
+      let atcctgname = '';
+      let targetindex = -1;
+      if(state.posts.atcindex<9){
+        atcctgname="popular";
+        targetindex=state.posts.atcindex;
+      }else{
+        atcctgname="recent";
+        targetindex=state.posts.atcindex-9;
+      }
       return {
         ...state,
+        posts:{
+          ...state.posts,
+          [atcctgname]: [
+            ...state.posts[atcctgname].slice(0, targetindex),
+            {
+              ...state.posts[atcctgname][targetindex],
+              likecount: state.posts[atcctgname][targetindex].likecount + (payload?1:0)
+            },
+            ...state.posts[atcctgname].slice(targetindex+1, state.posts[atcctgname].length)
+          ]
+        },
         modalpost: {
           ...state.modalpost,
           atclike:{
@@ -251,8 +279,26 @@ function search(state=initialState, action) {
         }
       }
     case SEARCH.MODAL_POST_NOTLIKE + '_FULFILLED':
+      if(state.posts.atcindex<9){
+        atcctgname="popular";
+        targetindex=state.posts.atcindex;
+      }else{
+        atcctgname="recent";
+        targetindex=state.posts.atcindex-9;
+      }
       return {
         ...state,
+        posts:{
+          ...state.posts,
+          [atcctgname]: [
+            ...state.posts[atcctgname].slice(0, targetindex),
+            {
+              ...state.posts[atcctgname][targetindex],
+              likecount: state.posts[atcctgname][targetindex].likecount - (payload?1:0)
+            },
+            ...state.posts[atcctgname].slice(targetindex+1, state.posts[atcctgname].length)
+          ]
+        },
         modalpost: {
           ...state.modalpost,
           atclike:{
@@ -283,6 +329,131 @@ function search(state=initialState, action) {
         }
       };
 
+    case SEARCH.MODAL_POST_INSERT_REPLY + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: true
+        },
+        requests: {
+          ...state.requests,
+          modalPostInsertReply: { ...pending }
+        }
+      }
+    case SEARCH.MODAL_POST_INSERT_REPLY + '_FULFILLED':
+      if(state.posts.atcindex<9){
+        atcctgname="popular";
+        targetindex=state.posts.atcindex;
+      }else{
+        atcctgname="recent";
+        targetindex=state.posts.atcindex-9;
+      }
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [atcctgname]: [
+            ...state.posts[atcctgname].slice(0, targetindex),
+            {
+              ...state.posts[atcctgname][targetindex],
+              replycount: state.posts[atcctgname][targetindex].replycount + (!payload.data.message?1:0)
+            },
+            ...state.posts[atcctgname].slice(targetindex+1, state.posts[atcctgname].length)
+          ]
+        },
+        modalState: {
+          ...state.modalState,
+          replyLoading: false
+        },
+        modalpost: {
+          ...state.modalpost,
+          replies:[
+              ...state.modalpost.replies,
+              !payload.data.message&&payload.data
+          ],
+          replycount: state.modalpost.replycount + !payload.data.message?1:0
+        },
+        requests: {
+          ...state.requests,
+          modalPostInsertReply: { ...fulfilled }
+        }
+      }
+    case SEARCH.MODAL_POST_INSERT_REPLY + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostInsertReply: { ...rejected, error: payload }
+        }
+      };
+
+    case SEARCH.MODAL_POST_DELETE_REPLY + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: true
+        },
+        requests: {
+          ...state.requests,
+          modalPostDeleteReply: { ...pending }
+        }
+      }
+    case SEARCH.MODAL_POST_DELETE_REPLY + '_FULFILLED':
+      if(state.posts.atcindex<9){
+        atcctgname="popular";
+        targetindex=state.posts.atcindex;
+      }else{
+        atcctgname="recent";
+        targetindex=state.posts.atcindex-9;
+      }
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [atcctgname]: [
+            ...state.posts[atcctgname].slice(0, targetindex),
+            {
+              ...state.posts[atcctgname][targetindex],
+              replycount: state.posts[atcctgname][targetindex].replycount - (payload.data?1:0)
+            },
+            ...state.posts[atcctgname].slice(targetindex+1, state.posts[atcctgname].length)
+          ]
+        },
+        modalState: {
+          ...state.modalState,
+          replyLoading: false
+        },
+        modalpost: {
+          ...state.modalpost,
+          replies:[
+              ...state.modalpost.replies.slice(0, meta.replyindex),
+              ...state.modalpost.replies.slice(meta.replyindex+1, state.modalpost.replies.length)
+          ],
+          replycount: state.modalpost.replycount - payload.data?1:0
+        },
+        requests: {
+          ...state.requests,
+          modalPostDeleteReply: { ...fulfilled }
+        }
+      }
+    case SEARCH.MODAL_POST_DELETE_REPLY + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostDeleteReply: { ...rejected, error: payload }
+        }
+      };
 
     default:
       return state;

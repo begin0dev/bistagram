@@ -21,8 +21,9 @@ import '../css/modal.css';
 class App extends React.Component{
 
 	async componentDidMount() {
+		window.addEventListener("scroll", this.handleWheel);
 		const { checkSession } = this.props;
-		window.addEventListener("scroll", this.handleScroll);
+
 		try{
 			await checkSession().then(()=>{
 				if(!this.props.auth.userinfo.logged && window.location.pathname === "/explore"){
@@ -35,7 +36,7 @@ class App extends React.Component{
   }
 
 	componentWillUnmount() {
-		window.removeEventListener("scroll", this.handleScroll);
+		window.addEventListener("scroll", this.handleWheel);
 	}
 
 	handleHeaderModal = async () =>{
@@ -72,11 +73,11 @@ class App extends React.Component{
 		}
 	}
 
-	handleScroll = (e) => {
+	handleWheel = (e) => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
 		const {ui, post, search, setHeader} = this.props;
-
 		let result=true;
+
 		if(ui.headerModal){
 			result=true;
 		}else if(scrollTop > this.prev){

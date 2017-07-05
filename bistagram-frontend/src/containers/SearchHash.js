@@ -15,12 +15,7 @@ import '../css/search.css';
 let position =	0;
 
 class SearchHash extends Component {
-  constructor(props) {
-      super(props);
-      this.state={
-        atcindex: 0
-      }
-  }
+
   async componentDidMount() {
     const {searchHash, setLoading, setLoadingInitial} = this.props;
     setLoading({name:"search", value:true});
@@ -93,8 +88,8 @@ class SearchHash extends Component {
         atcnum=search.posts.recent[nextindex-9].atcnum;
       }
 
-      setModalPostIndex(nextindex);
-      await getModalPost({atcnum: atcnum});
+    setModalPostIndex(nextindex);
+    await getModalPost({atcnum: atcnum});
   }
 
   handleFollowClick = (username) => {
@@ -123,7 +118,7 @@ class SearchHash extends Component {
 	}
 
   render() {
-    const {search, ui, auth, getModalPost} = this.props;
+    const {search, ui, auth, getModalPost, modalPostInsertReply, modalPostDeleteReply} = this.props;
 		return(
         <main className="search_body">
           <Hashpage
@@ -143,6 +138,8 @@ class SearchHash extends Component {
               handleBfAfModal={this.handleBfAfModal}
               handleFollowClick={this.handleFollowClick}
               handleModalLikeClick={this.handleModalLikeClick}
+              modalPostInsertReply={modalPostInsertReply}
+              modalPostDeleteReply={modalPostDeleteReply}
               getModalPost={getModalPost}
             />
           }
@@ -164,6 +161,8 @@ const mapDispatchToProps = (dispatch) => ({
   setModalInit: () => dispatch(search.setModalInit()),
   modalPostLike: (params) => dispatch(search.modalPostLike(params)),
   modalPostNotLike: (params) => dispatch(search.modalPostNotLike(params)),
+  modalPostInsertReply: (params) => dispatch(search.modalPostInsertReply(params)),
+  modalPostDeleteReply: (params) => dispatch(search.modalPostDeleteReply(params)),
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
 
   setFollowUser: (username) => dispatch(auth.setFollowUser(username)),

@@ -61,7 +61,7 @@ class Modalmedia extends Component {
 
               <div className="modal_media_frame">
                 <div className="postview_body" style={this.state.style}>
-                  {search.modalpost.media[index].mediatype!==null && search.modalpost.media[index].mediatype.match("image") ?
+                  {search.modalpost.media[index].mediatype && search.modalpost.media[index].mediatype.match("image") ?
                   <Imgview
                     media={search.modalpost.media[index]}
                     handleImgLoad={this.handleImgLoad}
@@ -72,7 +72,7 @@ class Modalmedia extends Component {
                     videoRef={video => this.videoRef = video}
                   />}
                 </div>
-                {search.modalpost.media[index].mediatype!==null && search.modalpost.media[index].mediatype.match("video") ?
+                {search.modalpost.media[index].mediatype && search.modalpost.media[index].mediatype.match("video") ?
                   <a className="videoPlay_a" role="button" onClick={this.playVideo}> </a>:null
                 }
                 {search.modalpost.media.length > 1 && index !== 0 ?
@@ -87,7 +87,7 @@ class Modalmedia extends Component {
                     onClick={this.handleAftBfClick}>after</a>:
                     null
                 }
-                {search.modalpost.media[index].mediatype!==null && search.modalpost.media[index].mediatype.match('video') ?
+                {search.modalpost.media[index].mediatype && search.modalpost.media[index].mediatype.match('video') ?
                     <a className={`media_play_btn media_play_btn_img ${play?'':'media_play_btn_hover'}`}
                     onClick={this.playVideo}
                     role="button">play</a>

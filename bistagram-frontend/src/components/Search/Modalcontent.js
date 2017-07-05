@@ -11,7 +11,8 @@ const changeNick = (text) =>{
   return text;
 }
 
-const Modalcontent = ({post}) => {
+const Modalcontent = ({post, auth, handleReplyDelete}) => {
+    let logusername=auth.userinfo.user.username;
     return (
       <div className="modal_content_section">
         <ul className="modal_content_ul">
@@ -25,10 +26,11 @@ const Modalcontent = ({post}) => {
           {post.replies.map((contact, i) => {
             return(
               <li className="modal_content_li" key={"reply"+i}>
-
-                <button className="reply_delbtn" title="댓글 삭제">
+                {(logusername && logusername === contact.username) || (logusername &&logusername===post.username)?
+                <button className="reply_delbtn" title="댓글 삭제" onClick={()=>handleReplyDelete(contact.replynum, i)}>
                   댓글 삭제
                 </button>
+                :null}
 
                 <a className="reply_li_id fontcolor_black">{contact.nickname}</a>
                 <span>

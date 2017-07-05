@@ -61,7 +61,7 @@ class Postwrite extends Component {
     render() {
         const { post, upload } = this.props;
         return(
-          <div className="border_gray2 post_marginbt30px">
+          <div className="border_gray2 post_marginbt20px">
         		<form encType="multipart/form-data">
         			<div className="writehead_div">
         				<h2 className="h2_title">게시물 작성</h2>

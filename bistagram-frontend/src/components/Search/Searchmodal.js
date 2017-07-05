@@ -4,8 +4,17 @@ import Modalheader from './Modalheader';
 import Modalmedia from './Modalmedia';
 import Modalfooter from './Modalfooter';
 
-class Searchmodal extends Component {
+const removeTag = (reply) => {
+	return reply.replace(/(<([^>]+)>)/gi, "");
+}
 
+class Searchmodal extends Component {
+    constructor(props) {
+        super(props);
+        this.state={
+          reply: ''
+        }
+    }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
     }
@@ -20,11 +29,37 @@ class Searchmodal extends Component {
           handleSearchModal(-1);
       }
     }
+    handleChangeReply = (e) =>{
+      if(this.state.reply.length<500){
+	      this.setState({
+	        reply: e.target.value
+	      });
+      }
+    }
     handleKeyPress = (e) => {
       if(e.charCode === 13){
         e.preventDefault();
       }
     }
+    handleReplySubmit = (e) =>{
+      const {auth, search, modalPostInsertReply}=this.props;
+			if(!auth.userinfo.user.username){
+				document.location = "/"
+			}
+      const {reply}=this.state;
+      let post=search.modalpost;
+      if(reply.length!==0 && e.charCode === 13){
+        modalPostInsertReply({atcnum: post.atcnum, content: removeTag(reply), username:post.username, nickname: post.nickname});
+        this.setState({
+          reply: ''
+        });
+      }
+    }
+		handleReplyDelete = (replynum, index) =>{
+			const {modalPostDeleteReply}=this.props;
+			modalPostDeleteReply({replynum: replynum, replyindex: index})
+		}
+
     render() {
         const modalstyle={
           position: 'relative',
@@ -72,8 +107,13 @@ class Searchmodal extends Component {
 
                     <Modalfooter
                       search={search}
+											auth={auth}
+                      reply={this.state.reply}
                       handleModalLikeClick={handleModalLikeClick}
                       handleKeyPress={this.handleKeyPress}
+                      handleChangeReply={this.handleChangeReply}
+                      handleReplySubmit={this.handleReplySubmit}
+											handleReplyDelete={this.handleReplyDelete}
                     />
 
                     <div className="modal_more_div">

@@ -52,10 +52,13 @@ const Hashpage = ({keyword, search, ui, addHashPost, handleSearchModal}) => {
             </div>
           </div>
         }
+        {!search.posts.moreView && search.posts.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addHashPost}>더 읽어들이기</a>:null}
+
+        {search.posts.moreView && search.posts.isMore &&
         <div className="loading_position">
-          {search.posts.moreView && search.posts.isMore ? <Loading />:null}
-          {!search.posts.moreView && search.posts.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addHashPost}>더 읽어들이기</a>:null}
+          <Loading />
         </div>
+        }
       </article>
     )
 }

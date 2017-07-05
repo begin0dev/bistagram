@@ -17,9 +17,9 @@ class Footer extends Component {
 
     handleChangeText = (e) =>{
       if(this.state.reply.length<500){
-      this.setState({
-        reply: e.target.value
-      });
+	      this.setState({
+	        reply: e.target.value
+	      });
       }
     }
 
