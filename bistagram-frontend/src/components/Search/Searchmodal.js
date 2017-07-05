@@ -5,14 +5,7 @@ import Modalmedia from './Modalmedia';
 import Modalfooter from './Modalfooter';
 
 class Searchmodal extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-          index: 0,
-          play: false,
-          style: {paddingBottom : '100%'}
-        }
-    }
+
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
     }
@@ -22,55 +15,17 @@ class Searchmodal extends Component {
     }
     handleClickOutside = (e) =>{
       const {handleSearchModal} = this.props;
-      if (this.modaldiv && !this.modaldiv.contains(e.target)) {
+      const {modaldiv, bfmodalbtn, afmodalbtn} = this;
+      if (modaldiv && !modaldiv.contains(e.target) && bfmodalbtn!==e.target && afmodalbtn!==e.target) {
           handleSearchModal(-1);
       }
-    }
-    handleAftBfClick = (e) => {
-      if(e.target === this.bfbtn){
-        this.setState(prevState => ({
-          ...this.state,
-          index:prevState.index-1,
-          play: false
-        }));
-      }
-      if(e.target === this.aftbtn){
-        this.setState(prevState => ({
-          ...this.state,
-          index:prevState.index+1,
-          play: false
-        }));
-      }
-    }
-    playVideo = () => {
-      let video=this.videoRef;
-      video.paused ? video.play() : video.pause();
-      this.setState({
-        ...this.state,
-        play: !this.state.play
-      });
-    }
-    handleImgLoad = ({target:img}) =>{
-      let width = img.naturalWidth;
-      let height = img.naturalHeight;
-      let heightper = height*100/width;
-      if(heightper<75){	heightper ='75'	}
-      else if(heightper>123){	heightper ='123'}
-      this.setState({
-        ...this.state,
-        style:{
-          ...this.state.style,
-          paddingBottom:`${heightper}%`
-        }
-      });
     }
     render() {
         const modalstyle={
           position: 'relative',
           zIndex: 2
         }
-        const {search} = this.props;
-        const {index, play} = this.state;
+        const {search, auth, atcindex, handleBfAfModal} = this.props;
         return(
           <div style={modalstyle}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -78,10 +33,20 @@ class Searchmodal extends Component {
               <div className="search_modal_bfafbtn_body">
                 <div className="search_modal_bfafbtn_position">
                   <div className="search_modal_bfafbtn_wrap">
+                    {atcindex!==0 &&
                     <a className="imgs search_modal_bfbtn search_modal_bfbtn_img"
-                    role="button">이전</a>
+                      role="button" ref={(a) => { this.bfmodalbtn = a }}
+                      onClick={()=>handleBfAfModal(-1)}>
+                      이전
+                    </a>
+                    }
+                    {atcindex<search.posts.popular.length+search.posts.recent.length-1 &&
                     <a className="imgs search_modal_afbtn search_modal_afbtn_img"
-                    role="button">다음</a>
+                      role="button" ref={(a) => { this.afmodalbtn = a }}
+                      onClick={()=>handleBfAfModal(1)}>
+                      다음
+                    </a>
+                    }
                   </div>
                 </div>
               </div>
@@ -94,15 +59,12 @@ class Searchmodal extends Component {
                   <article className="modal_article">
 
                     <Modalheader
+                      auth={auth}
                       search={search}
                     />
 
                     <Modalmedia
                       search={search}
-                      index={index}
-                      play={play}
-                      playVideo={this.playVideo}
-                      handleImgLoad={this.handleImgLoad}
                     />
 
                     <Modalfooter

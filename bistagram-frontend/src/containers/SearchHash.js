@@ -14,7 +14,12 @@ import '../css/search.css';
 let position =	0;
 
 class SearchHash extends Component {
-
+  constructor(props) {
+      super(props);
+      this.state={
+        atcindex: 0
+      }
+  }
   async componentDidMount() {
     const {searchHash, setLoading, setLoadingInitial} = this.props;
     setLoading({name:"search", value:true});
@@ -63,7 +68,10 @@ class SearchHash extends Component {
       }else{
         atcnum=search.posts.recent[index-9].atcnum;
       }
-
+      this.setState({
+        ...this.state,
+        atcindex: index
+      });
       await getModalPost({atcnum: atcnum}).then(()=>{
         document.body.style.position= 'fixed';
         document.body.style.top= -position+'px';
@@ -73,12 +81,32 @@ class SearchHash extends Component {
     else{
       document.body.style='';
       window.scrollTo(0, position);
+      this.setState({
+        ...this.state,
+        atcindex: index
+      });
       setModalInit();
     }
   }
 
+  handleBfAfModal = async(plusvalue) =>{
+    const { search, getModalPost } = this.props;
+    let atcnum = -1;
+    let nextindex = this.state.atcindex+plusvalue;
+      if(nextindex<9){
+        atcnum=search.posts.popular[nextindex].atcnum;
+      }else{
+        atcnum=search.posts.recent[nextindex-9].atcnum;
+      }
+      this.setState({
+        ...this.state,
+        atcindex: nextindex
+      });
+      await getModalPost({atcnum: atcnum});
+  }
+
   render() {
-    const {search, ui, getModalPost} = this.props;
+    const {search, ui, auth, getModalPost} = this.props;
 		return(
         <main className="search_body">
           <Hashpage
@@ -91,8 +119,11 @@ class SearchHash extends Component {
           {ui.loading.search && <Loading />}
           {search.modalState.modal &&
             <Searchmodal
+              auth={auth}
               search={search}
+              atcindex={this.state.atcindex}
               handleSearchModal={this.handleSearchModal}
+              handleBfAfModal={this.handleBfAfModal}
               getModalPost={getModalPost}
             />
           }
@@ -103,6 +134,7 @@ class SearchHash extends Component {
 
 const mapStateToProps = (state) => ({
 	search:state.search,
+  auth:state.auth,
   ui:state.ui
 });
 

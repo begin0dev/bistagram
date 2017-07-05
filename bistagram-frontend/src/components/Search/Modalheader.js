@@ -12,7 +12,7 @@ const Modalheader = ({search, auth}) => {
           <a className="modal_header_nicka">{search.modalpost.nickname}</a>
         </div>
         <span className="modal_header_followsp">
-          {auth.userinfo.followInfo.follower.indexOf(search.modalpost.username)!==-1 ?
+          {auth.userinfo.username!==null && auth.userinfo.followInfo.follower.indexOf(search.modalpost.username)!==-1 ?
             <button className="whitebtn btnstyle point">
               팔로잉
             </button>
