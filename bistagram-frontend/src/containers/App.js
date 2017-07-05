@@ -72,13 +72,14 @@ class App extends React.Component{
 		}
 	}
 
-	handleScroll = () => {
+	handleScroll = (e) => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
 		const {ui, post, search, setHeader} = this.props;
+
 		let result=true;
 		if(ui.headerModal){
 			result=true;
-		}else if(scrollTop > 90){
+		}else if(scrollTop > this.prev){
 			result=false;
 		}else if(post.status.modal || search.modalState.modal){
 			result=false;
@@ -88,6 +89,7 @@ class App extends React.Component{
 		if(result!==ui.header){
 			setHeader(result);
 		}
+		this.prev=scrollTop;
 	}
 
 	handleFollowClick = (username) => {
