@@ -7,7 +7,7 @@ import * as auth from '../actions/auth';
 
 import Loading from '../components/Loading';
 
-import Personpage from '../components/Search/Personpage';
+import Userpage from '../components/Search/Userpage';
 import Searchmodal from '../components/Search/Searchmodal';
 import Innermodal from '../components/Search/Innermodal';
 
@@ -15,14 +15,17 @@ import '../css/search.css';
 
 let position =	0;
 
-class SearchPerson extends Component {
+class SearchUser extends Component {
 
   async componentDidMount() {
-    const {searchHash, setLoading, setLoadingInitial} = this.props;
+    const {searchUser, setLoading, setLoadingInitial} = this.props;
     setLoading({name:"search", value:true});
     window.addEventListener("scroll", this.handleScroll);
-    await searchHash({keyword: this.props.match.params.keyword}).then(()=>{
-      setTimeout(()=>{ setLoadingInitial() }, 300);
+    await searchUser({nickname: this.props.match.params.keyword}).then(()=>{
+      if(!this.props.search.posts.userinfo.username){
+        document.location = "/NotFound"
+      }
+      setTimeout(()=>{ setLoadingInitial() }, 700);
     })
   }
 
@@ -57,14 +60,10 @@ class SearchPerson extends Component {
   handleSearchModal = async(index) =>{
     const { setModalInit, search, getModalPost, setModalPostIndex } = this.props;
     let doc = document.documentElement;
-    let atcnum = -1;
+    let atcnum=-1;
     if(index !== -1){
       position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
-      if(index<9){
-        atcnum=search.posts.popular[index].atcnum;
-      }else{
-        atcnum=search.posts.recent[index-9].atcnum;
-      }
+      atcnum=search.posts.userAtcs[index].atcnum;
       setModalPostIndex(index);
       await getModalPost({atcnum: atcnum}).then(()=>{
         document.body.style.position= 'fixed';
@@ -81,13 +80,9 @@ class SearchPerson extends Component {
 
   handleBfAfModal = async(plusvalue) =>{
     const { search, getModalPost, setModalPostIndex } = this.props;
-    let atcnum = -1;
+
     let nextindex = search.posts.atcindex+plusvalue;
-      if(nextindex<9){
-        atcnum=search.posts.popular[nextindex].atcnum;
-      }else{
-        atcnum=search.posts.recent[nextindex-9].atcnum;
-      }
+    let atcnum=search.posts.userAtcs[nextindex].atcnum;
 
     setModalPostIndex(nextindex);
     await getModalPost({atcnum: atcnum});
@@ -117,6 +112,7 @@ class SearchPerson extends Component {
       modalPostLike({atcnum: atcnum});
     }
 	}
+
   handleInnerModal = () =>{
     this.props.setInnerModal();
   }
@@ -125,15 +121,18 @@ class SearchPerson extends Component {
 		return(
         <main className="search_body">
 
-          <Personpage
+          <Userpage
             ui={ui}
+            auth={auth}
             keyword={this.props.match.params.keyword}
             search={search}
             addHashPost={this.addHashPost}
+            handleFollowClick={this.handleFollowClick}
             handleSearchModal={this.handleSearchModal}
           />
 
           {ui.loading.search && <Loading />}
+
           {search.modalState.modal &&
             <Searchmodal
               auth={auth}
@@ -167,7 +166,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	searchHash: (params) => dispatch(search.searchHash(params)),
+	searchUser: (params) => dispatch(search.searchUser(params)),
   addHash: (params) => dispatch(search.addHash(params)),
   getModalPost: (params) => dispatch(search.getModalPost(params)),
   setModalInit: () => dispatch(search.setModalInit()),
@@ -187,5 +186,5 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-SearchPerson = connect(mapStateToProps, mapDispatchToProps)(SearchPerson)
-export default SearchPerson;
+SearchUser = connect(mapStateToProps, mapDispatchToProps)(SearchUser)
+export default SearchUser;

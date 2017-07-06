@@ -22,7 +22,7 @@ class SearchHash extends Component {
     setLoading({name:"search", value:true});
     window.addEventListener("scroll", this.handleScroll);
     await searchHash({keyword: this.props.match.params.keyword}).then(()=>{
-      setTimeout(()=>{ setLoadingInitial() }, 300);
+      setTimeout(()=>{ setLoadingInitial() }, 700);
     })
   }
 

@@ -11,10 +11,10 @@ export const searchHash = (params) => ({
   }
 })
 
-export const searchPerson = (params) => ({
-  type: SEARCH.SEARCH_PERSON,
+export const searchUser = (params) => ({
+  type: SEARCH.SEARCH_USER,
   payload: {
-    promise: service.searchPerson(params)
+    promise: service.searchUser(params)
   }
 })
 

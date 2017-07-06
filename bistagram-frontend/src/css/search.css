@@ -24,7 +24,7 @@ width: 100%;
 color: #262626;
 text-align: center;
 }
-.person_header{
+.user_header{
 -webkit-box-orient: horizontal;
 -webkit-box-direction: normal;
 -webkit-flex-direction: row;
@@ -56,9 +56,6 @@ margin-bottom: 74px;
 .grid_wrap{
 display: grid;
 grid-template-columns: repeat(3, minmax(auto, 293px));
-}
-.search_box{
-max-height: 293px;
 }
 .search_box_media_wrap{
 background-color: #efefef;
@@ -201,10 +198,100 @@ border-color: #3897f0;
 color: #fff;
 }
 
-.person_profile_div{
+.user_profile_div{
 -webkit-flex-shrink: 0;
 -ms-flex-negative: 0;
 flex-shrink: 0;
+}
+.user_profile_circle{
+background-color: #fafafa;
+border-radius: 50%;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+overflow: hidden;
+position: relative;
+}
+.user_profile_circle::after{
+border: 1px solid rgba(0,0,0,.0975);
+border-radius: 50%;
+bottom: 0;
+content: '';
+left: 0;
+pointer-events: none;
+position: absolute;
+right: 0;
+top: 0;
+}
+.user_profile_circle_div{
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+.user_profile_circle_img{
+position: absolute;
+width: 100%;
+height: 100%;
+left: 0;
+top: 0;
+}
+.user_profile_info_div{
+color: #262626;
+-webkit-flex-shrink: 1;
+-ms-flex-negative: 1;
+flex-shrink: 1;
+min-width: 0;
+}
+.user_nick_info_div{
+-webkit-flex-shrink: 1;
+-ms-flex-negative: 1;
+flex-shrink: 1;
+min-width: 0;
+-webkit-box-align: center;
+-webkit-align-items: center;
+-ms-flex-align: center;
+align-items: center;
+-webkit-box-orient: horizontal;
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+}
+.user_nick_info_h1{
+-webkit-flex-shrink: 1;
+-ms-flex-negative: 1;
+flex-shrink: 1;
+min-width: 0;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+.user_follow_info{
+display: block;
+position: relative;
+-webkit-flex-shrink: 0;
+-ms-flex-negative: 0;
+flex-shrink: 0;
+margin-left: 20px;
+}
+.user_notmobile_ul{
+display: -webkit-box;
+display: -webkit-flex;
+display: -ms-flexbox;
+display: flex;
+-webkit-box-orient: horizontal;
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+margin-top: 0;
+margin-bottom: 20px;
+}
+.user_notmobile_li{
+font-size: 16px;
+margin-right: 40px;
+}
+.user_notmobile_li:first-child{
+margin-left: 0;
 }
 
 @media (min-width: 736px){
@@ -223,7 +310,7 @@ flex-shrink: 0;
     margin-top: 56px;
     margin-bottom: 44px;
   }
-  .person_header{
+  .user_header{
     padding: 0;
     margin-bottom: 44px;
   }
@@ -246,7 +333,7 @@ flex-shrink: 0;
     -ms-flex-item-align: center;
     align-self: center;
   }
-  .person_profile_div{
+  .user_profile_div{
     -webkit-flex-basis: 0;
     -ms-flex-preferred-size: 0;
     flex-basis: 0;
@@ -256,6 +343,41 @@ flex-shrink: 0;
     flex-grow: 1;
     margin-right: 30px;
   }
+  .user_profile_circle_div{
+    width: 152px;
+    height: 152px;
+    margin-bottom: -7px;
+    margin-top: -7px;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  .user_profile_info_div{
+    -webkit-flex-basis: 30px;
+    -ms-flex-preferred-size: 30px;
+    flex-basis: 30px;
+    -webkit-box-flex: 2;
+    -webkit-flex-grow: 2;
+    -ms-flex-positive: 2;
+    flex-grow: 2;
+  }
+  .user_nick_info_div{
+    margin-bottom: 20px;
+    margin-top: 0;
+  }
+  .user_nick_info_h1{
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 200;
+  }
+  .user_follow_btn{
+    padding: 0 24px !important;
+  }
+  .user_name_div{
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 14px;
+    margin: 0;
+  }
 }
 @media (max-width: 735px){
   .search_header{
@@ -263,7 +385,7 @@ flex-shrink: 0;
     margin-top: 31px;
     margin-bottom: 31px;
   }
-  .person_header{
+  .user_header{
     margin-left: 16px;
     margin-right: 16px;
     margin-top: 30px;
@@ -305,7 +427,31 @@ flex-shrink: 0;
     font-size: 14px;
     margin: 20px 20px 0;
   }
-  .person_profile_div{
+  .user_profile_div{
     margin-right: 28px;
+  }
+  .user_profile_circle_div{
+    width: 77px;
+    height: 77px;
+    margin-bottom: -6px;
+    margin-top: -6px;
+    margin: 0;
+  }
+  .user_profile_info_div{
+    -webkit-flex-basis: 0;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+  .user_nick_info_div{
+    margin-bottom: 12px;
+    margin-top: 0;
+  }
+  .user_nick_info_h1{
+    font-size: 22px;
+    line-height: 26px;
   }
 }

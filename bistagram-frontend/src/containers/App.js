@@ -6,7 +6,7 @@ import Header from '../components/Header/Header';
 import Login from './Login';
 import Posts from './Posts';
 import SearchHash from './SearchHash';
-import SearchPerson from './SearchPerson';
+import SearchUser from './SearchUser';
 import Explore from './Explore';
 import NotFound from './NotFound';
 
@@ -22,7 +22,7 @@ import '../css/modal.css';
 class App extends React.Component{
 
 	async componentDidMount() {
-		window.addEventListener("scroll", this.handleWheel);
+		window.addEventListener("scroll", this.handleScroll);
 		const { checkSession } = this.props;
 
 		try{
@@ -37,7 +37,7 @@ class App extends React.Component{
   }
 
 	componentWillUnmount() {
-		window.addEventListener("scroll", this.handleWheel);
+		window.addEventListener("scroll", this.handleScroll);
 	}
 
 	handleHeaderModal = async () =>{
@@ -67,14 +67,14 @@ class App extends React.Component{
 		let change = /[ {}[\]/?.,;:|)*~`!^\-_+┼<>@#$%&'"(=]/gi;
 		if(e.charCode === 13 && form.search.keyword.length>0 ){
 			if(regex.test(form.search.keyword)){
-
+				document.location = "/search/"+form.search.keyword.replace(change, '');
 			}else{
 				document.location = "/search/tags/"+form.search.keyword.replace(change, '');
 			}
 		}
 	}
 
-	handleWheel = (e) => {
+	handleScroll = (e) => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
 		const {ui, post, search, setHeader} = this.props;
 		let result=true;
@@ -124,9 +124,9 @@ class App extends React.Component{
 					null}
 					<Switch>
 						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
-						<Route path="/explore" component={Explore}/>						
+						<Route path="/explore" component={Explore}/>
 						<Route path="/Search/tags/:keyword" component={SearchHash}/>
-						<Route path="/Search/:keyword" component={SearchPerson}/>
+						<Route path="/Search/:keyword" component={SearchUser}/>
 						<Route component={NotFound}/>
 					</Switch>
 				</section>

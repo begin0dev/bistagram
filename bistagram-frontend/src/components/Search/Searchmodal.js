@@ -80,12 +80,12 @@ class Searchmodal extends Component {
                       이전
                     </a>
                     }
-                    {atcindex<search.posts.popular.length+search.posts.recent.length-1 &&
+                    {atcindex<search.posts.popular.length+search.posts.recent.length-1 || atcindex<search.posts.userAtcs.length-1?
                     <a className="imgs search_modal_afbtn search_modal_afbtn_img"
                       role="button" ref={(a) => { this.afmodalbtn = a }}
                       onClick={()=>handleBfAfModal(1)}>
                       다음
-                    </a>
+                    </a>:null
                     }
                   </div>
                 </div>

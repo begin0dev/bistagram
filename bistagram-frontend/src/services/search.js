@@ -1,15 +1,15 @@
 import request from '../helpers/request';
 
 export const searchHash = ({keyword}) => request({
-    url: '/api/search/SearchHash',
+    url: '/api/search/searchHash',
     method: 'post',
     data: {
       keyword
     }
 });
 
-export const searchPerson = ({nickname}) => request({
-    url: '/api/search/SearchPerson',
+export const searchUser = ({nickname}) => request({
+    url: '/api/search/searchUser',
     method: 'post',
     data: {
       nickname

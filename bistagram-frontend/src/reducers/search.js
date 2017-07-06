@@ -9,7 +9,8 @@ const request = {
 const posts = {
   atcindex: -1,
   atccount: -1,
-  persondata: [],
+  userinfo: {},
+  userAtcs: [],
   popular: [],
   recent: [],
   moreView: false,
@@ -38,6 +39,9 @@ const initialState = {
     },
     addHash: {
         ...request
+    },
+    searchUser:{
+
     },
     getModalPost: {
         ...request
@@ -165,6 +169,39 @@ function search(state=initialState, action) {
       };
 
 
+    case SEARCH.SEARCH_USER + "_PENDING":
+      return {
+        ...state,
+        requests: {
+            ...state.requests,
+            searchUser: { ...pending }
+        }
+      }
+    case SEARCH.SEARCH_USER + '_FULFILLED':
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          atccount: payload.data.atccount,
+          userinfo: payload.data.userinfo,
+          userAtcs: payload.data.posts,
+          isMore: payload.data.posts.length===12 && payload.data.atccount>payload.data.posts.length?true:false
+        },
+        requests: {
+          ...state.requests,
+          searchUser: { ...fulfilled }
+        }
+      }
+    case SEARCH.SEARCH_USER + '_REJECTED':
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          searchUser: { ...rejected, error: payload }
+        }
+      };
+
+
     case SEARCH.GET_MODAL_POST + "_PENDING":
       return {
         ...state,
@@ -217,7 +254,11 @@ function search(state=initialState, action) {
     case SEARCH.MODAL_POST_LIKE + '_FULFILLED':
       let atcctgname = '';
       let targetindex = -1;
-      if(state.posts.atcindex<9){
+      if(state.posts.userAtcs.length>0){
+        atcctgname="userAtcs";
+        targetindex=state.posts.atcindex;
+      }
+      else if(state.posts.popular.length>0 && state.posts.atcindex<9){
         atcctgname="popular";
         targetindex=state.posts.atcindex;
       }else{
@@ -281,7 +322,11 @@ function search(state=initialState, action) {
         }
       }
     case SEARCH.MODAL_POST_NOTLIKE + '_FULFILLED':
-      if(state.posts.atcindex<9){
+      if(state.posts.userAtcs.length>0){
+        atcctgname="userAtcs";
+        targetindex=state.posts.atcindex;
+      }
+      else if(state.posts.popular.length>0 && state.posts.atcindex<9){
         atcctgname="popular";
         targetindex=state.posts.atcindex;
       }else{
@@ -344,7 +389,11 @@ function search(state=initialState, action) {
         }
       }
     case SEARCH.MODAL_POST_INSERT_REPLY + '_FULFILLED':
-      if(state.posts.atcindex<9){
+      if(state.posts.userAtcs.length>0){
+        atcctgname="userAtcs";
+        targetindex=state.posts.atcindex;
+      }
+      else if(state.posts.popular.length>0 && state.posts.atcindex<9){
         atcctgname="popular";
         targetindex=state.posts.atcindex;
       }else{
@@ -407,7 +456,11 @@ function search(state=initialState, action) {
         }
       }
     case SEARCH.MODAL_POST_DELETE_REPLY + '_FULFILLED':
-      if(state.posts.atcindex<9){
+      if(state.posts.userAtcs.length>0){
+        atcctgname="userAtcs";
+        targetindex=state.posts.atcindex;
+      }
+      else if(state.posts.popular.length>0 && state.posts.atcindex<9){
         atcctgname="popular";
         targetindex=state.posts.atcindex;
       }else{
