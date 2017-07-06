@@ -33,6 +33,11 @@ class SearchUser extends Component {
 		window.removeEventListener("scroll", this.handleScroll);
 	}
 
+  handleLogout = async () =>{
+		const {logout} = this.props;
+		await logout().then(() => document.location = "/");
+	}
+
   handleScroll = () => {
     const { search } = this.props;
     const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
@@ -43,18 +48,14 @@ class SearchUser extends Component {
 
     if (windowBottom >= docHeight) {
       if(search.posts.moreView && search.posts.isMore && !search.posts.loading){
-        this.addHashPost();
+        this.addUserPost();
       }
     }
   }
 
-  addHashPost = () =>{
-    const { search, addHash } = this.props;
-    let atcnums=[search.posts.recent[search.posts.recent.length-1].atcnum];
-    search.posts.popular.forEach(value=>{
-      atcnums=[...atcnums, value.atcnum]
-    })
-    addHash({keyword:this.props.match.params.keyword, atcnums:atcnums})
+  addUserPost = () =>{
+    const { search, addUserPost } = this.props;
+    addUserPost({username:search.posts.userinfo.username, atcnum: search.posts.userAtcs[search.posts.userAtcs.length-1].atcnum})
   }
 
   handleSearchModal = async(index) =>{
@@ -126,9 +127,10 @@ class SearchUser extends Component {
             auth={auth}
             keyword={this.props.match.params.keyword}
             search={search}
-            addHashPost={this.addHashPost}
+            addUserPost={this.addUserPost}
             handleFollowClick={this.handleFollowClick}
             handleSearchModal={this.handleSearchModal}
+            handleLogout={this.handleLogout}
           />
 
           {ui.loading.search && <Loading />}
@@ -167,7 +169,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	searchUser: (params) => dispatch(search.searchUser(params)),
-  addHash: (params) => dispatch(search.addHash(params)),
+  addUserPost: (params) => dispatch(search.addUserPost(params)),
   getModalPost: (params) => dispatch(search.getModalPost(params)),
   setModalInit: () => dispatch(search.setModalInit()),
   modalPostLike: (params) => dispatch(search.modalPostLike(params)),
@@ -180,6 +182,7 @@ const mapDispatchToProps = (dispatch) => ({
   setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
 	following: (params) => dispatch(auth.following(params)),
 	unfollow: (params) => dispatch(auth.unfollow(params)),
+	logout: () => dispatch(auth.logout()),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))

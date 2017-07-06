@@ -43,6 +43,9 @@ const initialState = {
     searchUser:{
 
     },
+    addUserPost: {
+        ...request
+    },
     getModalPost: {
         ...request
     },
@@ -198,6 +201,50 @@ function search(state=initialState, action) {
         requests: {
           ...state.requests,
           searchUser: { ...rejected, error: payload }
+        }
+      };
+
+
+    case SEARCH.ADD_USER_POST + "_PENDING":
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          loading: true,
+          moreView: true
+        },
+        requests: {
+            ...state.requests,
+            addUserPost: { ...pending }
+        }
+      }
+    case SEARCH.ADD_USER_POST + '_FULFILLED':
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          userAtcs: [
+            ...state.posts.userAtcs,
+            ...payload.data
+          ],
+          isMore: payload.data.length===9 && state.posts.atccount>(payload.data.length+state.posts.userAtcs.length)?true:false,
+          loading: false
+        },
+        requests: {
+          ...state.requests,
+          addUserPost: { ...fulfilled }
+        }
+      }
+    case SEARCH.ADD_USER_POST + '_REJECTED':
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          loading: false
+        },
+        requests: {
+          ...state.requests,
+          addUserPost: { ...rejected, error: payload }
         }
       };
 

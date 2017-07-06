@@ -25,6 +25,15 @@ export const addHash = ({keyword, atcnums}) => request({
     }
 });
 
+export const addUserPost = ({username, atcnum}) => request({
+    url: '/api/search/addUserPost',
+    method: 'post',
+    data: {
+      username,
+      atcnum
+    }
+});
+
 export const getModalPost = ({atcnum}) => request({
     url: '/api/search/getModalPost',
     method: 'post',

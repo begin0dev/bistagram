@@ -94,6 +94,10 @@ text-align: center;
 background-image: url("../img/imgs.png");
 background-repeat: no-repeat;
 }
+.oldimgs{
+background-image: url("../img/oldimgs.png");
+background-repeat: no-repeat;
+}
 .img_100{
 height: 100%;
 width: 100%;
@@ -124,6 +128,7 @@ position: absolute;
 right: 0;
 top: 0;
 }
+.fontcolor_black{color: #262626 !important;}
 .fontcolor_gray{color: #999 !important;}
 .fontcolor_blue, .fontcolor_blue:active{color: #3897f0 !important;}
 .fontbold{font-weight: 600;}

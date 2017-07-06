@@ -144,6 +144,22 @@ router.post('/searchUser', async (req, res) => {
   });
 });
 
+router.post('/addUserPost', async (req, res) => {
+  let sql = "select y.*, count(reply.atcnum)as replycount from "+
+            "(select x.*, count(atclike.username) as likecount from "+
+            "(select article.atcnum, media.medianame, media.mediatype "+
+            "from article left join media on article.atcnum=media.atcnum "+
+            "where username=? and article.atcnum<? group by article.atcnum order by article.atcnum desc limit 9)x "+
+            "left join atclike on x.atcnum = atclike.atcnum group by x.atcnum order by null)y "+
+            "left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"
+  let params = [req.body.username, req.body.atcnum];
+  conn.query(sql, params, (err, rows) =>{
+    if(err) {
+      return res.status(500).json({message: err.message});
+    }
+    return res.json(rows)
+  });
+});
 
 const getModalData = (atcnum, user) =>{
   return (item, callback) =>{

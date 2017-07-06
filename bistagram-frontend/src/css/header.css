@@ -431,6 +431,12 @@ height: 40px;
 min-width: 40px;
 vertical-align: middle;
 }
+.login_Link{
+color: #3897f0 !important;
+font-weight: 600;
+line-height: 28px;
+font-size: 16px;
+}
 @media (max-width: 449px){
   .history_body{
     margin-left: -255px;

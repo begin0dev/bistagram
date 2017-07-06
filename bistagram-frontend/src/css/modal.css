@@ -185,7 +185,7 @@ flex-shrink: 1;
 overflow: hidden;
 }
 .modal_header_nicka{
-color: #262626;
+color: #262626 !important;
 font-weight: 600;
 overflow: hidden;
 text-overflow: ellipsis;

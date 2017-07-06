@@ -37,7 +37,7 @@ class App extends React.Component{
   }
 
 	componentWillUnmount() {
-		window.addEventListener("scroll", this.handleScroll);
+		window.removeEventListener("scroll", this.handleScroll);
 	}
 
 	handleHeaderModal = async () =>{
@@ -50,11 +50,6 @@ class App extends React.Component{
 				setLoadingInitial();
 			});
 		}
-	}
-
-	handleLogout = async () =>{
-		const {logout} = this.props;
-		await logout().then(() => document.location = "/");
 	}
 
 	handleChangeSearch = (content) =>{
@@ -117,7 +112,6 @@ class App extends React.Component{
 						headDisplay={ui.header}
 						handleHeaderModal={this.handleHeaderModal}
 						handleFollowClick={this.handleFollowClick}
-						handleLogout={this.handleLogout}
 						handleChangeSearch={this.handleChangeSearch}
 						handleSubmitSearch={this.handleSubmitSearch}
 					/>:
@@ -147,7 +141,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	changeUserData: (params) => dispatch(auth.changeUserData(params)),
 	checkSession: () => dispatch(auth.checkSession()),
-	logout: () => dispatch(auth.logout()),
 	getHistory: () => dispatch(auth.getHistory()),
 
 	setFollowUser: (username) => dispatch(auth.setFollowUser(username)),

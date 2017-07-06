@@ -27,6 +27,13 @@ export const addHash = (params) => ({
   }
 })
 
+export const addUserPost = (params) => ({
+  type: SEARCH.ADD_USER_POST,
+  payload: {
+    promise: service.addUserPost(params)
+  }
+})
+
 export const getModalPost = (params) => ({
   type: SEARCH.GET_MODAL_POST,
   payload: {

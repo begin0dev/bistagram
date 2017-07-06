@@ -17,7 +17,7 @@ const Modalcontent = ({post, auth, handleReplyDelete}) => {
       <div className="modal_content_section">
         <ul className="modal_content_ul">
           <li className="modal_content_li">
-            <a className="reply_li_id fontcolor_black">
+            <a href={`/search/${post.nickname}`} className="reply_li_id fontcolor_black">
               {post.nickname}
             </a>
             <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
@@ -32,7 +32,7 @@ const Modalcontent = ({post, auth, handleReplyDelete}) => {
                 </button>
                 :null}
 
-                <a className="reply_li_id fontcolor_black">{contact.nickname}</a>
+                <a href={`/search/${contact.nickname}`} className="reply_li_id fontcolor_black">{contact.nickname}</a>
                 <span>
                   <span dangerouslySetInnerHTML={{__html: changeNick(contact.content)}}></span>
                 </span>

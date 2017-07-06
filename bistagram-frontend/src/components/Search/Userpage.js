@@ -5,10 +5,11 @@ import NumberFormat from 'react-number-format';
 import Loading from '../Loading';
 
 import Searchbox from './Searchbox';
+import Followbtns from './Followbtns';
 
 import noimg from '../../img/noimg.jpg';
 
-const Userpage = ({search, ui, auth, addHashPost, handleSearchModal, handleFollowClick}) => {
+const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollowClick, handleLogout}) => {
 
     let logusername=auth.userinfo.user.username;
     let scuserinfo=search.posts.userinfo;
@@ -28,55 +29,26 @@ const Userpage = ({search, ui, auth, addHashPost, handleSearchModal, handleFollo
               <h1 className="user_nick_info_h1" title={scuserinfo.nickname}>
                 {scuserinfo.nickname}
               </h1>
-              <span className="user_follow_info">
-                {logusername && logusername !== scuserinfo.username &&
-                  auth.userinfo.followInfo.follower.indexOf(scuserinfo.username)!==-1 ?
-                  <button className="whitebtn btnstyle point user_follow_btn"
-                    disabled={scuserinfo.username===auth.recommend.clickUser ?true:''}
-                    onClick={() => handleFollowClick(scuserinfo.username)}>
-                    팔로잉
+
+              <Followbtns
+                search={search}
+                auth={auth}
+                handleFollowClick={handleFollowClick}
+              />
+
+              {logusername === scuserinfo.username &&
+                <Link to="">
+                  <button className="whitebtn btnstyle point user_follow_btn">
+                    프로필 편집
                   </button>
-                  :
-                  logusername !== scuserinfo.username?
-                    <button className={`bluebtn btnstyle point user_follow_btn ${scuserinfo.username===auth.recommend.clickUser?'bluebtn_disable':''}`}
-                      disabled={scuserinfo.username===auth.recommend.clickUser ?true:''}
-                      onClick={() => handleFollowClick(scuserinfo.username)}>
-                      팔로우
-                    </button>
-                  :null
-                }
-                {logusername === scuserinfo.username &&
-                  <Link to="">
-                    <button className="whitebtn btnstyle point user_follow_btn">
-                      프로필 편집
-                    </button>
-                  </Link>
-                }
-              </span>
+                </Link>
+              }
+              {logusername === scuserinfo.username &&
+                <div className="user_control_btn_div">
+                  <button className="oldimgs user_control_btn" onClick={handleLogout}>옵션</button>
+                </div>
+              }
             </div>
-            <ul className="user_notmobile_ul">
-              <li className="user_notmobile_li">
-                <span>게시물&nbsp;
-                  <span className="fontbold">
-                    <NumberFormat value={search.posts.atccount} displayType={'text'} thousandSeparator={true}/>
-                  </span>
-                </span>
-              </li>
-              <li className="user_notmobile_li">
-                <span>팔로워&nbsp;
-                  <span className="fontbold">
-                    <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>
-                  </span>
-                </span>
-              </li>
-              <li className="user_notmobile_li">
-                <span>팔로우&nbsp;
-                  <span className="fontbold">
-                    <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
-                  </span>
-                </span>
-              </li>
-            </ul>
 
             <div className="user_name_div">
               <h2 className="fontbold">{search.posts.userinfo.name}</h2>
@@ -84,6 +56,33 @@ const Userpage = ({search, ui, auth, addHashPost, handleSearchModal, handleFollo
 
           </div>
         </header>
+
+
+        <ul className="user_userinfo_ul user_mobile_ul">
+          <li className="user_mobile_li">
+            <span>게시물<br/>
+              <span className="fontcolor_black fontbold">
+                <NumberFormat value={search.posts.atccount} displayType={'text'} thousandSeparator={true}/>
+              </span>
+            </span>
+          </li>
+          <li className="user_mobile_li">
+            <span>팔로워<br/>
+              <span className="fontcolor_black fontbold">
+                <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>
+              </span>
+            </span>
+          </li>
+          <li className="user_mobile_li">
+            <span>팔로우<br/>
+              <span className="fontcolor_black fontbold">
+                <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
+              </span>
+            </span>
+          </li>
+        </ul>
+
+
           <div>
             <div className="grid_wrap">
               {search.posts.userAtcs.map((contact, i) => {
@@ -98,7 +97,7 @@ const Userpage = ({search, ui, auth, addHashPost, handleSearchModal, handleFollo
               })}
             </div>
           </div>
-        {!search.posts.moreView && search.posts.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addHashPost}>더 읽어들이기</a>:null}
+        {!search.posts.moreView && search.posts.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addUserPost}>더 읽어들이기</a>:null}
 
         {search.posts.moreView && search.posts.isMore &&
         <div className="loading_position">
