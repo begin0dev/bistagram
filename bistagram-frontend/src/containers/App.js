@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Login from './Login';
 import Posts from './Posts';
+import Mypage from './Mypage';
 import SearchHash from './SearchHash';
 import SearchUser from './SearchUser';
 import Explore from './Explore';
@@ -119,6 +120,7 @@ class App extends React.Component{
 					<Switch>
 						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
+						<Route path="/mypage" component={Mypage}/>
 						<Route path="/Search/tags/:keyword" component={SearchHash}/>
 						<Route path="/Search/:keyword" component={SearchUser}/>
 						<Route component={NotFound}/>

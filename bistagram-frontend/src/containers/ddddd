@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/webapp/css/basic.css" type="text/css" />
+<title>Insert title here</title>
+<style type="text/css">
+
+
+</style>
+</head>
+<body>
+<main className="mypage_main mypage_main_bg" role="main">
+
+
+
+
+
+		<!-- 프로필 편집 -->
+
+		</article>
+	</div>
+	</main>
+</body>
+
+<script>
+
+$("#profile").on('click', function() {
+	$('._cmoxu').css('display','block');
+	$('._tf7jx').css('display','none');
+
+});
+
+
+$('#pass').on('click', function() {
+	$('._tf7jx').css('display','block');
+	$('._cmoxu').css('display','none');
+});
+
+
+</script>
+</html>

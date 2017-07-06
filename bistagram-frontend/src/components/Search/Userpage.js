@@ -37,7 +37,7 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
               />
 
               {logusername === scuserinfo.username &&
-                <Link to="">
+                <Link to="/mypage">
                   <button className="whitebtn btnstyle point user_follow_btn">
                     프로필 편집
                   </button>

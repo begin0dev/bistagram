@@ -227,13 +227,6 @@ display: block;
 margin-left: auto;
 margin-right: auto;
 }
-.user_profile_circle_img{
-position: absolute;
-width: 100%;
-height: 100%;
-left: 0;
-top: 0;
-}
 .user_profile_info_div{
 color: #262626;
 -webkit-flex-shrink: 1;
