@@ -14,8 +14,15 @@ const getPostData = (keyword) =>{
       function(callback){
         let sql = "select y.*, media.medianame, media.mediatype from "+
                   "(select x.*, count(reply.atcnum)as replycount from "+
-                  "(select hashtag.atcnum, count(atclike.username) as likecount from hashtag left join atclike "+
-                  "on hashtag.atcnum = atclike.atcnum where hashtag.tag like ? group by hashtag.atcnum order by null)x "+
+                  "(select u.atcnum, count(atclike.username) as likecount from "+
+                  "(select z.atcnum from "+
+                  "(select hashtag.atcnum from hashtag join article "+
+                  "join member on hashtag.atcnum = article.atcnum "+
+                  "and  article.username=member.username "+
+                  "where hashtag.tag like ? and member.state='all' "+
+                  "group by hashtag.atcnum order by null)z left join media "+
+                  "on z.atcnum = media.atcnum where media.medianame is not null group by z.atcnum order by null)u "+
+                  "left join atclike on u.atcnum = atclike.atcnum group by u.atcnum order by null)x "+
                   "left join reply on x.atcnum = reply.atcnum group by x.atcnum order by null)y "+
                   "left join media on y.atcnum = media.atcnum where media.medianame is not null group by y.atcnum order by y.likecount desc, y.replycount desc limit 9";
         let params = [keyword];
@@ -30,9 +37,16 @@ const getPostData = (keyword) =>{
         if(arg1.atccount>9){
           let sql = "select y.*, media.medianame, media.mediatype from "+
                     "(select x.*, count(reply.atcnum)as replycount from "+
-                    "(select hashtag.atcnum, count(atclike.username) as likecount from hashtag left join atclike "+
-                    "on hashtag.atcnum = atclike.atcnum where hashtag.tag like ? and hashtag.atcnum not in (?,?,?,?,?,?,?,?,?) "+
-                    "group by hashtag.atcnum order by null)x "+
+                    "(select u.atcnum, count(atclike.username) as likecount from "+
+                    "(select z.atcnum from "+
+                    "(select hashtag.atcnum from hashtag join article "+
+                    "join member on hashtag.atcnum = article.atcnum "+
+                    "and  article.username=member.username "+
+                    "where hashtag.tag like ? and member.state='all' "+
+                    "group by hashtag.atcnum order by null)z left join media "+
+                    "on z.atcnum = media.atcnum where media.medianame is not null group by z.atcnum order by null)u "+
+                    "left join atclike on u.atcnum = atclike.atcnum where u.atcnum not in (?,?,?,?,?,?,?,?,?) "+
+                    "group by u.atcnum order by null)x "+
                     "left join reply on x.atcnum = reply.atcnum group by x.atcnum order by null)y "+
                     "left join media on y.atcnum = media.atcnum where media.medianame is not null group by y.atcnum order by atcnum desc limit 9";
           let params = [keyword];
@@ -56,10 +70,14 @@ const getPostData = (keyword) =>{
 }
 
 router.post('/searchHash', async (req, res) => {
-  let sql = "select count(x.atcnum) as atccount from"+
-            "(select hashtag.atcnum from hashtag left join media "+
-            "on hashtag.atcnum = media.atcnum where hashtag.tag like ?"+
-            "and media.medianame is not null group by hashtag.atcnum order by null)x";
+  let sql = "select count(x.atcnum) as atccount from "+
+            "(select z.atcnum from "+
+            "(select hashtag.atcnum from hashtag join article "+
+            "join member on hashtag.atcnum = article.atcnum "+
+            "and  article.username=member.username "+
+            "where hashtag.tag like ? and member.state='all' "+
+            "group by hashtag.atcnum order by null)z left join media "+
+            "on z.atcnum = media.atcnum where media.medianame is not null group by z.atcnum order by null)x";
   let params = ['%'+req.body.keyword+'%'];
   conn.query(sql, params, function(err, rows) {
     if(err) {
@@ -81,9 +99,16 @@ router.post('/searchHash', async (req, res) => {
 router.post('/addHash', async (req, res) => {
   let sql = "select y.*, media.medianame, media.mediatype from "+
             "(select x.*, count(reply.atcnum)as replycount from "+
-            "(select hashtag.atcnum, count(atclike.username) as likecount from hashtag left join atclike "+
-            "on hashtag.atcnum = atclike.atcnum where hashtag.tag like ? and hashtag.atcnum<? and hashtag.atcnum not in (?,?,?,?,?,?,?,?,?) "+
-            "group by hashtag.atcnum order by null)x "+
+            "(select u.atcnum, count(atclike.username) as likecount from "+
+            "(select z.atcnum from "+
+            "(select hashtag.atcnum from hashtag join article "+
+            "join member on hashtag.atcnum = article.atcnum "+
+            "and  article.username=member.username "+
+            "where hashtag.tag like ? and member.state='all' "+
+            "group by hashtag.atcnum order by null)z left join media "+
+            "on z.atcnum = media.atcnum where media.medianame is not null group by z.atcnum order by null)u "+
+            "left join atclike on u.atcnum = atclike.atcnum where u.atcnum<? and u.atcnum not in (?,?,?,?,?,?,?,?,?) "+
+            "group by u.atcnum order by null)x "+
             "left join reply on x.atcnum = reply.atcnum group by x.atcnum order by null)y "+
             "left join media on y.atcnum = media.atcnum where media.medianame is not null group by y.atcnum order by atcnum desc limit 9";
   let params = ['%'+req.body.keyword+'%'];
@@ -99,7 +124,6 @@ router.post('/addHash', async (req, res) => {
 });
 
 
-
 router.post('/searchUser', async (req, res) => {
   let usersql = "select y.*, count(following.username) as followingcount from "+
                 "(select x.*, count(follower.username) as followercount from "+
@@ -113,34 +137,39 @@ router.post('/searchUser', async (req, res) => {
       return res.status(500).json({message: err.message});
     }
     let posts = [];
-    let postsql = "select y.*, count(reply.atcnum)as replycount from "+
-              "(select x.*, count(atclike.username) as likecount from "+
-              "(select article.atcnum, media.medianame, media.mediatype "+
-              "from article left join media on article.atcnum=media.atcnum "+
-              "where username=? group by article.atcnum order by article.atcnum desc limit 12)x "+
-              "left join atclike on x.atcnum = atclike.atcnum group by x.atcnum order by null)y "+
-              "left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"
-    let postparam = [userinfo[0].username];
-    conn.query(postsql, postparam, function(err, getposts){
-      if(err) {
-        return res.status(500).json({message: err.message})
+    let userdata={
+      atccount: userinfo[0].atccount,
+      userinfo: {
+        username: userinfo[0].username,
+        name: userinfo[0].name,
+        nickname: userinfo[0].nickname,
+        profileimgname: userinfo[0].profileimgname,
+        intro: userinfo[0].intro,
+        state: userinfo[0].state,
+        followercount: userinfo[0].followercount,
+        followingcount: userinfo[0].followingcount
       }
-      const userdata={
-        atccount: userinfo[0].atccount,
-        userinfo: {
-          username: userinfo[0].username,
-          name: userinfo[0].name,
-          nickname: userinfo[0].nickname,
-          profileimgname: userinfo[0].profileimgname,
-          intro: userinfo[0].intro,
-          state: userinfo[0].state,
-          followercount: userinfo[0].followercount,
-          followingcount: userinfo[0].followingcount
-        }
-      }
-      posts=getposts;
+    }
+    if(userinfo[0].state!=="all"){
       return res.json({...userdata, posts})
-    })
+    }
+    else{
+      let postsql = "select y.*, count(reply.atcnum)as replycount from "+
+                    "(select x.*, count(atclike.username) as likecount from "+
+                    "(select article.atcnum, media.medianame, media.mediatype "+
+                    "from article left join media on article.atcnum=media.atcnum "+
+                    "where username=? group by article.atcnum order by article.atcnum desc limit 12)x "+
+                    "left join atclike on x.atcnum = atclike.atcnum group by x.atcnum order by null)y "+
+                    "left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"
+      let postparam = [userinfo[0].username];
+      conn.query(postsql, postparam, function(err, getposts){
+        if(err) {
+          return res.status(500).json({message: err.message})
+        }
+        posts=getposts;
+        return res.json({...userdata, posts})
+      })
+    }
   });
 });
 

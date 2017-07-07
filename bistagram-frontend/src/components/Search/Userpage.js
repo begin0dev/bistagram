@@ -37,7 +37,7 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
               />
 
               {logusername === scuserinfo.username &&
-                <Link to="/mypage">
+                <Link to="/mypage/profile">
                   <button className="whitebtn btnstyle point user_follow_btn">
                     프로필 편집
                   </button>
@@ -83,20 +83,20 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
         </ul>
 
 
-          <div>
-            <div className="grid_wrap">
-              {search.posts.userAtcs.map((contact, i) => {
-                return(
-                  <Searchbox
-                    post={contact}
-                    handleSearchModal={handleSearchModal}
-                    index={i}
-                    key={i}
-                  />
-                );
-              })}
-            </div>
+        <div>
+          <div className="grid_wrap">
+            {search.posts.userAtcs.map((contact, i) => {
+              return(
+                <Searchbox
+                  post={contact}
+                  handleSearchModal={handleSearchModal}
+                  index={i}
+                  key={i}
+                />
+              );
+            })}
           </div>
+        </div>
         {!search.posts.moreView && search.posts.isMore ? <a className="moreview_btn_style moreview_btn" onClick={addUserPost}>더 읽어들이기</a>:null}
 
         {search.posts.moreView && search.posts.isMore &&

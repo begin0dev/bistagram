@@ -120,7 +120,7 @@ class App extends React.Component{
 					<Switch>
 						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
 						<Route path="/explore" component={Explore}/>
-						<Route path="/mypage" component={Mypage}/>
+						<Route path="/mypage/:page" component={Mypage}/>
 						<Route path="/Search/tags/:keyword" component={SearchHash}/>
 						<Route path="/Search/:keyword" component={SearchUser}/>
 						<Route component={NotFound}/>

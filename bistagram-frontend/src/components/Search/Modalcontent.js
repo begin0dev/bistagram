@@ -1,13 +1,13 @@
 import React from 'react';
 
 const changeTag = (text) =>{
-  text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig, '<a href="search/tags/$1">#$1</a>');
-  text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig, '<a href="search/$1">@$1</a>');
+  text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig, '<a href="/search/tags/$1">#$1</a>');
+  text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig, '<a href="/search/$1">@$1</a>');
   return text;
 }
 
 const changeNick = (text) =>{
-  text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig,'<a href="search/$1">@$1</a>');
+  text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig,'<a href="/search/$1">@$1</a>');
   return text;
 }
 
