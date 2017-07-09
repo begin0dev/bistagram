@@ -51,6 +51,13 @@ const search ={
   loading: false
 }
 
+const mypage = {
+  profileimg: {},
+  name: '',
+  nickname: '',
+
+}
+
 const submitStatus = {
   signup: false,
   signin: false,
