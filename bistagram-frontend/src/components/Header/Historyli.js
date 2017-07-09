@@ -57,13 +57,15 @@ const Historyli = ({history, auth, handleFollowClick}) => {
     <li className="history_li point">
   		<div className="history_img_div">
         <div className="inlineblock">
-          <a className="history_img_a" style={imgsize}>
+          <a href={`/search/${history.nickname}`} className="history_img_a" style={imgsize}>
             <img src={noimg} className="img_100" alt=""></img>
           </a>
         </div>
   		</div>
       <div className="history_message_div">
-        <a className="history_id_size history_id_bold">{history.nickname}</a>
+        <a href={`/search/${history.nickname}`} className="history_id_size history_id_bold">
+          {history.nickname}
+        </a>
         {`${history.type==='follow'?'님이 회원님을 팔로우하기 시작했습니다':''}`}
         {`${history.type==='call'?'님이 댓글에서 회원님을 언급했습니다: ':''}`}
         {`${history.type==='atclike'&&!history.mediatype?'님이 회원님의 게시물을 좋아합니다.':''}`}

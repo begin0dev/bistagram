@@ -8,6 +8,7 @@ import Posts from './Posts';
 import Mypage from './Mypage';
 import SearchHash from './SearchHash';
 import SearchUser from './SearchUser';
+import Fblogged from './Fblogged';
 import Explore from './Explore';
 import NotFound from './NotFound';
 
@@ -105,20 +106,23 @@ class App extends React.Component{
 		return(
 			<Router>
 				<section className="react-body">
-					{auth.userinfo.logged || window.location.pathname !== "/"?
-					<Header
-						ui={ui}
-						auth={auth}
-						form={form}
-						headDisplay={ui.header}
-						handleHeaderModal={this.handleHeaderModal}
-						handleFollowClick={this.handleFollowClick}
-						handleChangeSearch={this.handleChangeSearch}
-						handleSubmitSearch={this.handleSubmitSearch}
-					/>:
-					null}
+					{(auth.userinfo.logged && window.location.pathname === "/") ||
+						(window.location.pathname !== "/")?
+						<Header
+							ui={ui}
+							auth={auth}
+							form={form}
+							headDisplay={ui.header}
+							handleHeaderModal={this.handleHeaderModal}
+							handleFollowClick={this.handleFollowClick}
+							handleChangeSearch={this.handleChangeSearch}
+							handleSubmitSearch={this.handleSubmitSearch}
+						/>:
+						null
+					}
 					<Switch>
 						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
+						<Route path="/auth/:result" component={Fblogged}/>
 						<Route path="/explore" component={Explore}/>
 						<Route path="/mypage/:page" component={Mypage}/>
 						<Route path="/Search/tags/:keyword" component={SearchHash}/>

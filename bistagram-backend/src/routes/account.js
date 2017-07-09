@@ -112,16 +112,53 @@ router.get('/checkNickName/:nickname', async (req, res) => {
     });
 });
 
+router.get('/facebook', passport.authenticate('facebook',
+  {authType: 'rerequest', scope: ['public_profile', 'email']}
+));
+
+router.get('/facebook/callback', passport.authenticate('facebook',
+  {failureRedirect: '/api/account/failure'}), (req, res) => {
+    res.redirect('/api/account/success');
+});
+
+router.get('/success', (req, res) => {
+    let url = req.protocol + '://' + req.get('host');
+    if (process.env.NODE_ENV === 'development') {
+        url = url.replace(process.env.PORT, process.env.DEVPORT);
+    }
+    if(!req.user) {
+        return res.redirect(url + '/auth/failure');
+    }
+    if (req.user.username !== null) {
+        res.redirect(url + '/auth/success');
+    } else {
+        res.redirect(url + '/auth/register');
+    }
+});
+
+router.get('/failure', (req, res) => {
+    let url = req.protocol + '://' + req.get('host');
+    url = url.replace(process.env.PORT, process.env.DEVPORT);
+    if (process.env.NODE_ENV === 'development') {
+        res.redirect(url + '/auth/failure');
+    }
+});
+
+
 router.post('/signup', async (req, res, next) => {
   passport.authenticate('local-register', (err, user, info) => {
     if (err) {
       return res.status(500).json({code: err.code, message: err.message});
     }
+
+    if(info){
+      return res.json({...info});
+    }
     req.login(user, (err) => {
         if (err) {
             return res.status(500).json({code: err.code, message: err.message});
         }
-        res.json(true);
+        res.json({code: 3, message: 'success'});
     });
   })(req, res, next);
 });
@@ -131,18 +168,17 @@ router.post('/signin', async (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
         if (err) {
           return res.status(500).json({code: err.code, message: err.message});
-        } else {
-            if(info){
-              return res.json({...info});
-            }
-            else{
-              req.login(user, (err) => {
-                  if (err) {
-                      return res.status(500).json({code: err.code, message: err.message});
-                  }
-                  res.json(true);
-              });
-            }
+        }
+        if(info){
+          return res.json({...info});
+        }
+        else{
+          req.login(user, (err) => {
+              if (err) {
+                return res.status(500).json({code: err.code, message: "Bistagram에 로그인하는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."});
+              }
+              res.json({code: 3, message: 'success'});
+          });
         }
     })(req, res, next);
 });

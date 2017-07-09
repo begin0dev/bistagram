@@ -316,9 +316,17 @@ function form(state=initialState, action) {
     case FORM.SIGNUP + '_FULFILLED':
       return {
         ...state,
+        register: {
+          ...state.register,
+          status:{
+            ...state.register.status,
+            error: payload.data.code!==3?true:false,
+            message: payload.data.msg
+          }
+        },
         submitStatus: {
           ...state.submitStatus,
-          logged: payload
+          logged: payload.data.code!==3?false:true
         },
         requests: {
           ...state.requests,
@@ -364,7 +372,15 @@ function form(state=initialState, action) {
         ...state,
         submitStatus: {
           ...state.submitStatus,
-          logged: payload
+          logged: payload.data.code!==3?false:true
+        },
+        login: {
+          ...state.login,
+          status:{
+            ...state.login.status,
+            error: payload.data.code!==3?true:false,
+            message: payload.data.msg
+          }
         },
         requests: {
           ...state.requests,

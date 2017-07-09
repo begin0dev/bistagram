@@ -72,7 +72,7 @@ flex-direction: column;
 .subtitle{
 font-size: 17px;
 line-height: 20px;
-margin: 0 40px 20px;
+margin: 0 40px 10px;
 text-align: center;
 color: #999;
 font-weight: 600;
@@ -163,10 +163,60 @@ line-height: 18px;
 margin: 10px 40px;
 text-align: center;
 }
+.fb_span_img_pos{
+display: inline-block;
+margin-right: 8px;
+position: relative;
+top: 3px;
+}
+.fb_span_img{
+background-position: -317px -115px;
+height: 16px;
+width: 16px;
+}
+.boundary_div_wrap{
+-webkit-box-orient: horizontal;
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+margin: 10px 40px 18px;
+}
+.boundary_line_div{
+-webkit-box-flex: 1;
+-webkit-flex-grow: 1;
+-ms-flex-positive: 1;
+flex-grow: 1;
+-webkit-flex-shrink: 1;
+-ms-flex-negative: 1;
+flex-shrink: 1;
+background-color: #c7c7c7;
+height: 1px;
+position: relative;
+top: .45em;
+}
+.boundary_txt_div{
+-webkit-box-flex: 0;
+-webkit-flex-grow: 0;
+-ms-flex-positive: 0;
+flex-grow: 0;
+-webkit-flex-shrink: 0;
+-ms-flex-negative: 0;
+flex-shrink: 0;
+text-transform: uppercase;
+font-size: 13px;
+line-height: 15px;
+margin: 0 18px;
+}
 @media screen and (max-width: 875px) {
    .imgtotal_div{
-   display: none;
+     display: none;
    }
+}
+@media (min-width: 736px){
+  .fb_span_img_pos{
+    top: 2px;
+  }
 }
 @media screen and (max-width: 450px) {
   .center_wrap{

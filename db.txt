@@ -4,12 +4,19 @@ create table member
 (
 username varchar(30) primary key not null,
 name varchar(20),
-nickname varchar(20),
-password varchar(15) not null,
+nickname varchar(20) not null,
+password text,
+salt text,
 profileimgname varchar(30),
+state enum('all', 'follow') default 'all',
+phone varchar(30),
+email varchar(30),
+gender enum('male', 'female') default 'male',
 intro text,
-state enum('all', 'follow')
+website varchar(30)
 );
+
+ALTER TABLE member MODIFY COLUMN gender enum('male', 'female') default 'male'
 
 
 delimiter //

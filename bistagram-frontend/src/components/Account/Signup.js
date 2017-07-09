@@ -109,6 +109,16 @@ class Register extends Component {
     }
   }
 
+  leaveTo = ({path, express = false}) =>{
+    if (express) {
+        if (process.env.NODE_ENV === 'development') {
+            document.location.href = "http://localhost:3001" + path;
+        } else {
+            document.location.href = path;
+        }
+    }
+  }
+
   handleKeyPress = (e) => {
     if(e.charCode ===13 ){
       this.handleSubmit();
@@ -124,6 +134,18 @@ class Register extends Component {
             <div className="loginfrm_div">
               <form className="inputForm">
                 <h2 className="subtitle">친구들의 사진과 동영상을 보려면 가입하세요.</h2>
+                <span className="regiinput_btn_span logininput_btn_block">
+                  <button className="bluebtn btnstyle point" type="button"
+                    onClick={() => this.leaveTo({path: '/api/account/facebook', express: true})}>
+                    <span className="imgs fb_span_img fb_span_img_pos"></span>
+                     Facebook으로 로그인
+                  </button>
+                </span>
+                <div className="boundary_div_wrap">
+                  <div className="boundary_line_div"></div>
+                  <div className="boundary_txt_div fontcolor_gray fontbold">또는</div>
+                  <div className="boundary_line_div"></div>
+                </div>
                 <div className="logininput_div">
                   <input type="text" className="logininput_txt"
                   name="username" maxLength="30"
@@ -180,7 +202,7 @@ class Register extends Component {
                   </div>
                 </div>
                 <div>
-                  <span className="regiinput_btn_span">
+                  <span className="regiinput_btn_span logininput_btn_block">
                     <button type="button"
                     className={`bluebtn btnstyle point ${form.submitStatus.signup?"bluebtn_disable":""}`}
                     onClick={this.handleSubmit}

@@ -398,7 +398,7 @@ min-width: 0;
 word-wrap: break-word;
 }
 .history_id_bold{
-color: #262626;
+color: #262626 !important;
 font-weight: 600;
 }
 .history_id_size{
