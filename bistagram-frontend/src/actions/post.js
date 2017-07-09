@@ -4,6 +4,10 @@ import POST from './ActionTypes/post';
 import * as service from '../services/post';
 
 export const postsReset = createAction(POST.POSTS_RESET);
+export const setMediaIndex = createAction(POST.SET_MEDIA_INDEX);
+export const setMediaPlay = createAction(POST.SET_MEDIA_PLAY);
+export const setPostReply = createAction(POST.SET_POST_REPLY);
+
 
 export const searchPosts = (params) => ({
   type: POST.SEARCH_POSTS,

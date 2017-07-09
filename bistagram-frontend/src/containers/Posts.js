@@ -102,10 +102,12 @@ class Post extends Component{
 		await deletePost({atcnum: post.posts[post.index].atcnum, media: post.posts[post.index].media}).then(()=>this.handleModal(-1));
 	}
 
+
 	render(){
 		const {post, auth, form, ui, setPostIndex, insertReply,
 			deleteReply, getAllReplies, setPostMedia, moveMedia,
-			deleteMedia, changeFormData, uploadPost, postformReset} = this.props;
+			deleteMedia, changeFormData, uploadPost, postformReset,
+			setMediaIndex, setMediaPlay, setPostReply} = this.props;
 
 		return(
 				<main className="post_body" >
@@ -142,6 +144,9 @@ class Post extends Component{
 								auth={auth}
 								handleLikeClick={this.handleLikeClick}
 								setPostIndex={setPostIndex}
+								setMediaIndex={setMediaIndex}
+								setMediaPlay={setMediaPlay}
+								setPostReply={setPostReply}
 								insertReply={insertReply}
 								deleteReply={deleteReply}
 								getAllReplies={getAllReplies}
@@ -188,6 +193,10 @@ const mapDispatchToProps = (dispatch) => ({
 	deleteReply: (replynum) => dispatch(post.deleteReply(replynum)),
 	getAllReplies: (params) => dispatch(post.getAllReplies(params)),
 	uploadPost: (params) => dispatch(post.uploadPost(params)),
+
+	setMediaIndex: (parmas) => dispatch(post.setMediaIndex(parmas)),
+	setMediaPlay: (parmas) => dispatch(post.setMediaPlay(parmas)),
+	setPostReply: (parmas) => dispatch(post.setPostReply(parmas)),
 
 	postformReset: () => dispatch(form.postformReset()),
 	changeFormData: (formname, name, value) => dispatch(form.changeFormData(formname, name, value)),

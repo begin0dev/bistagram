@@ -43,6 +43,9 @@ const getPostData = (username) =>{
         conn.query(sql, params, function(err, rows){
           let media=JSON.stringify(rows);
           item.media=JSON.parse(media);
+          item.mdindex=0;
+          item.play=false;
+
           callback(null, item);
         })
       },
@@ -55,6 +58,7 @@ const getPostData = (username) =>{
         conn.query(sql, params, function(err, rows){
           let replies=JSON.stringify(rows);
           item.replies=JSON.parse(replies);
+          item.setreply='';
           callback(null, item);
         })
       }
@@ -235,19 +239,7 @@ const DBpool  = mysql.createPool({
   database : 'bistagram'
 });
 
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'upload/')
-  },
-  filename: function (req, file, cb) {
-    let extArray = file.mimetype.split("/");
-    let extension = extArray[extArray.length - 1];
 
-    cb(null, req.user.username+Date.now()+'.'+extension)
-  }
-})
-
-let upload = multer({ storage: storage }).any();
 
 const getHashTag = params =>{
   let tagString=params.content;
@@ -364,7 +356,6 @@ router.post('/insertReply', async (req, res) => {
                       });
                   });
                 }
-
                 con.commit((err) => {
                   if (err) {
                       return con.rollback(() => {
@@ -379,6 +370,19 @@ router.post('/insertReply', async (req, res) => {
         });
     })
 });
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null, 'upload/')
+  },
+  filename: (req, file, cb) =>{
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    cb(null, req.user.username + Date.now()+req.files.length+'.'+extension)
+  }
+})
+
+let upload = multer({ storage: storage }).array('media', 6);
 
 const thumbnail = (filename) => {
   let _lastDot = filename.lastIndexOf('.');
@@ -407,6 +411,10 @@ const videothumbnail = (filename) => {
 
 router.post('/uploadPost', (req, res) => {
   upload(req, res, (err) =>{
+    if(err) {
+      console.log(err);
+      return res.state(500).end("Error uploading file.");
+    }
     let username = req.user.username;
     let atcnum = -1;
     DBpool.getConnection((err, con) => {

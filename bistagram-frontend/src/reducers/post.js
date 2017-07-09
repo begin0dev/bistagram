@@ -80,6 +80,36 @@ function post(state=initialState, action) {
         posts:[]
       }
 
+    case POST.SET_MEDIA_INDEX:
+      return{
+        ...state,
+        posts:[
+          ...state.posts.slice(0, payload.atcindex),
+          {...state.posts[payload.atcindex], mdindex: state.posts[payload.atcindex].mdindex + payload.plusnum, play: false},
+          ...state.posts.slice(payload.atcindex+1, state.posts.length)
+        ]
+      }
+
+    case POST.SET_MEDIA_PLAY:
+      return{
+        ...state,
+        posts:[
+          ...state.posts.slice(0, payload.atcindex),
+          {...state.posts[payload.atcindex], play: payload.value},
+          ...state.posts.slice(payload.atcindex+1, state.posts.length)
+        ]
+      }
+
+    case POST.SET_POST_REPLY:
+      return{
+        ...state,
+        posts:[
+          ...state.posts.slice(0, payload.atcindex),
+          {...state.posts[payload.atcindex], setreply: payload.replytxt},
+          ...state.posts.slice(payload.atcindex+1, state.posts.length)
+        ]
+      }
+
     case POST.SEARCH_POSTS + "_PENDING":
       return{
         ...state,

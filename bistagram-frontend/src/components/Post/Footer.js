@@ -8,22 +8,7 @@ const removeTag = (reply) => {
 }
 
 class Footer extends Component {
-    constructor(props) {
-      super(props);
-      this.state={
-        reply:''
-      }
-    }
-
-    handleChangeText = (e) =>{
-      if(this.state.reply.length<500){
-	      this.setState({
-	        reply: e.target.value
-	      });
-      }
-    }
-
-    handleFocus = () =>{
+	  handleFocus = () =>{
       this.contenttextarea._rootDOMNode.focus();
     }
 
@@ -38,18 +23,21 @@ class Footer extends Component {
       setPostIndex({index: index, replyindex: replyindex});
       deleteReply({replynum: post.replies[replyindex].replynum});
     }
-
+		handleChangeText = (e) =>{
+			const {post, index, setPostReply} = this.props;
+      if(post.setreply.length<500){
+				setPostReply({atcindex: index, replytxt: e.target.value});
+      }
+    }
     handleReplySubmit = (e) =>{
-      const { post, insertReply, setPostIndex, index } = this.props;
-      if(this.state.reply.length===0){
+      const { post, insertReply, setPostIndex, index, setPostReply } = this.props;
+      if(post.setreply.length===0){
         return;
       }
       if(e.charCode === 13){
         setPostIndex({index: index, replyindex: -1});
-        insertReply({atcnum: post.atcnum, content: removeTag(this.state.reply), username:post.username, nickname: post.userinfo.nickname});
-        this.setState({
-          reply: ''
-        });
+        insertReply({atcnum: post.atcnum, content: removeTag(post.setreply), username:post.username, nickname: post.userinfo.nickname});
+				setPostReply({atcindex: index, replytxt: ''});
       }
     }
 
@@ -100,12 +88,14 @@ class Footer extends Component {
                   onChange={this.handleChangeText}
                   onKeyPress={this.handleKeyPress}
                   ref={(textarea) => { this.contenttextarea = textarea }}
-                  value={this.state.reply}
+                  value={post.setreply}
                   disabled={`${replyload?true:''}`}>
                 </Textarea>
               </form>
               <button className="imgs more_btn more_btn_img more_btn_display"
-              onClick={(e)=>handleModal(index)}>옵션 더 보기</button>
+	              onClick={(e)=>handleModal(index)}>
+								옵션 더 보기
+							</button>
             </section>
     			</div>
         );

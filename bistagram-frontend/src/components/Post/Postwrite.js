@@ -51,9 +51,12 @@ class Postwrite extends Component {
     handlePostSubmit = async(e) => {
       e.preventDefault();
       const {post, uploadPost, postformReset} = this.props;
+			if(post.content<1){
+				return;
+			}
       let formdata=new FormData();
       formdata.append('content', removeTag(post.content))
-      post.media.forEach(function(file){
+      post.media.forEach((file) =>{
         formdata.append('media', file)
       })
       await uploadPost(formdata).then(()=>postformReset());

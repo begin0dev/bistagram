@@ -1,6 +1,8 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy }  from 'passport-facebook';
+import crypto from 'crypto';
+import sha512 from 'sha512';
 
 import mysql from 'mysql';
 import dbconfig from '../dbinfo/database';
@@ -35,16 +37,21 @@ passport.use('local-register',
       if(rows.length>0){
         return done(null, false, {code: 1,  msg: "다른 사람이 이용 중인 사용자 이름입니다." })
       }
-      let insertsql = "insert into member(username, name, nickname, password) values(?, ?, ?, ?)";
-      let insertparams = [username, req.body.name, req.body.nickname, password];
-      conn.query(insertsql, insertparams, function(err, rows) {
-        if(err) {
-          return done(err);
-        }
-        if(rows.affectedRows===0){
-          return done(null, false, {code: 1,  msg: "회원등록에 실패하였습니다" })
-        }
-        return done(null, {username:username, password:password});
+      crypto.randomBytes(64, (err, buf) => {
+        crypto.pbkdf2(password, buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
+          let insertsql = "insert into member(username, name, nickname, password, salt) values(?, ?, ?, ?, ?)";
+          let insertparams = [username, req.body.name, req.body.nickname, key.toString('base64'), buf.toString('base64')];
+          conn.query(insertsql, insertparams, function(err, rows) {
+            if(err) {
+              return done(err);
+            }
+            if(rows.affectedRows===0){
+              return done(null, false, {code: 1,  msg: "회원등록에 실패하였습니다" })
+            }
+            return done(null, {username:username, password:password});
+          });
+
+        });
       });
     });
   })
@@ -61,10 +68,14 @@ passport.use('local-login',
       if(user.length === 0){
         return done(null, false, {code: 1,  msg: "입력한 사용자 이름이 계정과 일치하지 않습니다. 사용자 이름을 확인하고 다시 시도하세요." })
       }
-      if(user[0].password !== password){
-        return done(null, false, {code: 2,  msg: "잘못된 비밀번호입니다. 다시 확인하세요." })
-      }
-      return done(null, user[0]);
+      crypto.randomBytes(64, (err, buf) => {
+        crypto.pbkdf2(password, user[0].salt, 100000, 64, 'sha512', (err, key) => {
+          if(user[0].password !== key.toString('base64')){
+            return done(null, false, {code: 2,  msg: "잘못된 비밀번호입니다. 다시 확인하세요." })
+          }
+          return done(null, user[0]);
+        });
+      });
     });
   })
 )

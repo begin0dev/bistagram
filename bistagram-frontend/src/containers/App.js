@@ -78,7 +78,7 @@ class App extends React.Component{
 
 		if(ui.headerModal){
 			result=true;
-		}else if(scrollTop > this.prev){
+		}else if(scrollTop > 90){
 			result=false;
 		}else if(post.status.modal || search.modalState.modal){
 			result=false;
@@ -88,7 +88,6 @@ class App extends React.Component{
 		if(result!==ui.header){
 			setHeader(result);
 		}
-		this.prev=scrollTop;
 	}
 
 	handleFollowClick = (username) => {
