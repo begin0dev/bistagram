@@ -58,11 +58,18 @@ const mypage = {
   intro: '',
   email: '',
   phone: '',
-  gender: ''
+  gender: '',
+  state: {
+    change: false,
+    loading: false,
+    success: false,
+    message: ''
+  }
 }
 
 const password = {
-  password: '',
+  prepassword: '',
+  changepassword: '',
   checkpassword: ''
 }
 
@@ -102,6 +109,9 @@ const initialState = {
         ...request
     },
     signin: {
+        ...request
+    },
+    profileUpdate: {
         ...request
     }
   },
@@ -193,6 +203,98 @@ function form(state=initialState, action) {
         [payload.form]: {
           ...state[payload.form],
           [payload.name]: payload.value
+        }
+      }
+
+    case FORM.SET_MYPAGE_FORM:
+      return {
+        ...state,
+        mypage: {
+          ...state.mypage,
+          name: payload.name,
+          nickname: payload.nickname,
+          website: payload.website,
+          intro: payload.intro,
+          email: payload.email,
+          phone: payload.phone,
+          gender: payload.gender
+        }
+      }
+
+    case FORM.CHANGE_MYPAGE_FORM:
+      return {
+        ...state,
+        mypage: {
+          ...state.mypage,
+          [payload.name]: payload.value,
+          state: {
+            ...state.mypage.state,
+            change: true
+          }
+        }
+      }
+
+    case FORM.PROFILE_UPDATE + "_PENDING":
+      return {
+        ...state,
+        mypage: {
+          ...state.mypage,
+          state: {
+            ...state.mypage.state,
+            loading: true
+          }
+        },
+        requests: {
+            ...state.requests,
+            profileUpdate: { ...pending }
+        }
+      }
+    case FORM.PROFILE_UPDATE + '_FULFILLED':
+      return {
+        ...state,
+        mypage: {
+          ...state.mypage,
+          state: {
+            ...state.mypage.state,
+            loading: false,
+            success: payload.data.code===3?true:false,
+            message: payload.data.message
+          }
+        },
+        requests: {
+            ...state.requests,
+            profileUpdate: { ...pending }
+        }
+      }
+    case FORM.PROFILE_UPDATE + '_REJECTED':
+      return {
+        ...state,
+        mypage: {
+          ...state.mypage,
+          state: {
+            ...state.mypage.state,
+            loading: false,
+            success: false,
+            message: payload.response.data.message
+          }
+        },
+        requests: {
+          ...state.requests,
+          profileUpdate: { ...rejected, error: payload }
+        }
+      };
+
+    case FORM.SET_PROFILE_ERROR:
+      return {
+        ...state,
+        mypage: {
+          ...state.mypage,
+          state: {
+            ...state.mypage.state,
+            loading: false,
+            success: false,
+            message: payload.message
+          }
         }
       }
 

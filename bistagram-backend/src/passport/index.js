@@ -95,10 +95,18 @@ passport.use(
                 if(user.length>0){
                   return done(null, user[0]);
                 }
+
+                let nick='';
+                let emailExist = (profile.emails && profile.emails.length > 0) ? true : false;
+                if(emailExist){
+                  let nickarray= profile.emails[0].value.split('@');
+                  nick="fb"+nickarray[0]+profile.id.substring(0, 6);
+                }
+
                 let newUser = {
                   'username': "fb:"+profile.id,
-                  'nickname': profile.id,
-                  'email': profile.emails ? (profile.emails.length > 0 ? profile.emails[0].value : null) : null,
+                  'nickname': emailExist ? nick : profile.id,
+                  'email': emailExist ? profile.emails[0].value : null,
                   'gender': profile.gender
                 };
                 let insertsql = "insert into member(username, nickname, email, gender) values(?, ?, ?, ?)";

@@ -57,6 +57,11 @@ export const profileImgDelete = ({preprofilename}) => request({
     }
 });
 
+export const profileUpdate = (user) => request({
+    url: '/api/account/profileUpdate',
+    method: 'post',
+    data: user
+});
 
 export const getHistory = () => request({
     url: '/api/history/getHistory'

@@ -93,7 +93,7 @@ class Register extends Component {
       setSubmitStatus({name: 'signup', value: false})
     }
     else if(!regex.regnickname.test(nickname_val)){
-      setErrorMessage({name: "register", msg:"사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
+      setErrorMessage({name: "register", msg:"사용자 이름에는 영어, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
       setSubmitStatus({name: 'signup', value: false})
     }
     else if(!form.register.checked.nickname){

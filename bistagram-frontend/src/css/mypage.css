@@ -298,6 +298,16 @@ padding: 0 10px;
 .mypage_bluebtn_opacity {
 opacity: .3;
 }
+.mypage_p{
+font-size: 14px;
+line-height: 16px;
+}
+.mypage_success_p{
+color: #4e9f2e;
+}
+.mypage_fail_p{
+color: #ed4956;
+}
 @media ( max-width : 965px) and (min-width: 451px) {
 	.mypage_frame {
 		max-width: calc(100% - 20px);

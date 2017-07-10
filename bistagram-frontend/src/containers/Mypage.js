@@ -14,13 +14,27 @@ import Profilefrm from '../components/Mypage/Profilefrm';
 import Passwordfrm from '../components/Mypage/Passwordfrm';
 import ProfileImgModal from '../components/Mypage/ProfileImgModal';
 
+const regex ={
+  regemail: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+  regphone: /^(?:(010\d{4})|(01[1|6|7|8|9]\d{3,4}))(\d{4})$/,
+  regnickname: /^[0-9a-z_]{5,20}$/,
+  regpassword: /^.{6,20}$/,
+  regnum: /^[0-9]+$/
+}
+
 class Mypage extends Component {
 
     componentDidMount() {
-
+      const {auth, form, setMypageForm} = this.props;
+      if(!form.mypage.state.change){
+        setMypageForm(auth.userinfo.user);
+      }
     }
-    handleChange = (e) =>{
-      this.changeFormData({form:'mypage', name: e.target.name, value: e.target.value});
+    handleMypageTextChange = (e) =>{
+      this.props.changeMypageForm({name: e.target.name, value: e.target.value});
+    }
+    handlePwChange = (e) =>{
+      this.props.changeFormData({form:"password", name: e.target.name, value: e.target.value})
     }
     handleProfileClick = () =>{
       this.handleProfileModal(false);
@@ -44,8 +58,24 @@ class Mypage extends Component {
     handleProfileModal = (value) =>{
       this.props.setMypageModal({name: 'profileImgModal', value: value});
     }
+    handleProfileUpdate = async () =>{
+      const {form, checkSession, profileUpdate, setProfileError}= this.props;
+      if(!regex.regnickname.test(form.mypage.nickname)){
+        setProfileError({message: "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
+        return;
+      }
+      if(form.mypage.email && !regex.regemail.test(form.mypage.email)){
+        setProfileError({message: "이메일 형식이 올바르지 않습니다."});
+        return;
+      }
+      if(form.mypage.phone && !regex.regphone.test(form.mypage.phone)){
+        setProfileError({message: "전화번호 형식이 올바르지 않습니다."});
+        return;
+      }
+      await profileUpdate(form.mypage).then(()=> checkSession());
+    }
     render() {
-      const { ui, auth, match } = this.props;
+      const { ui, auth, form, match } = this.props;
         return(
             <main className="mypage_main mypage_main_bg" role="main">
               {!auth.userinfo.user.username &&
@@ -81,11 +111,26 @@ class Mypage extends Component {
                         />
               				</form>
               			</div>
-                    <h1 className="mypage_nick_title">ffff</h1>
+                    <h1 className="mypage_nick_title">{form.mypage.nickname}</h1>
                   </div>
 
-                  <Route path="/mypage/profile" component={Profilefrm}/>
-                  <Route path="/mypage/pwchange" component={Passwordfrm}/>
+                  <Route path="/mypage/profile"
+                    render={()=>
+                      <Profilefrm
+                        form={form}
+                        handleMypageTextChange={this.handleMypageTextChange}
+                        handleProfileUpdate={this.handleProfileUpdate}
+                      />
+                    }
+                  />
+                  <Route path="/mypage/pwchange"
+                    render={()=>
+                      <Passwordfrm
+                        form={form}
+                        handlePwChange={this.handlePwChange}
+                      />
+                    }
+                  />
 
                 </article>
               </div>
@@ -110,9 +155,14 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   changeFormData: (formname, name, value) => dispatch(form.changeFormData(formname, name, value)),
   formDataReset: () => dispatch(form.formDataReset()),
+  setMypageForm: (params) => dispatch(form.setMypageForm(params)),
+  changeMypageForm: (params) => dispatch(form.changeMypageForm(params)),
+  profileUpdate: (params) => dispatch(form.profileUpdate(params)),
+  setProfileError: (params) => dispatch(form.setProfileError(params)),
 
   profileImgUpdate: (formdata) => dispatch(auth.profileImgUpdate(formdata)),
   profileImgDelete: (params) => dispatch(auth.profileImgDelete(params)),
+  checkSession: () => dispatch(auth.checkSession()),
 
   setMypageModal: (params) => dispatch(ui.setMypageModal(params))
 })

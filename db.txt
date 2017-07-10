@@ -13,7 +13,7 @@ phone varchar(30),
 email varchar(30),
 gender enum('male', 'female') default 'male',
 intro text,
-website varchar(30)
+website varchar(50)
 );
 
 ALTER TABLE member MODIFY COLUMN gender enum('male', 'female') default 'male'

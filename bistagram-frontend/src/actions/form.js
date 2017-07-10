@@ -10,6 +10,8 @@ export const moveMedia = createAction(FORM.MOVE_MEDIA);
 export const deleteMedia = createAction(FORM.DELETE_MEDIA);
 
 export const changeFormData = createAction(FORM.CHANGE_FORMDATA);
+export const setMypageForm = createAction(FORM.SET_MYPAGE_FORM);
+export const changeMypageForm = createAction(FORM.CHANGE_MYPAGE_FORM);
 
 export const checkUserName = (username) => ({
   type: FORM.CHECK_USERNAME,
@@ -31,6 +33,7 @@ export const formDataReset = createAction(FORM.FORMDATA_RESET);
 
 export const setSubmitStatus = createAction(FORM.SET_SUBMIT_STATUS);
 export const setErrorMessage = createAction(FORM.SET_ERRORMESSAGE);
+export const setProfileError = createAction(FORM.SET_PROFILE_ERROR);
 
 
 export const signUp = (params) => ({
@@ -44,5 +47,12 @@ export const signIn = (params) => ({
   type: FORM.SIGNIN,
   payload: {
     promise: service.signIn(params)
+  }
+})
+
+export const profileUpdate = (params) => ({
+  type: FORM.PROFILE_UPDATE,
+  payload: {
+    promise: service.profileUpdate(params)
   }
 })

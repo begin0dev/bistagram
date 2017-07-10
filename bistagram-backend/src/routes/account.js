@@ -283,6 +283,7 @@ router.delete('/profileImgDelete', (req, res) => {
   let params = [null, req.user.username];
   conn.query(sql, params, (err, rows) =>{
     if(err) {
+      console.log(err)
       return res.status(500).json({code: err.code, message: err.message});
     }
     if(rows.affectedRows === 0){
@@ -293,5 +294,47 @@ router.delete('/profileImgDelete', (req, res) => {
     }
   });
 })
+
+
+const checkNickname = (nickname) =>{
+  return new Promise((resolve, reject)=>{
+    let sql = "select nickname from member where nickname=?";
+    let params = [nickname];
+    conn.query(sql, params, (err, rows) =>{
+      if(err) {
+        reject(err);
+      }
+      if(rows.length===0){
+        resolve(true);
+      }else{
+        resolve(false);
+      }
+    });
+  })
+}
+
+router.post('/profileUpdate', async (req, res) => {
+  let user = req.body;
+  if(user.nickname!==req.user.nickname){
+    const nickpossible = await checkNickname(user.nickname);
+    if(!nickpossible){
+      return res.json({code: 1, message: "다른 사람이 이용 중인 사용자 이름입니다."});
+    }
+  }
+  let sql ="update member set name=?, nickname=?, phone=?, email=?, gender=?, intro=?, website=? where username=? ";
+  let params = [user.name, user.nickname, user.phone, user.email, user.gender, user.intro, user.website, req.user.username];
+  conn.query(sql, params, (err, rows) =>{
+    if(err) {
+      console.log(err)
+      return res.status(500).json({code: 0, message: "프로필 저장에 실패하였습니다."});
+    }
+    if(rows.affectedRows===0){
+      return res.status(500).json({code: 0, message: "프로필 저장에 실패하였습니다."});
+    }else{
+      res.json({code: 3, message: "프로필이 저장되었습니다!"});
+    }
+  });
+})
+
 
 module.exports = router;

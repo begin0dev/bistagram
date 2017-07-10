@@ -1,7 +1,6 @@
 import React from 'react';
 
-
-const Profilefrm = () => {
+const Profilefrm = ({form, handleMypageTextChange, handleProfileUpdate}) => {
   return (
     <form className="mypage_frm">
       <div className="mypage_row_div">
@@ -9,7 +8,10 @@ const Profilefrm = () => {
           <label>이름</label>
         </aside>
         <div className="mypage_col_input_div">
-          <input type="text" className="mypage_col_input mypage_col_input_wk" aria-required="false" value="Sooyoung"/>
+          <input type="text" className="mypage_col_input mypage_col_input_wk"
+            name="name" maxLength="30" onChange={handleMypageTextChange}
+            aria-required="false" value={form.mypage.name?form.mypage.name:''}
+          />
         </div>
       </div>
       <div className="mypage_row_div">
@@ -17,7 +19,10 @@ const Profilefrm = () => {
           <label>사용자 이름</label>
         </aside>
         <div className="mypage_col_input_div">
-          <input type="text" className="mypage_col_input mypage_col_input_wk" aria-required="true" value="prosonic1"/>
+          <input type="text" className="mypage_col_input mypage_col_input_wk"
+            name="nickname" maxLength="30" onChange={handleMypageTextChange}
+            aria-required="true" value={form.mypage.nickname}
+          />
         </div>
       </div>
       <div className="mypage_row_div">
@@ -25,7 +30,10 @@ const Profilefrm = () => {
           <label>웹사이트</label>
         </aside>
         <div className="mypage_col_input_div">
-          <input type="text" className="mypage_col_input mypage_col_input_wk" aria-required="false" value=""/>
+          <input type="text" className="mypage_col_input mypage_col_input_wk"
+            name="website" maxLength="50" onChange={handleMypageTextChange}
+            aria-required="false" value={form.mypage.website?form.mypage.website:''}
+          />
         </div>
       </div>
       <div className="mypage_row_div">
@@ -33,13 +41,18 @@ const Profilefrm = () => {
           <label>소개</label>
         </aside>
         <div className="mypage_col_input_div">
-          <textarea className="mypage_col_ta"></textarea>
+          <textarea className="mypage_col_ta"
+            name="intro" maxLength="500" onChange={handleMypageTextChange}
+            value={form.mypage.intro?form.mypage.intro:''}>
+          </textarea>
         </div>
       </div>
 
 
       <div className="mypage_row_div">
-        <aside className="mypage_col_aside"> <label></label></aside>
+        <aside className="mypage_col_aside">
+          <label></label>
+        </aside>
         <div className="mypage_col_input_div">
           <div className="mypage_h2_div">
             <h2 className="mypage_h2">개인 정보</h2>
@@ -51,7 +64,10 @@ const Profilefrm = () => {
           <label>이메일</label>
         </aside>
         <div className="mypage_col_input_div">
-          <input type="text" className="mypage_col_input mypage_col_input_wk" aria-required="false" value="prosonic1@naver.com"/>
+          <input type="text" className="mypage_col_input mypage_col_input_wk"
+            name="email" maxLength="30" onChange={handleMypageTextChange}
+            aria-required="false" value={form.mypage.email?form.mypage.email:''}
+          />
         </div>
       </div>
       <div className="mypage_row_div">
@@ -59,7 +75,10 @@ const Profilefrm = () => {
           <label>전화번호</label>
         </aside>
         <div className="mypage_col_input_div">
-          <input type="text" className="mypage_col_input mypage_col_input_wk" aria-required="false" value="+82 10-2102-0330"/>
+          <input type="text" className="mypage_col_input mypage_col_input_wk"
+            name="phone" maxLength="30" onChange={handleMypageTextChange}
+            aria-required="false" value={form.mypage.phone?form.mypage.phone:''}
+          />
         </div>
       </div>
       <div className="mypage_row_div">
@@ -69,10 +88,9 @@ const Profilefrm = () => {
         <div className="mypage_col_input_div">
           <div className="mypage_select_div">
             <span className="mypage_select_img_pos mypage_select_img_block imgs mypage_select_downArrow"></span>
-            <select className="mypage_select">
-              <option value="1">남성</option>
-              <option value="2">여성</option>
-              <option value="3">선택 안 함</option>
+            <select className="mypage_select" name="gender" value={form.mypage.gender} onChange={handleMypageTextChange}>
+              <option value="male">남성</option>
+              <option value="female">여성</option>
             </select>
           </div>
         </div>
@@ -83,11 +101,25 @@ const Profilefrm = () => {
         <div className="mypage_col_input_div">
           <div className="mypage_submit_div">
             <span className="mypage_submit_span">
-              <button className="mypage_submit_size mypage_submit_blue mypage_submit_pd point">제출</button>
+              <button className="mypage_submit_size mypage_submit_blue mypage_submit_pd point"
+                type="button" onClick={handleProfileUpdate} disabled={form.mypage.state.loading?true:''}>
+                제출
+              </button>
+              {form.mypage.state.loading &&
+                <div className='loding_div loding_img'></div>
+              }
             </span>
           </div>
         </div>
       </div>
+      {form.mypage.state.message && 
+      <div className="mypage_row_div">
+        <aside className="mypage_col_aside"> <label></label></aside>
+        <div className="mypage_col_input_div">
+          <p className={`mypage_p ${form.mypage.state.success?'mypage_success_p':'mypage_fail_p'}`}>{form.mypage.state.message}</p>
+        </div>
+      </div>
+      }
     </form>
   );
 }
