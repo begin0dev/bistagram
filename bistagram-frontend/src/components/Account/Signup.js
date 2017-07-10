@@ -114,6 +114,7 @@ class Register extends Component {
         if (process.env.NODE_ENV === 'development') {
             document.location.href = "http://localhost:3001" + path;
         } else {
+            console.log("작동")
             document.location.href = path;
         }
     }

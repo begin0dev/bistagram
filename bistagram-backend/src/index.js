@@ -21,7 +21,6 @@ const port = process.env.PORT || 3000;
 /* SETUP MIDDLEWARE */
 app.use(bodyParser.json()); // parses json
 // SERVE STATIC FILES
-app.use('/', express.static(path.join(__dirname, '../../bistagram-frontend/public/')));
 app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 
 const options ={

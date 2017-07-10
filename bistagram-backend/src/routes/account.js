@@ -337,4 +337,9 @@ router.post('/profileUpdate', async (req, res) => {
 })
 
 
+router.post('/changePassword', async (req, res) => {
+
+
+})
+
 module.exports = router;

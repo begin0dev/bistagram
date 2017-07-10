@@ -125,7 +125,7 @@ class Searchmodal extends Component {
                   </article>
                 </div>
               </div>
-              <button className="modal_canclebtn">닫기</button>
+              <button className="modal_canclebtn cancle_btn_disnone">닫기</button>
             </div>
           </div>
         );

@@ -508,6 +508,9 @@ top: auto;
 	.search_modal_bfafbtn_body{
     display: none;
 	}
+	.cancle_btn_disnone{
+		display: none;
+	}
 }
 @media (max-width: 415px){
 	.modal_wrap{
