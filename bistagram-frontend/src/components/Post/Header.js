@@ -46,7 +46,10 @@ class Header extends Component {
         <header className="postview_head">
           <Link to={`/search/${post.userinfo.nickname}`}
             className="profile_img_a profile_img_circle" style={imgsize}>
-            <img src={noimg} className="postview_profileimg img_100" alt=""></img>
+            <img
+              src={!post.userinfo.profileimgname ? noimg : '/upload/profile/'+post.userinfo.profileimgname}
+              className="postview_profileimg img_100" alt="">
+            </img>
           </Link>
           <div className="postview_iddiv">
             <Link to={`/search/${post.userinfo.nickname}`}

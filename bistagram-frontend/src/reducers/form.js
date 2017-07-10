@@ -52,10 +52,18 @@ const search ={
 }
 
 const mypage = {
-  profileimg: {},
   name: '',
   nickname: '',
+  website: '',
+  intro: '',
+  email: '',
+  phone: '',
+  gender: ''
+}
 
+const password = {
+  password: '',
+  checkpassword: ''
 }
 
 const submitStatus = {
@@ -76,6 +84,12 @@ const initialState = {
   },
   search:{
     ...search
+  },
+  mypage: {
+    ...mypage
+  },
+  password: {
+    ...password
   },
   requests: {
     checkUserName: {

@@ -8,6 +8,12 @@ export const searchPosts = ({atcnum}) => request({
     }
 });
 
+export const uploadPost = (formdata) => request({
+    url: '/api/post/uploadPost',
+    method: 'post',
+    data: formdata
+});
+
 export const deletePost = ({atcnum, media}) => request({
     url: '/api/post/deletePost',
     method: 'delete',
@@ -59,10 +65,4 @@ export const getAllReplies = ({atcnum, count}) => request({
       atcnum,
       count
     }
-});
-
-export const uploadPost = (formdata) => request({
-    url: '/api/post/uploadPost',
-    method: 'post',
-    data: formdata
 });

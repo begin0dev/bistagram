@@ -26,7 +26,10 @@ const FollowList = ({auth, page, handleFollowClick}) => {
 								<div className="li_wrap_div">
 									<div className="profile_wrap_div">
 										<Link to={`/search/${contact.nickname}`} className="profile_img_a profile_img_circle li_circleimg" style={imgsize}>
-											<img src={noimg} className="img_100" alt=""></img>
+											<img
+                        src={!contact.profileimgname ? noimg : '/upload/profile/'+contact.profileimgname} 
+                        className="img_100" alt="">
+                      </img>
 										</Link>
 										<div className="profile_info_wrap">
 											<div className="profile_nickname_div">

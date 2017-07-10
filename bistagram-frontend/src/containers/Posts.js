@@ -117,6 +117,7 @@ class Post extends Component{
 					<section className="post_wrapper" style={{display:`${ui.loading.post?'none':''}`}}>
 
 						<Postwrite
+							auth={auth}
 							post={form.post}
 							upload={post.status.uploadPost}
 							changeFormData={changeFormData}

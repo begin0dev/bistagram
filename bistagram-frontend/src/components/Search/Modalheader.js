@@ -6,7 +6,10 @@ const Modalheader = ({search, auth, handleFollowClick}) => {
     return (
       <header className="modal_header modal_header_position">
         <a href={`/search/${search.modalpost.nickname}`} className="profile_img_circle profile_img_a profile_img_size">
-          <img src={noimg} className="postview_profileimg img_100" alt=""></img>
+          <img
+            src={!search.modalpost.profileimgname ? noimg : '/upload/profile/'+search.modalpost.profileimgname}
+            className="postview_profileimg img_100" alt="">
+          </img>
         </a>
         <div className="modal_header_nickdiv">
           <a href={`/search/${search.modalpost.nickname}`} className="modal_header_nicka">{search.modalpost.nickname}</a>

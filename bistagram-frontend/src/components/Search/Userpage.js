@@ -9,7 +9,7 @@ import Followbtns from './Followbtns';
 
 import noimg from '../../img/noimg.jpg';
 
-const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollowClick, handleLogout}) => {
+const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollowClick, handleLogoutModal}) => {
 
     let logusername=auth.userinfo.user.username;
     let scuserinfo=search.posts.userinfo;
@@ -19,7 +19,10 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
 
           <div className="user_profile_div">
             <div className="user_profile_circle user_profile_circle_div">
-              <img className="user_profile_circle_img" src={noimg} alt=""></img>
+              <img
+                className="user_profile_circle_img" alt=""
+                src={!scuserinfo.profileimgname ? noimg : '/upload/profile/'+scuserinfo.profileimgname}>
+              </img>
             </div>
           </div>
 
@@ -45,7 +48,7 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
               }
               {logusername === scuserinfo.username &&
                 <div className="user_control_btn_div">
-                  <button className="oldimgs user_control_btn" onClick={handleLogout}>옵션</button>
+                  <button className="oldimgs user_control_btn" onClick={() => handleLogoutModal(true)}>옵션</button>
                 </div>
               }
             </div>

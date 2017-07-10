@@ -88,19 +88,17 @@ passport.use(
         profileFields: fbConfig.profileFields
     },
         (access_token, refresh_token, profile, done) => {
-
             let logchecksql = "select * from member where username=?";
             let logparams = ["fb:"+profile.id];
             conn.query(logchecksql, logparams, (err, user) => {
                 if(err) {return done(err);}
-
-                if(user.length!==0){
+                if(user.length>0){
                   return done(null, user[0]);
                 }
                 let newUser = {
                   'username': "fb:"+profile.id,
-                  'nickname': profile.name.givenName,
-                  'email': profile.emails[0].value,
+                  'nickname': profile.id,
+                  'email': profile.emails ? (profile.emails.length > 0 ? profile.emails[0].value : null) : null,
                   'gender': profile.gender
                 };
                 let insertsql = "insert into member(username, nickname, email, gender) values(?, ?, ?, ?)";

@@ -12,6 +12,11 @@ const userinfo ={
     name: null,
     nickname: null,
     profileimgname: null,
+    email: null,
+    phone: null,
+    intro: null,
+    website: null,
+    gender: null,
     state: null
   },
   followInfo: {
@@ -36,6 +41,12 @@ const initialState ={
         ...request
     },
     logout: {
+        ...request
+    },
+    profileImgUpdate: {
+        ...request
+    },
+    profileImgDelete:{
         ...request
     },
     getHistory: {
@@ -172,6 +183,71 @@ function auth(state=initialState, action) {
         }
       };
 
+
+    case AUTH.PROFILE_IMG_UPDATE + "_PENDING":
+      return {
+        ...state,
+        requests: {
+            ...state.requests,
+            profileImgUpdate: { ...pending  }
+        }
+      }
+    case AUTH.PROFILE_IMG_UPDATE + '_FULFILLED':
+      return {
+        ...state,
+        userinfo: {
+          ...state.userinfo,
+          user: {
+            ...state.userinfo.user,
+            profileimgname: payload.data.profileimgname
+          }
+        },
+        requests: {
+          ...state.requests,
+          profileImgUpdate: { fulfilled }
+        }
+      }
+    case AUTH.PROFILE_IMG_UPDATE + '_REJECTED':
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          profileImgUpdate: { ...rejected, error: payload }
+        }
+      };
+
+
+    case AUTH.PROFILE_IMG_DELETE + "_PENDING":
+      return {
+        ...state,
+        requests: {
+            ...state.requests,
+            profileImgDelete: { ...pending  }
+        }
+      }
+    case AUTH.PROFILE_IMG_DELETE + '_FULFILLED':
+      return {
+        ...state,
+        userinfo: {
+          ...state.userinfo,
+          user: {
+            ...state.userinfo.user,
+            profileimgname: null
+          }
+        },
+        requests: {
+          ...state.requests,
+          profileImgDelete: { fulfilled }
+        }
+      }
+    case AUTH.PROFILE_IMG_DELETE + '_REJECTED':
+      return {
+        ...state,
+        requests: {
+          ...state.requests,
+          profileImgDelete: { ...rejected, error: payload }
+        }
+      };
 
     case AUTH.SET_FOLLOW_USER:
       return{

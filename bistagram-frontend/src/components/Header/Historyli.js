@@ -58,7 +58,10 @@ const Historyli = ({history, auth, handleFollowClick}) => {
   		<div className="history_img_div">
         <div className="inlineblock">
           <a href={`/search/${history.nickname}`} className="history_img_a" style={imgsize}>
-            <img src={noimg} className="img_100" alt=""></img>
+            <img
+              src={!history.profileimgname ? noimg : '/upload/profile/'+history.profileimgname}
+              className="img_100" alt="">
+            </img>
           </a>
         </div>
   		</div>

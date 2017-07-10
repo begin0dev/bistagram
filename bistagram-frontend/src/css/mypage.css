@@ -59,6 +59,10 @@ width: calc(100% - 48px);
 border-left-color: #262626;
 font-weight: 600;
 }
+.mypage_menu_li_none:hover{
+background-color: #fafafa;
+border-left-color: #dbdbdb
+}
 .mypage_menu_li, .mypage_menu_li:active, .mypage_menu_li:hover, .mypage_menu_li:visited {
 color: #262626;
 }
@@ -112,6 +116,9 @@ cursor: pointer;
 height: 100%;
 padding: 0;
 width: 100%;
+}
+.frm_dis_none{
+display: none;
 }
 .mypage_nick_title {
 font-size: 24px;

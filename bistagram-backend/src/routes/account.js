@@ -2,6 +2,10 @@ import express from 'express';
 import mysql from 'mysql';
 import Promise from 'bluebird';
 import passport from 'passport';
+import multer from 'multer';
+import fs from 'fs';
+import gm from 'gm';
+
 import dbconfig from '../dbinfo/database';
 
 const router = new express.Router();
@@ -60,10 +64,17 @@ router.get('/check', async (req, res) => {
     let followInfo = null;
     let hiscount = null;
     if (req.user) {
-        const { username, nickname, state} = req.user;
+        const { username, name, nickname, profileimgname, intro, email, phone, gender, website, state} = req.user;
         user = {
             username,
+            name,
             nickname,
+            profileimgname,
+            intro,
+            email,
+            phone,
+            gender,
+            website,
             state,
         };
         const hiscount=await getHisCount(req.user.username);
@@ -112,13 +123,15 @@ router.get('/checkNickName/:nickname', async (req, res) => {
     });
 });
 
-router.get('/facebook', passport.authenticate('facebook',
-  {authType: 'rerequest', scope: ['public_profile', 'email']}
+router.get('/facebook',
+  passport.authenticate('facebook',
+    {authType: 'rerequest', scope: ['public_profile', 'email']}
 ));
 
-router.get('/facebook/callback', passport.authenticate('facebook',
-  {failureRedirect: '/api/account/failure'}), (req, res) => {
-    res.redirect('/api/account/success');
+router.get('/facebook/callback',
+  passport.authenticate('facebook',
+    {failureRedirect: '/api/account/failure'}), (req, res) => {
+      res.redirect('/api/account/success');
 });
 
 router.get('/success', (req, res) => {
@@ -188,5 +201,97 @@ router.delete ('/logout', async (req, res) => {
     req.session.destroy();
     res.json({success: true});
 });
+
+
+const deleteProfileimg = (profilename) =>{
+  fs.unlink('upload/profile/'+profilename, (err)=>{
+    if(err){
+      console.log(err);
+      return;
+    }
+  })
+}
+
+const deleteTmp = (filename) =>{
+  fs.unlink('upload/tmp/'+filename, (err)=>{
+    if(err){
+      console.log(err);
+      return;
+    }
+  })
+}
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null, 'upload/tmp/')
+  },
+  filename: (req, file, cb) =>{
+    let extArray = file.mimetype.split("/");
+    let extension = extArray[extArray.length - 1];
+    cb(null, req.user.username + Date.now() + '.' + extension)
+  }
+})
+
+let upload = multer({ storage: storage }).single('profileimg');
+
+const thumbnail = (filename) => {
+  return new Promise((resolve, reject)=>{
+    gm('upload/tmp/'+filename)
+      .thumb(250, 250, 'upload/profile/'+filename, (err) => {
+        if (err) reject(err);
+        else{
+          deleteTmp(filename);
+          resolve('done - thumb');
+        }
+      });
+  })
+}
+
+router.post('/profileImgUpdate', (req, res) => {
+  upload(req, res, (err) =>{
+    if(err) {
+      console.log(err);
+      return res.state(500).json({code: err.code, message: err.message});
+    }
+    thumbnail(req.file.filename).then((text)=>{
+      let sql = "update member set profileimgname=? where username=?;";
+      let params = [req.file.filename, req.user.username];
+      conn.query(sql, params, (err, rows) =>{
+        if(err) {
+          return res.status(500).json({code: err.code, message: err.message});
+        }
+        if(rows.affectedRows === 0){
+          return res.status(400).json({code: 1, message: "error"});
+        }
+        else{
+          if(req.body.preprofilename){
+            deleteProfileimg(req.body.preprofilename);
+            res.json({profileimgname: req.file.filename});
+          }
+        }
+      });
+    },(err)=>{
+      console.log(err)
+    });
+  })
+})
+
+
+router.delete('/profileImgDelete', (req, res) => {
+  deleteProfileimg(req.body.preprofilename);
+  let sql = "update member set profileimgname=? where username=?;";
+  let params = [null, req.user.username];
+  conn.query(sql, params, (err, rows) =>{
+    if(err) {
+      return res.status(500).json({code: err.code, message: err.message});
+    }
+    if(rows.affectedRows === 0){
+      return res.status(400).json({code: 1, message: "error"});
+    }
+    else{
+      res.json({profileimgname: null});
+    }
+  });
+})
 
 module.exports = router;

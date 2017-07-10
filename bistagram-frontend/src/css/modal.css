@@ -31,6 +31,13 @@ z-index: 2;
 background-color: #fff;
 border-bottom: 1px solid #dbdbdb;
 }
+.modal_list_title{
+color: #999;
+font-size: 16px;
+font-weight: 600;
+line-height: 50px;
+text-align: center;
+}
 .modal_listBtn{
 background: #fff;
 border: none;
@@ -46,6 +53,9 @@ text-align: center;
 text-overflow: ellipsis;
 white-space: nowrap;
 width: 100%;
+}
+.modal_listBtn:hover{
+background-color: #efefef;
 }
 .modal_canclebtn {
 background: 0 0;

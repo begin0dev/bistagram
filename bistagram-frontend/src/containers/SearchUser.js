@@ -10,6 +10,7 @@ import Loading from '../components/Loading';
 import Userpage from '../components/Search/Userpage';
 import Searchmodal from '../components/Search/Searchmodal';
 import Innermodal from '../components/Search/Innermodal';
+import LogoutModal from '../components/Search/LogoutModal';
 
 import '../css/search.css';
 
@@ -32,6 +33,10 @@ class SearchUser extends Component {
   componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
 	}
+
+  handleLogoutModal = (value) =>{
+    this.props.setMypageModal({name: 'logoutModal', value: value})
+  }
 
   handleLogout = async () =>{
 		const {logout} = this.props;
@@ -130,7 +135,7 @@ class SearchUser extends Component {
             addUserPost={this.addUserPost}
             handleFollowClick={this.handleFollowClick}
             handleSearchModal={this.handleSearchModal}
-            handleLogout={this.handleLogout}
+            handleLogoutModal={this.handleLogoutModal}
           />
 
           {ui.loading.search && <Loading />}
@@ -154,6 +159,12 @@ class SearchUser extends Component {
             <Innermodal
               handleInnerModal={this.handleInnerModal}
               handleSearchModal={this.handleSearchModal}
+            />
+          }
+          {ui.logoutModal &&
+            <LogoutModal
+              handleLogoutModal={this.handleLogoutModal}
+              handleLogout={this.handleLogout}
             />
           }
         </main>
@@ -185,7 +196,8 @@ const mapDispatchToProps = (dispatch) => ({
 	logout: () => dispatch(auth.logout()),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
-  setLoading: (params) => dispatch(ui.setLoading(params))
+  setLoading: (params) => dispatch(ui.setLoading(params)),
+  setMypageModal: (params) => dispatch(ui.setMypageModal(params))
 });
 
 

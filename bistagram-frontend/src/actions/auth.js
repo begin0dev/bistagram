@@ -28,6 +28,20 @@ export const logout = () => ({
   }
 })
 
+export const profileImgUpdate = (formdata) => ({
+  type: AUTH.PROFILE_IMG_UPDATE,
+  payload: {
+    promise: service.profileImgUpdate(formdata)
+  }
+})
+
+export const profileImgDelete = (params) => ({
+  type: AUTH.PROFILE_IMG_DELETE,
+  payload: {
+    promise: service.profileImgDelete(params)
+  }
+})
+
 export const recommendFollow = (params) => ({
   type: AUTH.RECOMMEND_FOLLOW,
   payload: {

@@ -11,6 +11,8 @@ const loading = {
 const initialState = {
   header: true,
   headerModal: false,
+  profileImgModal: false,
+  logoutModal: false,
   loading: {
     ...loading
   }
@@ -47,6 +49,12 @@ function ui(state=initialState, action) {
           ...state.loading,
           [payload.name]: payload.value
         }
+      }
+
+    case UI.SET_MYPAGE_MODAL:
+      return{
+        ...state,
+        [payload.name]: payload.value
       }
 
     default:

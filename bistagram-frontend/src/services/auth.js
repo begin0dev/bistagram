@@ -43,6 +43,21 @@ export const logout = () => request({
 });
 
 
+export const profileImgUpdate = (formdata) => request({
+    url: '/api/account/profileImgUpdate',
+    method: 'post',
+    data: formdata
+});
+
+export const profileImgDelete = ({preprofilename}) => request({
+    url: '/api/account/profileImgDelete',
+    method: 'delete',
+    data: {
+      preprofilename
+    }
+});
+
+
 export const getHistory = () => request({
     url: '/api/history/getHistory'
 });

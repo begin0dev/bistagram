@@ -57,12 +57,12 @@ class Postwrite extends Component {
       let formdata=new FormData();
       formdata.append('content', removeTag(post.content))
       post.media.forEach((file) =>{
-        formdata.append('media', file)
+        formdata.append('media', file);
       })
       await uploadPost(formdata).then(()=>postformReset());
     }
     render() {
-        const { post, upload } = this.props;
+        const { auth, post, upload } = this.props;
         return(
           <div className="border_gray2 post_marginbt20px">
         		<form encType="multipart/form-data">
@@ -91,7 +91,10 @@ class Postwrite extends Component {
         				<div className="writebody_txt">
         					<div className="write_profileimg">
         						<div className="write_imgsize_div">
-        							<img src={noimg} className="img_100" alt=''></img>
+        							<img
+												src={!auth.userinfo.user.profileimgname ? noimg : '/upload/profile/'+auth.userinfo.user.profileimgname}
+											 	className="img_100" alt=''>
+											</img>
         						</div>
         					</div>
         					<div className="write_txtareadiv">
@@ -127,9 +130,10 @@ class Postwrite extends Component {
                 }
         			</div>
         			<input type="file" name="mediaList" style={{display:'none'}}
-              accept="video/*, image/*" multiple="multiple"
-              ref={(input) => { this.fileInput = input }}
-              onChange={this.handleFileChange}/>
+	              accept="video/*, image/*" multiple="multiple"
+	              ref={(input) => { this.fileInput = input }}
+              	onChange={this.handleFileChange}
+							/>
         		</form>
         	</div>
         );
