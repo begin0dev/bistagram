@@ -75,7 +75,7 @@ class Mypage extends Component {
       await profileUpdate(form.mypage).then(()=> checkSession());
     }
     handlePwUpdate = () =>{
-      const {form, passwordUpdate, setProfileError, postformReset} = this.props;
+      const {form, passwordUpdate, setProfileError} = this.props;
       if(form.password.changepassword!==form.password.checkpassword){
         setProfileError({name: "password", message: "두개의 비밀번호 필드가 일치하지 않습니다."});
         return;
