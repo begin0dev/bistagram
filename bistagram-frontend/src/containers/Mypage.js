@@ -26,7 +26,7 @@ class Mypage extends Component {
 
     componentDidMount() {
       const {auth, form, setMypageForm} = this.props;
-      if(!form.mypage.state.change){
+      if(!form.mypage.status.change){
         setMypageForm(auth.userinfo.user);
       }
     }
@@ -61,18 +61,26 @@ class Mypage extends Component {
     handleProfileUpdate = async () =>{
       const {form, checkSession, profileUpdate, setProfileError}= this.props;
       if(!regex.regnickname.test(form.mypage.nickname)){
-        setProfileError({message: "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
+        setProfileError({name: "mypage", message: "사용자 이름에는 문자, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."});
         return;
       }
       if(form.mypage.email && !regex.regemail.test(form.mypage.email)){
-        setProfileError({message: "이메일 형식이 올바르지 않습니다."});
+        setProfileError({name: "mypage", message: "이메일 형식이 올바르지 않습니다."});
         return;
       }
       if(form.mypage.phone && !regex.regphone.test(form.mypage.phone)){
-        setProfileError({message: "전화번호 형식이 올바르지 않습니다."});
+        setProfileError({name: "mypage", message: "전화번호 형식이 올바르지 않습니다."});
         return;
       }
       await profileUpdate(form.mypage).then(()=> checkSession());
+    }
+    handlePwUpdate = () =>{
+      const {form, passwordUpdate, setProfileError, postformReset} = this.props;
+      if(form.password.changepassword!==form.password.checkpassword){
+        setProfileError({name: "password", message: "두개의 비밀번호 필드가 일치하지 않습니다."});
+        return;
+      }
+      passwordUpdate({prepassword: form.password.prepassword, changepassword:form.password.changepassword});
     }
     render() {
       const { ui, auth, form, match } = this.props;
@@ -127,7 +135,9 @@ class Mypage extends Component {
                     render={()=>
                       <Passwordfrm
                         form={form}
+                        postformReset={this.props.postformReset}
                         handlePwChange={this.handlePwChange}
+                        handlePwUpdate={this.handlePwUpdate}
                       />
                     }
                   />
@@ -153,11 +163,13 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  postformReset: () => dispatch(form.postformReset()),
   changeFormData: (formname, name, value) => dispatch(form.changeFormData(formname, name, value)),
   formDataReset: () => dispatch(form.formDataReset()),
   setMypageForm: (params) => dispatch(form.setMypageForm(params)),
   changeMypageForm: (params) => dispatch(form.changeMypageForm(params)),
   profileUpdate: (params) => dispatch(form.profileUpdate(params)),
+  passwordUpdate: (params) => dispatch(form.passwordUpdate(params)),
   setProfileError: (params) => dispatch(form.setProfileError(params)),
 
   profileImgUpdate: (formdata) => dispatch(auth.profileImgUpdate(formdata)),

@@ -78,7 +78,7 @@ class Post extends Component{
 	}
 
 	handleModal = (index) =>{
-		const {post, auth, setModal} = this.props;
+		const {setModal} = this.props;
 		let doc = document.documentElement;
 		if(index !== -1){
 			position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
@@ -90,11 +90,7 @@ class Post extends Component{
 			document.body.style='';
 			window.scrollTo(0, position);
 		}
-		let result=false;
-		if(index !== -1){
-			result=post.posts[index].username===auth.userinfo.user.username?true:false
-		}
-		setModal({index: index, mine: result})
+		setModal({index: index})
 	}
 
 	handleDeletePost = async() =>{
@@ -164,7 +160,8 @@ class Post extends Component{
 					{post.status.modal&&
 						<Postmodal
 							lodingpost={post.status.post}
-							deletePossible={post.status.mine && post.posts[post.index].atclikecount===0 && post.posts[post.index].repliescount===0?true:false}
+							mine={post.posts[post.index].username===auth.userinfo.user.username ? true : false}
+							deletePossible={post.posts[post.index].atclikecount===0 && post.posts[post.index].repliescount===0 ? true : false}
 							handleModal={this.handleModal}
 							handleDeletePost={this.handleDeletePost}
 						/>

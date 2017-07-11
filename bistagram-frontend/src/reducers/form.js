@@ -59,7 +59,7 @@ const mypage = {
   email: '',
   phone: '',
   gender: '',
-  state: {
+  status: {
     change: false,
     loading: false,
     success: false,
@@ -70,7 +70,12 @@ const mypage = {
 const password = {
   prepassword: '',
   changepassword: '',
-  checkpassword: ''
+  checkpassword: '',
+  status: {
+    loading: false,
+    success: false,
+    message: ''
+  }
 }
 
 const submitStatus = {
@@ -113,6 +118,9 @@ const initialState = {
     },
     profileUpdate: {
         ...request
+    },
+    passwordUpdate: {
+        ...request
     }
   },
   submitStatus: { ...submitStatus }
@@ -131,6 +139,9 @@ function form(state=initialState, action) {
         ...state,
         post: {
           ...post
+        },
+        password: {
+          ...password
         }
       }
 
@@ -227,8 +238,8 @@ function form(state=initialState, action) {
         mypage: {
           ...state.mypage,
           [payload.name]: payload.value,
-          state: {
-            ...state.mypage.state,
+          status: {
+            ...state.mypage.status,
             change: true
           }
         }
@@ -239,8 +250,8 @@ function form(state=initialState, action) {
         ...state,
         mypage: {
           ...state.mypage,
-          state: {
-            ...state.mypage.state,
+          status: {
+            ...state.mypage.status,
             loading: true
           }
         },
@@ -254,8 +265,8 @@ function form(state=initialState, action) {
         ...state,
         mypage: {
           ...state.mypage,
-          state: {
-            ...state.mypage.state,
+          status: {
+            ...state.mypage.status,
             loading: false,
             success: payload.data.code===3?true:false,
             message: payload.data.message
@@ -271,8 +282,8 @@ function form(state=initialState, action) {
         ...state,
         mypage: {
           ...state.mypage,
-          state: {
-            ...state.mypage.state,
+          status: {
+            ...state.mypage.status,
             loading: false,
             success: false,
             message: payload.response.data.message
@@ -284,13 +295,64 @@ function form(state=initialState, action) {
         }
       };
 
+
+    case FORM.PASSWORD_UPDATE + "_PENDING":
+      return {
+        ...state,
+        password: {
+          ...state.password,
+          status: {
+            ...state.password.status,
+            loading: true
+          }
+        },
+        requests: {
+            ...state.requests,
+            passwordUpdate: { ...pending }
+        }
+      }
+    case FORM.PASSWORD_UPDATE + '_FULFILLED':
+      return {
+        ...state,
+        password: {
+          ...state.password,
+          status: {
+            ...state.password.status,
+            loading: false,
+            success: payload.data.code===3?true:false,
+            message: payload.data.message
+          }
+        },
+        requests: {
+            ...state.requests,
+            passwordUpdate: { ...pending }
+        }
+      }
+    case FORM.PASSWORD_UPDATE + '_REJECTED':
+      return {
+        ...state,
+        password: {
+          ...state.password,
+          status: {
+            ...state.password.status,
+            loading: false,
+            success: false,
+            message: payload.response.data.message
+          }
+        },
+        requests: {
+          ...state.requests,
+          passwordUpdate: { ...rejected, error: payload }
+        }
+      };
+
     case FORM.SET_PROFILE_ERROR:
       return {
         ...state,
-        mypage: {
-          ...state.mypage,
-          state: {
-            ...state.mypage.state,
+        [payload.name]: {
+          ...state[payload.name],
+          status: {
+            ...state[payload.name].status,
             loading: false,
             success: false,
             message: payload.message

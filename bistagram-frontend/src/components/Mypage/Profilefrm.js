@@ -102,21 +102,21 @@ const Profilefrm = ({form, handleMypageTextChange, handleProfileUpdate}) => {
           <div className="mypage_submit_div">
             <span className="mypage_submit_span">
               <button className="mypage_submit_size mypage_submit_blue mypage_submit_pd point"
-                type="button" onClick={handleProfileUpdate} disabled={form.mypage.state.loading?true:''}>
+                type="button" onClick={handleProfileUpdate} disabled={form.mypage.status.loading?true:''}>
                 제출
               </button>
-              {form.mypage.state.loading &&
+              {form.mypage.status.loading &&
                 <div className='loding_div loding_img'></div>
               }
             </span>
           </div>
         </div>
       </div>
-      {form.mypage.state.message && 
+      {form.mypage.status.message &&
       <div className="mypage_row_div">
         <aside className="mypage_col_aside"> <label></label></aside>
         <div className="mypage_col_input_div">
-          <p className={`mypage_p ${form.mypage.state.success?'mypage_success_p':'mypage_fail_p'}`}>{form.mypage.state.message}</p>
+          <p className={`mypage_p ${form.mypage.status.success?'mypage_success_p':'mypage_fail_p'}`}>{form.mypage.status.message}</p>
         </div>
       </div>
       }

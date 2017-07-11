@@ -19,7 +19,7 @@ class MediaView extends Component {
       const {atcindex, setMediaPlay} = this.props;
       let video=this.videoRef;
       video.paused ? video.play() : video.pause();
-      setMediaPlay({atcindex: atcindex, value: video.paused ? true : false});
+      setMediaPlay({atcindex: atcindex, value: video.paused ? false : true});
     }
     handleAftBfClick = (e) => {
       const {atcindex, setMediaIndex} = this.props;

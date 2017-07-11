@@ -5,8 +5,8 @@ const Videoview = ({media, videoRef}) => {
       <div className="videowrap_div">
         <div className="video_div">
           <video className="img_100"
-            src={`/upload/${media.medianame}`}
-            type={media.mediatype} preload="auto" loop
+            src={`http://192.168.1.3:3001/upload/${media.medianame}`}
+            type={media.mediatype} loop playsInline
             ref={videoRef}>
           </video>
         </div>

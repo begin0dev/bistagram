@@ -137,7 +137,7 @@ class Register extends Component {
                 <h2 className="subtitle">친구들의 사진과 동영상을 보려면 가입하세요.</h2>
                 <span className="regiinput_btn_span logininput_btn_block">
                   <button className="bluebtn btnstyle point" type="button"
-                    onClick={() => this.leaveTo({path: '/api/account/facebook', express: true})}>
+                    onClick={() => this.leaveTo({path: '/api/auth/facebook', express: true})}>
                     <span className="imgs fb_span_img fb_span_img_pos"></span>
                      Facebook으로 로그인
                   </button>

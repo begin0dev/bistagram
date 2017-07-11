@@ -56,3 +56,10 @@ export const profileUpdate = (params) => ({
     promise: service.profileUpdate(params)
   }
 })
+
+export const passwordUpdate = (params) => ({
+  type: FORM.PASSWORD_UPDATE,
+  payload: {
+    promise: service.passwordUpdate(params)
+  }
+})

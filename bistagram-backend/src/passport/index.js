@@ -50,7 +50,6 @@ passport.use('local-register',
             }
             return done(null, {username:username, password:password});
           });
-
         });
       });
     });

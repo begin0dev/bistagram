@@ -5,6 +5,8 @@ import passport from 'passport';
 import multer from 'multer';
 import fs from 'fs';
 import gm from 'gm';
+import crypto from 'crypto';
+import sha512 from 'sha512';
 
 import dbconfig from '../dbinfo/database';
 
@@ -130,8 +132,8 @@ router.get('/facebook',
 
 router.get('/facebook/callback',
   passport.authenticate('facebook',
-    {failureRedirect: '/api/account/failure'}), (req, res) => {
-      res.redirect('/api/account/success');
+    {failureRedirect: '/api/auth/failure'}), (req, res) => {
+      res.redirect('/api/auth/success');
 });
 
 router.get('/success', (req, res) => {
@@ -337,9 +339,54 @@ router.post('/profileUpdate', async (req, res) => {
 })
 
 
-router.post('/changePassword', async (req, res) => {
+const getPassword = (username) =>{
+  return new Promise((resolve, reject)=>{
+    let sql = "select password, salt from member where username=?";
+    let params = [username];
+    conn.query(sql, params, (err, rows) =>{
+      if(err) {
+        reject(err);
+      }
+      let userinfo=JSON.stringify(...rows);
+      resolve(JSON.parse(userinfo));
+    });
+  })
+}
 
+const updatePassword = (password, username) =>{
+  return new Promise((resolve, reject)=>{
+    crypto.randomBytes(64, (err, buf) => {
+      crypto.pbkdf2(password, buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
+        let sql = "update member set password=?, salt=? where username=?";
+        let params = [key.toString('base64'), buf.toString('base64'), username];
+        conn.query(sql, params, function(err, rows) {
+          if(err) {
+            reject (err);
+          }
+          if(rows.affectedRows===0){
+            resolve(false)
+          }
+          resolve(true);
+        });
+      });
+    });
+  })
+}
 
+router.post('/passwordUpdate', async (req, res) => {
+  const userinfo = await getPassword(req.user.username);
+  crypto.randomBytes(64, (err, buf) => {
+    crypto.pbkdf2(req.body.prepassword, userinfo.salt, 100000, 64, 'sha512', async (err, key) => {
+      if(userinfo.password !== key.toString('base64')){
+        return res.json({code: 1, message: "이전 비밀번호가 잘못 입력되었습니다. 다시 입력해주세요."});
+      }
+      const changepassword = await updatePassword(req.body.changepassword, req.user.username);
+      if(changepassword){
+        return res.json({code: 3, message: "비밀번호가 저장되었습니다!"});
+      }
+       res.json({code: 2, message: "비밀번호 저장에 실패하였습니다."});
+    });
+  });
 })
 
 module.exports = router;

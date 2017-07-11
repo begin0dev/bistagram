@@ -17,8 +17,7 @@ const initialState = {
     post: false,
     like: false,
     reply: false,
-    uploadPost: false,
-    mine: false
+    uploadPost: false
   },
   requests: {
     searchPosts:{
@@ -69,8 +68,7 @@ function post(state=initialState, action) {
         index: payload.index,
         status: {
           ...state.status,
-          modal: !state.status.modal,
-          mine: payload.mine
+          modal: !state.status.modal
         }
       }
 
