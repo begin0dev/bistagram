@@ -30,10 +30,10 @@ const TopInfoPart = ({ui, auth, handleFollowClick, handleHeaderModal}) => {
 
   				</div>
   				<div className="top_items">
-  					<a href={`/search/${auth.userinfo.user.nickname}`}
+  					<Link to={`/search/${auth.userinfo.user.nickname}`}
               className="clickscimg top_menuimgsize imgblock top_menuimg3">
               프로필
-            </a>
+            </Link>
   				</div>
   			</div>
       }

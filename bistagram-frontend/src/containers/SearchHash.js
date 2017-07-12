@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import * as search from '../actions/search';
 import * as ui from '../actions/ui';
@@ -95,19 +96,6 @@ class SearchHash extends Component {
     await getModalPost({atcnum: atcnum});
   }
 
-  handleFollowClick = (username) => {
-		const {auth, setFollowUser, following, unfollow} = this.props;
-    if(auth.userinfo.user.username===null){
-      document.location = "/"
-    }
-		setFollowUser(username);
-		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
-			unfollow({username: username});
-		}else{
-			following({username: username});
-		}
-	}
-
 	handleModalLikeClick = (atcnum) =>{
     const {auth, search, modalPostLike, modalPostNotLike} = this.props;
     if(auth.userinfo.user.username===null){
@@ -123,7 +111,8 @@ class SearchHash extends Component {
     this.props.setInnerModal();
   }
   render() {
-    const {search, ui, auth, getModalPost, modalPostInsertReply, modalPostDeleteReply} = this.props;
+    const {search, ui, auth, getModalPost, modalPostInsertReply,
+          handleFollowClick, modalPostDeleteReply} = this.props;
 		return(
         <main className="search_body">
           <Hashpage
@@ -142,7 +131,7 @@ class SearchHash extends Component {
               atcindex={search.posts.atcindex}
               handleSearchModal={this.handleSearchModal}
               handleBfAfModal={this.handleBfAfModal}
-              handleFollowClick={this.handleFollowClick}
+              handleFollowClick={handleFollowClick}
               handleModalLikeClick={this.handleModalLikeClick}
               handleInnerModal={this.handleInnerModal}
               modalPostInsertReply={modalPostInsertReply}
@@ -179,14 +168,10 @@ const mapDispatchToProps = (dispatch) => ({
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
 
-  setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
-	following: (params) => dispatch(auth.following(params)),
-	unfollow: (params) => dispatch(auth.unfollow(params)),
-
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))
 });
 
 
 SearchHash = connect(mapStateToProps, mapDispatchToProps)(SearchHash)
-export default SearchHash;
+export default withRouter(SearchHash);

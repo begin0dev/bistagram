@@ -71,6 +71,19 @@ class App extends React.Component{
 		}
 	}
 
+	handleFollowClick = (username) => {
+		const {auth, setFollowUser, following, unfollow} = this.props;
+    if(auth.userinfo.user.username===null){
+      document.location = "/"
+    }
+		setFollowUser(username);
+		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
+			unfollow({username: username});
+		}else{
+			following({username: username});
+		}
+	}
+
 	handleScroll = (e) => {
 		const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
 		const {ui, post, search, setHeader} = this.props;
@@ -87,16 +100,6 @@ class App extends React.Component{
 		}
 		if(result!==ui.header){
 			setHeader(result);
-		}
-	}
-
-	handleFollowClick = (username) => {
-		const {auth, setFollowUser, following, unfollow} = this.props;
-		setFollowUser(username);
-		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
-			unfollow({username: username});
-		}else{
-			following({username: username});
 		}
 	}
 
@@ -120,12 +123,24 @@ class App extends React.Component{
 						null
 					}
 					<Switch>
-						<Route exact path="/" component={auth.userinfo.logged?Posts:Login}/>
+						<Route exact path="/"	component={auth.userinfo.logged?Posts:Login}/>
 						<Route path="/auth/:result" component={Fblogged}/>
-						<Route path="/explore" component={Explore}/>
+						<Route path="/explore"
+							render={()=>
+								<Explore	handleFollowClick={this.handleFollowClick}/>
+							}
+						/>
 						<Route path="/mypage/:page" component={Mypage}/>
-						<Route path="/Search/tags/:keyword" component={SearchHash}/>
-						<Route path="/Search/:keyword" component={SearchUser}/>
+						<Route path="/Search/tags/:keyword"
+							render={()=>
+								<SearchHash	handleFollowClick={this.handleFollowClick}/>
+							}
+						/>
+						<Route path="/Search/:keyword"
+							render={()=>
+								<SearchUser	handleFollowClick={this.handleFollowClick}/>
+							}
+						/>
 						<Route component={NotFound}/>
 					</Switch>
 				</section>

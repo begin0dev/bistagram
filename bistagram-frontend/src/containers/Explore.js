@@ -5,6 +5,7 @@ import * as auth from '../actions/auth';
 import * as ui from '../actions/ui';
 
 import FollowList from '../components/Follow/FollowList';
+import FollowNothing from '../components/Follow/FollowNothing';
 import FollowLoader from '../components/Follow/FollowLoader';
 
 class Explore extends Component {
@@ -24,27 +25,20 @@ class Explore extends Component {
     }
 	}
 
-  handleFollowClick = (username) => {
-		const {auth, setFollowUser, following, unfollow} = this.props;
-		setFollowUser(username);
-		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
-			unfollow({username: username});
-		}else{
-			following({username: username});
-		}
-	}
-
   render() {
-    const {auth} = this.props;
+    const {auth, handleFollowClick} = this.props;
 		return(
         <main className="post_body">
 			    <section className="post_wrapper">
           {this.props.ui.loading.explore?
             <FollowLoader />
             :
+            auth.recommend.users.length===0 ?
+            <FollowNothing />
+            :
             <FollowList
 							auth={auth}
-							handleFollowClick={this.handleFollowClick}
+							handleFollowClick={handleFollowClick}
               page='explore'
             />
           }
@@ -62,9 +56,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   recommendFollow: (params) => dispatch(auth.recommendFollow(params)),
-  setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
-	following: (params) => dispatch(auth.following(params)),
-	unfollow: (params) => dispatch(auth.unfollow(params)),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))

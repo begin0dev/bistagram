@@ -1,19 +1,21 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import noimg from '../../img/noimg.jpg';
 
 const Modalheader = ({search, auth, handleFollowClick}) => {
     let logusername=auth.userinfo.user.username;
     return (
       <header className="modal_header modal_header_position">
-        <a href={`/search/${search.modalpost.nickname}`} className="profile_img_circle profile_img_a profile_img_size">
+        <Link to={`/search/${search.modalpost.nickname}`} className="profile_img_circle profile_img_a profile_img_size">
           <img
             src={!search.modalpost.profileimgname ? noimg : '/upload/profile/'+search.modalpost.profileimgname}
             className="postview_profileimg img_100" alt="">
           </img>
-        </a>
+        </Link>
         <div className="modal_header_nickdiv">
-          <a href={`/search/${search.modalpost.nickname}`} className="modal_header_nicka">{search.modalpost.nickname}</a>
+          <Link to={`/search/${search.modalpost.nickname}`} className="modal_header_nicka">{search.modalpost.nickname}</Link>
         </div>
         <span className="modal_header_followsp">
           {logusername && logusername!== search.modalpost.username &&

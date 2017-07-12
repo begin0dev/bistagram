@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import * as search from '../actions/search';
 import * as ui from '../actions/ui';
@@ -18,24 +19,47 @@ let position =	0;
 
 class SearchUser extends Component {
 
-  async componentDidMount() {
-    const {searchUser, setLoading, setLoadingInitial} = this.props;
-    setLoading({name:"search", value:true});
-    window.addEventListener("scroll", this.handleScroll);
-    await searchUser({nickname: this.props.match.params.keyword}).then(()=>{
-      if(!this.props.search.posts.userinfo.username){
-        document.location = "/NotFound"
+  constructor(props) {
+      super(props);
+      this.state={
+        keyword: ''
       }
-      setTimeout(()=>{ setLoadingInitial() }, 700);
-    })
+  }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.handleScroll);
+    this.handleUserInfo();
   }
 
   componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);
 	}
 
+  componentDidUpdate() {
+    this.handleUserInfo();
+  }
+
+  handleUserInfo = async() =>{
+    const {search, searchUser, setLoading, setLoadingInitial} = this.props;
+    if(this.state.keyword !== this.props.match.params.keyword){
+      if(search.modalState.modal){
+        this.handleSearchModal(-1);
+      }
+      setLoading({name:"search", value:true});
+      this.setState({
+        keyword: this.props.match.params.keyword
+      });
+      await searchUser({nickname: this.props.match.params.keyword}).then(()=>{
+        if(!this.props.search.posts.userinfo.username){
+          document.location = "/NotFound"
+        }
+        setTimeout(()=>{ setLoadingInitial() }, 700);
+      })
+    }
+  }
+
   handleLogoutModal = (value) =>{
-    this.props.setMypageModal({name: 'logoutModal', value: value})
+    this.props.setMypageModal({name:'logoutModal', value: value})
   }
 
   handleLogout = async () =>{
@@ -96,19 +120,6 @@ class SearchUser extends Component {
     getModalPost({atcnum: atcnum});
   }
 
-  handleFollowClick = (username) => {
-		const {auth, setFollowUser, following, unfollow} = this.props;
-    if(auth.userinfo.user.username===null){
-      document.location = "/"
-    }
-		setFollowUser(username);
-		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
-			unfollow({username: username});
-		}else{
-			following({username: username});
-		}
-	}
-
 	handleModalLikeClick = (atcnum) =>{
     const {auth, search, modalPostLike, modalPostNotLike} = this.props;
     if(auth.userinfo.user.username===null){
@@ -125,7 +136,8 @@ class SearchUser extends Component {
     this.props.setInnerModal();
   }
   render() {
-    const {search, ui, auth, getModalPost, modalPostInsertReply, modalPostDeleteReply} = this.props;
+    const {search, ui, auth, getModalPost, modalPostInsertReply,
+          handleFollowClick,modalPostDeleteReply} = this.props;
 		return(
         <main className="search_body">
 
@@ -135,7 +147,7 @@ class SearchUser extends Component {
             keyword={this.props.match.params.keyword}
             search={search}
             addUserPost={this.addUserPost}
-            handleFollowClick={this.handleFollowClick}
+            handleFollowClick={handleFollowClick}
             handleSearchModal={this.handleSearchModal}
             handleLogoutModal={this.handleLogoutModal}
           />
@@ -149,7 +161,7 @@ class SearchUser extends Component {
               atcindex={search.posts.atcindex}
               handleSearchModal={this.handleSearchModal}
               handleBfAfModal={this.handleBfAfModal}
-              handleFollowClick={this.handleFollowClick}
+              handleFollowClick={handleFollowClick}
               handleModalLikeClick={this.handleModalLikeClick}
               handleInnerModal={this.handleInnerModal}
               modalPostInsertReply={modalPostInsertReply}
@@ -192,9 +204,6 @@ const mapDispatchToProps = (dispatch) => ({
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
 
-  setFollowUser: (username) => dispatch(auth.setFollowUser(username)),
-	following: (params) => dispatch(auth.following(params)),
-	unfollow: (params) => dispatch(auth.unfollow(params)),
 	logout: () => dispatch(auth.logout()),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
@@ -204,4 +213,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 
 SearchUser = connect(mapStateToProps, mapDispatchToProps)(SearchUser)
-export default SearchUser;
+export default withRouter(SearchUser);

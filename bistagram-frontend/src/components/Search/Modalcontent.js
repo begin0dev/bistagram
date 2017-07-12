@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 const changeTag = (text) =>{
   text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig, '<a href="/search/tags/$1">#$1</a>');
   text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig, '<a href="/search/$1">@$1</a>');
@@ -17,9 +19,9 @@ const Modalcontent = ({post, auth, handleReplyDelete}) => {
       <div className="modal_content_section">
         <ul className="modal_content_ul">
           <li className="modal_content_li">
-            <a href={`/search/${post.nickname}`} className="reply_li_id fontcolor_black">
+            <Link to={`/search/${post.nickname}`} className="reply_li_id fontcolor_black">
               {post.nickname}
-            </a>
+            </Link>
             <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
           </li>
 
@@ -32,7 +34,7 @@ const Modalcontent = ({post, auth, handleReplyDelete}) => {
                 </button>
                 :null}
 
-                <a href={`/search/${contact.nickname}`} className="reply_li_id fontcolor_black">{contact.nickname}</a>
+                <Link to={`/search/${contact.nickname}`} className="reply_li_id fontcolor_black">{contact.nickname}</Link>
                 <span>
                   <span dangerouslySetInnerHTML={{__html: changeNick(contact.content)}}></span>
                 </span>

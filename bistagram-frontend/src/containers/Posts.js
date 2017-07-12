@@ -57,16 +57,6 @@ class Post extends Component{
 		}
 	}
 
-	handleFollowClick = (username) => {
-		const {auth, setFollowUser, following, unfollow} = this.props;
-		setFollowUser(username);
-		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
-			unfollow({follower: username});
-		}else{
-			following({follower: username});
-		}
-	}
-
 	handleLikeClick = (num) => {
 		const {post, setPostIndex, likeAtc, notlikeAtc} = this.props;
 		setPostIndex({index: num, replyindex: -1});
@@ -100,6 +90,18 @@ class Post extends Component{
 		await deletePost({atcnum: post.posts[post.index].atcnum, media: post.posts[post.index].media}).then(()=>this.handleModal(-1));
 	}
 
+	handleFollowClick = (username) => {
+		const {auth, setFollowUser, following, unfollow} = this.props;
+    if(auth.userinfo.user.username===null){
+      document.location = "/"
+    }
+		setFollowUser(username);
+		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
+			unfollow({username: username});
+		}else{
+			following({username: username});
+		}
+	}
 
 	render(){
 		const {post, auth, form, ui, setPostIndex, insertReply,
@@ -109,7 +111,7 @@ class Post extends Component{
 
 		return(
 				<main className="post_body" >
-
+				
 					{ui.loading.post&&<Loading />}
 
 					<section className="post_wrapper" style={{display:`${ui.loading.post?'none':''}`}}>
@@ -126,12 +128,13 @@ class Post extends Component{
 							postformReset={postformReset}
 						/>
 
+						{auth.recommend.users.length!==0&&
 						<FollowList
 							auth={auth}
 							handleFollowClick={this.handleFollowClick}
 							page='mainpost'
 						/>
-
+						}
 						{post.posts.length===0&&
 							<Nothingpost />
 						}

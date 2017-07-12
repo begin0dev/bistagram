@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import noimg from '../../img/noimg.jpg';
 
 const imgsize = {
@@ -57,18 +59,18 @@ const Historyli = ({history, auth, handleFollowClick}) => {
     <li className="history_li point">
   		<div className="history_img_div">
         <div className="inlineblock">
-          <a href={`/search/${history.nickname}`} className="history_img_a" style={imgsize}>
+          <Link to={`/search/${history.nickname}`} className="history_img_a" style={imgsize}>
             <img
               src={!history.profileimgname ? noimg : '/upload/profile/'+history.profileimgname}
               className="img_100" alt="">
             </img>
-          </a>
+          </Link>
         </div>
   		</div>
       <div className="history_message_div">
-        <a href={`/search/${history.nickname}`} className="history_id_size history_id_bold">
+        <Link to={`/search/${history.nickname}`} className="history_id_size history_id_bold">
           {history.nickname}
-        </a>
+        </Link>
         {`${history.type==='follow'?'님이 회원님을 팔로우하기 시작했습니다':''}`}
         {`${history.type==='call'?'님이 댓글에서 회원님을 언급했습니다: ':''}`}
         {`${history.type==='atclike'&&!history.mediatype?'님이 회원님의 게시물을 좋아합니다.':''}`}

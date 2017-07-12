@@ -166,7 +166,16 @@ margin-left: 15px;
 display: block;
 position: relative;
 }
-
+.follow_nothing_div{
+flex-grow: 1;
+justify-content: center;
+align-items: center;
+}
+.follow_nothing_span{
+color: #999;
+font-size: 14px;
+text-transform: uppercase;
+}
 
 @media (max-width: 735px){
 	.follow_recommend{
