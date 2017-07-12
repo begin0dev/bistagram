@@ -17,7 +17,7 @@ const Modalheader = ({search, auth, handleFollowClick}) => {
         </div>
         <span className="modal_header_followsp">
           {logusername && logusername!== search.modalpost.username &&
-            auth.userinfo.followInfo.follower.indexOf(search.modalpost.username)!==-1 ?
+            auth.userinfo.followInfo.following.indexOf(search.modalpost.username)!==-1 ?
               <button className="whitebtn btnstyle point"
                 disabled={search.modalpost.username===auth.recommend.clickUser ?true:''}
                 onClick={() => handleFollowClick(search.modalpost.username)}>

@@ -86,18 +86,18 @@ export const recommendFollow = ({start, count}) => request({
     }
 });
 
-export const following = ({follower}) => request({
+export const following = ({username}) => request({
     url: '/api/follow/following',
     method: 'post',
     data: {
-      follower
+      username
     }
 });
 
-export const unfollow = ({follower}) => request({
+export const unfollow = ({username}) => request({
     url: '/api/follow/unfollow',
     method: 'delete',
     data: {
-      follower
+      username
     }
 });

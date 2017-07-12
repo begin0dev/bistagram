@@ -72,14 +72,14 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
           <li className="user_mobile_li">
             <span>팔로워<br/>
               <span className="fontcolor_black fontbold">
-                <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>
+                <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
               </span>
             </span>
           </li>
           <li className="user_mobile_li">
             <span>팔로우<br/>
               <span className="fontcolor_black fontbold">
-                <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
+                <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>
               </span>
             </span>
           </li>

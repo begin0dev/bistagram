@@ -78,8 +78,8 @@ router.post('/SearchPosts', async (req, res) => {
             "(select y.*, count(reply.atcnum) as repliescount from "+
             "(select * from article where username in "+
             "(select username from ("+
-            "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
-            "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
+            "(select follower as username from follower where username=? and follower in (select following from following where username=?))"+
+            "union (select member.username from following join member on following.username=? and following.following=member.username and member.state='all')"+
             "union (select username from member where username=?))x) order by atcnum desc limit ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
             ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";
@@ -89,8 +89,8 @@ router.post('/SearchPosts', async (req, res) => {
             "(select y.*, count(reply.atcnum) as repliescount from "+
             "(select * from article where username in "+
             "(select username from ("+
-            "(select following as username from following where username=? and following in (select follower from follower where username=?))"+
-            "union (select member.username from follower join member on follower.username=? and follower.follower=member.username and member.state='all')"+
+            "(select follower as username from follower where username=? and follower in (select following from following where username=?))"+
+            "union (select member.username from following join member on following.username=? and following.following=member.username and member.state='all')"+
             "union (select username from member where username=?))x) and atcnum<? order by atcnum desc limit ?"+
             ")y left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"+
             ")z left join atclike on z.atcnum = atclike.atcnum group by z.atcnum order by null";

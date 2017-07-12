@@ -27,7 +27,7 @@ const FollowList = ({auth, page, handleFollowClick}) => {
 									<div className="profile_wrap_div">
 										<Link to={`/search/${contact.nickname}`} className="profile_img_a profile_img_circle li_circleimg" style={imgsize}>
 											<img
-                        src={!contact.profileimgname ? noimg : '/upload/profile/'+contact.profileimgname} 
+                        src={!contact.profileimgname ? noimg : '/upload/profile/'+contact.profileimgname}
                         className="img_100" alt="">
                       </img>
 										</Link>
@@ -43,7 +43,7 @@ const FollowList = ({auth, page, handleFollowClick}) => {
 									</div>
 									<div className="folloew_btn_div">
 										<span className="follow_btn_span">
-                      {auth.userinfo.followInfo.follower.indexOf(contact.username) !== -1?
+                      {auth.userinfo.followInfo.following.indexOf(contact.username) !== -1?
   											<button
                           className="whitebtn btnstyle point"
                           disabled={contact.username===auth.recommend.clickUser ?true:''}

@@ -302,8 +302,8 @@ function auth(state=initialState, action) {
           ...state.userinfo,
           followInfo:{
             ...state.userinfo.followInfo,
-            follower: [
-              ...state.userinfo.followInfo.follower,
+            following: [
+              ...state.userinfo.followInfo.following,
               payload.data.username
             ]
           }
@@ -339,14 +339,14 @@ function auth(state=initialState, action) {
         }
       }
     case AUTH.UNFOLLOW + '_FULFILLED':
-      let filteredArray = state.userinfo.followInfo.follower.filter(item => item !== payload.data.username)
+      let filteredArray = state.userinfo.followInfo.following.filter(item => item !== payload.data.username)
       return {
         ...state,
         userinfo: {
           ...state.userinfo,
           followInfo:{
             ...state.userinfo.followInfo,
-            follower: filteredArray
+            following: filteredArray
           }
         },
         recommend: {

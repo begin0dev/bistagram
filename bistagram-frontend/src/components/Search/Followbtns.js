@@ -6,7 +6,7 @@ const Followbtns = ({search, auth, handleFollowClick}) => {
     return (
       <span className="user_follow_info">
         {logusername && logusername !== scuserinfo.username &&
-          auth.userinfo.followInfo.follower.indexOf(scuserinfo.username)!==-1 ?
+          auth.userinfo.followInfo.following.indexOf(scuserinfo.username)!==-1 ?
           <button className="whitebtn btnstyle point user_follow_btn"
             disabled={scuserinfo.username===auth.recommend.clickUser ?true:''}
             onClick={() => handleFollowClick(scuserinfo.username)}>

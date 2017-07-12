@@ -87,7 +87,7 @@ const Historyli = ({history, auth, handleFollowClick}) => {
       <div className="history_right_div">
         {history.type==='follow'?
           <span className="history_button_span">
-            {auth.userinfo.followInfo.follower.indexOf(history.who)!==-1 ?
+            {auth.userinfo.followInfo.following.indexOf(history.who)!==-1 ?
               <button className="whitebtn btnstyle point"
                 disabled={history.who===auth.recommend.clickUser ?true:''}
                 onClick={(e)=>handleFollowClick(history.who)}>

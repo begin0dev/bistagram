@@ -93,10 +93,10 @@ class App extends React.Component{
 	handleFollowClick = (username) => {
 		const {auth, setFollowUser, following, unfollow} = this.props;
 		setFollowUser(username);
-		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
-			unfollow({follower: username});
+		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
+			unfollow({username: username});
 		}else{
-			following({follower: username});
+			following({username: username});
 		}
 	}
 

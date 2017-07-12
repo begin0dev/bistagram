@@ -60,7 +60,7 @@ class Post extends Component{
 	handleFollowClick = (username) => {
 		const {auth, setFollowUser, following, unfollow} = this.props;
 		setFollowUser(username);
-		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
+		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
 			unfollow({follower: username});
 		}else{
 			following({follower: username});

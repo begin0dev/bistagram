@@ -101,10 +101,10 @@ class SearchHash extends Component {
       document.location = "/"
     }
 		setFollowUser(username);
-		if(auth.userinfo.followInfo.follower.indexOf(username)!==-1){
-			unfollow({follower: username});
+		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
+			unfollow({username: username});
 		}else{
-			following({follower: username});
+			following({username: username});
 		}
 	}
 

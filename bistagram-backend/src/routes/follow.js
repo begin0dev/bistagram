@@ -13,13 +13,13 @@ router.post('/RecommedFollow', (req, res) => {
   let username=req.user.username;
   let sql = "select member.username, name, nickname, profileimgname, state, convert(recommend.type using utf8) as type from member join "+
 					  "(select * from ("+
-						"(select following as username, '나를 팔로우중인 사람' as type, 1 as rank  from following where username = ?) "+
-						"UNION (select follower as username, concat('함께 아는 사람 ', count(follower)) as type, 2 as rank from follower where username in "+
-            "(select follower from follower where username=?) group by follower order by null) "+
-						"UNION (select username, count(username) as type, 3 as rank from following group by username order by null) "+
+						"(select follower as username, '나를 팔로우중인 사람' as type, 1 as rank  from follower where username = ?) "+
+						"UNION (select following as username, concat('함께 아는 사람 ', count(following)) as type, 2 as rank from following where username in "+
+            "(select following from following where username=?) group by following order by null) "+
+						"UNION (select username, count(username) as type, 3 as rank from follower group by username order by null) "+
 						"UNION (select username, '' as type, 4 as rank from member)) as x "+
 						"where username != ? "+
-						"and username not in (select follower from follower where username=?) "+
+						"and username not in (select following from following where username=?) "+
 						"group by username order by null) as recommend "+
 						"on member.username=recommend.username "+
 						"order by rank asc, type desc limit ?, ?";
@@ -36,8 +36,8 @@ router.post('/RecommedFollow', (req, res) => {
 
 router.post('/following', (req, res) => {
   let username=req.user.username;
-  let sql = "insert into follower(username, follower) values(?, ?)";
-  let params = [username, req.body.follower];
+  let sql = "insert into following(username, following) values(?, ?)";
+  let params = [username, req.body.username];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -47,7 +47,7 @@ router.post('/following', (req, res) => {
         return res.status(500).json({message: 'fail'});
       }
       else{
-        return res.json({username: req.body.follower});
+        return res.json({username: req.body.username});
       }
     }
   });
@@ -55,8 +55,8 @@ router.post('/following', (req, res) => {
 
 router.delete('/unfollow', (req, res) => {
   let username=req.user.username;
-  let sql = "delete from follower where username=? and follower=?";
-  let params = [username, req.body.follower];
+  let sql = "delete from following where username=? and following=?";
+  let params = [username, req.body.username];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -66,7 +66,7 @@ router.delete('/unfollow', (req, res) => {
         return res.status(500).json({message: 'fail'});
       }
       else{
-        return res.json({username: req.body.follower});
+        return res.json({username: req.body.username});
       }
     }
   });
