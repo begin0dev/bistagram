@@ -315,6 +315,10 @@ border: 0;
 cursor: pointer;
 padding: 0;
 }
+.search_box{
+display: block;
+position: relative;
+}
 @media (min-width: 736px){
   .search_wrap{
     -webkit-box-sizing: content-box;

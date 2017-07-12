@@ -73,7 +73,7 @@ export const profileUpdate = (user) => request({
 });
 
 export const getHistory = () => request({
-    url: '/api/auth/getHistory'
+    url: '/api/history/getHistory'
 });
 
 

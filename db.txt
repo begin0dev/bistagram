@@ -126,14 +126,6 @@ delimiter ;
 
 
 
-create table follower
-(
-username varchar(25) not null,
-follower varchar(25) not null,
-primary key(username, follower),
-foreign key(username) references member(username)
-);
-
 create table following
 (
 username varchar(25) not null,
@@ -142,29 +134,34 @@ primary key(username, following),
 foreign key(username) references member(username)
 );
 
+create table follower
+(
+username varchar(25) not null,
+follower varchar(25) not null,
+primary key(username, follower),
+foreign key(username) references member(username)
+);
+
 
 팔로우 트리거
 delimiter //
 
-create trigger addfollow after insert on follower
+create trigger addfollow after insert on following
 for each row
 begin
-insert into following(username, following) values(new.follower, new.username);
-insert into history(username, who, type) values(new.follower, new.username, 'follow');
+insert into follower(username, follower) values(new.following, new.username);
+insert into history(username, who, type) values(new.following, new.username, 'follow');
 end//
 
-create trigger removefollow after delete on follower
+create trigger removefollow after delete on following
 for each row
 begin
-delete from following where username=old.follower and following=old.username;
-delete from history where username=old.follower and who=old.username;
+delete from follower where username=old.following and follower=old.username;
+delete from history where username=old.following and who=old.username;
 end//
 
 delimiter ;
 
-insert into follower(memid, followid) values('zzz0711@naver.com', '01055551234');
-
-delete from follower where memid='prosonic1@naver.com' and followid='01021020330';
 
 create table history
 (

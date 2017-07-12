@@ -54,7 +54,7 @@ class SearchHash extends Component {
     addHash({keyword:this.props.match.params.keyword, atcnums:atcnums})
   }
 
-  handleSearchModal = async(index) =>{
+  handleSearchModal = (index) =>{
     const { setModalInit, search, getModalPost, setModalPostIndex } = this.props;
     let doc = document.documentElement;
     let atcnum = -1;
@@ -66,14 +66,16 @@ class SearchHash extends Component {
         atcnum=search.posts.recent[index-9].atcnum;
       }
       setModalPostIndex(index);
-      await getModalPost({atcnum: atcnum}).then(()=>{
+      getModalPost({atcnum: atcnum}).then(()=>{
         document.body.style.position= 'fixed';
         document.body.style.top= -position+'px';
         document.body.style.width= '100%';
       })
     }
     else{
-      document.body.style='';
+      document.body.style.position= '';
+      document.body.style.top= 0;
+      document.body.style.width= '';
       window.scrollTo(0, position);
       setModalInit();
     }

@@ -63,7 +63,7 @@ class SearchUser extends Component {
     addUserPost({username:search.posts.userinfo.username, atcnum: search.posts.userAtcs[search.posts.userAtcs.length-1].atcnum})
   }
 
-  handleSearchModal = async(index) =>{
+  handleSearchModal = (index) =>{
     const { setModalInit, search, getModalPost, setModalPostIndex } = this.props;
     let doc = document.documentElement;
     let atcnum=-1;
@@ -71,27 +71,29 @@ class SearchUser extends Component {
       position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
       atcnum=search.posts.userAtcs[index].atcnum;
       setModalPostIndex(index);
-      await getModalPost({atcnum: atcnum}).then(()=>{
+      getModalPost({atcnum: atcnum}).then(()=>{
         document.body.style.position= 'fixed';
         document.body.style.top= -position+'px';
         document.body.style.width= '100%';
       })
     }
     else{
-      document.body.style='';
+      document.body.style.position= '';
+      document.body.style.top= 0;
+      document.body.style.width= '';
       window.scrollTo(0, position);
       setModalInit();
     }
   }
 
-  handleBfAfModal = async(plusvalue) =>{
+  handleBfAfModal = (plusvalue) =>{
     const { search, getModalPost, setModalPostIndex } = this.props;
 
     let nextindex = search.posts.atcindex+plusvalue;
     let atcnum=search.posts.userAtcs[nextindex].atcnum;
 
     setModalPostIndex(nextindex);
-    await getModalPost({atcnum: atcnum});
+    getModalPost({atcnum: atcnum});
   }
 
   handleFollowClick = (username) => {

@@ -15,6 +15,8 @@ vertical-align: baseline;
 }
 ol, ul {list-style: none;}
 ::-ms-clear {display: none;}
+select::-ms-expand {display: none;}
+textarea{overflow: auto;}
 body{margin: 0;background-color: #fafafa;}
 body{overflow:scroll;}
 body, button, input, textarea{

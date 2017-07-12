@@ -87,7 +87,9 @@ class Post extends Component{
 			document.body.style.width= '100%';
 		}
 		else{
-			document.body.style='';
+			document.body.style.position= '';
+			document.body.style.top= 0;
+			document.body.style.width= '';
 			window.scrollTo(0, position);
 		}
 		setModal({index: index})
