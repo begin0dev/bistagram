@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import FollowUl from './FollowUl'
+import Loading from '../Loading'
+
 class PollowModal extends Component {
     handleClickOutside = (e) =>{
       const { handleFollowModal } = this.props;
@@ -12,7 +15,7 @@ class PollowModal extends Component {
           position: 'relative',
           zIndex: 3
         }
-        const {auth, follow} = this.props;
+        const {auth, follow, loading, handleFollowClick} = this.props;
         return(
           <div style={style}>
             <div className="follow_modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -22,7 +25,15 @@ class PollowModal extends Component {
                     팔로워
                   </div>
                   <div className="follow_list_div">
-
+                    {loading ?
+                      <Loading />
+                      :
+                      <FollowUl
+                        auth={auth}
+                        follow={follow}
+                        handleFollowClick={handleFollowClick}
+                      />
+                    }
                   </div>
                 </div>
               </div>

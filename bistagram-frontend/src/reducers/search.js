@@ -581,7 +581,6 @@ function search(state=initialState, action) {
         ...state,
         modalState: {
           ...state.modalState,
-          followModal: true,
           followLoading: true
         },
         requests: {
@@ -619,6 +618,51 @@ function search(state=initialState, action) {
         requests: {
           ...state.requests,
           getUserFollower: { ...rejected, error: payload }
+        }
+      };
+
+    case SEARCH.GET_USER_FOLLOWING + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          followLoading: true
+        },
+        requests: {
+            ...state.requests,
+            getUserFollowing: { ...pending }
+        }
+      }
+    case SEARCH.GET_USER_FOLLOWING + '_FULFILLED':
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          userinfo: {
+            ...state.posts.userinfo,
+            following: payload.data
+          }
+        },
+        modalState: {
+          ...state.modalState,
+          followLoading: false,
+          followingStart: payload.data.length
+        },
+        requests: {
+          ...state.requests,
+          getUserFollowing: { ...fulfilled }
+        }
+      }
+    case SEARCH.GET_USER_FOLLOWING + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          followLoading: false,
+        },
+        requests: {
+          ...state.requests,
+          getUserFollowing: { ...rejected, error: payload }
         }
       };
 

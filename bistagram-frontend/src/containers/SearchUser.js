@@ -43,14 +43,16 @@ class SearchUser extends Component {
   }
 
   handleUserInfo = async() =>{
-    const {search, searchUser, setLoading, setLoadingInitial} = this.props;
+    const {search, searchUser, setLoading, setModalInit, setLoadingInitial} = this.props;
     if(this.state.keyword !== this.props.match.params.keyword){
       if(search.modalState.modal){
         this.handleSearchModal(-1);
       }
       setLoading({name:"search", value:true});
       this.setState({
-        keyword: this.props.match.params.keyword
+        keyword: this.props.match.params.keyword,
+        follower: false,
+        following: false
       });
       await searchUser({nickname: this.props.match.params.keyword}).then(()=>{
         if(!this.props.search.posts.userinfo.username){
@@ -115,10 +117,8 @@ class SearchUser extends Component {
 
   handleBfAfModal = (plusvalue) =>{
     const { search, getModalPost, setModalPostIndex } = this.props;
-
     let nextindex = search.posts.atcindex+plusvalue;
     let atcnum=search.posts.userAtcs[nextindex].atcnum;
-
     setModalPostIndex(nextindex);
     getModalPost({atcnum: atcnum});
   }
@@ -140,6 +140,8 @@ class SearchUser extends Component {
   }
 
   handleFollowModal = (navi) =>{
+    const {search, setModalInit} = this.props;
+    let userinfo = search.posts.userinfo;
     let doc = document.documentElement;
     if(!this.state.follower && !this.state.following){
       position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
@@ -150,11 +152,16 @@ class SearchUser extends Component {
         this.setState({
           follower: true,
         });
-        this.handleGetFollower();
+        if(userinfo.follower.length===0){
+          this.handleGetFollower();
+        }
       }else{
         this.setState({
           following: true,
         });
+        if(userinfo.following.length===0){
+          this.handleGetFollowing();
+        }
       }
     }
     else{
@@ -174,6 +181,14 @@ class SearchUser extends Component {
     let userinfo = search.posts.userinfo;
     if(userinfo.followercount>userinfo.follower.length){
       getUserFollower({username: userinfo.username, start: search.modalState.followerStart});
+    }
+  }
+
+  handleGetFollowing = () =>{
+    const {search, getUserFollowing} = this.props;
+    let userinfo = search.posts.userinfo;
+    if(userinfo.followingcount>userinfo.following.length){
+      getUserFollowing({username: userinfo.username, start: search.modalState.followingStart});
     }
   }
 
@@ -224,8 +239,10 @@ class SearchUser extends Component {
           {follower || following ?
             <PollowModal
               auth={auth}
-              follow={search.posts.userinfo.follower}
+              follow={this.state.follower?search.posts.userinfo.follower:search.posts.userinfo.following}
+              loading={search.modalState.followLoading}
               handleFollowModal={this.handleFollowModal}
+              handleFollowClick={handleFollowClick}
             />
             :
             null
@@ -237,6 +254,7 @@ class SearchUser extends Component {
               handleLogout={this.handleLogout}
             />
           }
+
         </main>
     );
 	}
@@ -260,6 +278,7 @@ const mapDispatchToProps = (dispatch) => ({
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
   getUserFollower: (params) => dispatch(search.getUserFollower(params)),
+  getUserFollowing: (params) => dispatch(search.getUserFollowing(params)),
 
 	logout: () => dispatch(auth.logout()),
 
