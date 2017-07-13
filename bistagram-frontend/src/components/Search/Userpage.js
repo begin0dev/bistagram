@@ -70,7 +70,7 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
             </span>
           </li>
           <li className="user_mobile_li">
-            <a className="point" style={{'color': 'inherit'}} onClick={()=>handleFollowModal(0)}>
+            <a className={`${scuserinfo.followercount!==0?'point':''}`} style={{'color': 'inherit'}} onClick={()=>scuserinfo.followercount!==0 && handleFollowModal(0)}>
               <span>팔로워<br/>
                 <span className="fontcolor_black fontbold">
                   <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
@@ -79,7 +79,7 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
             </a>
           </li>
           <li className="user_mobile_li">
-            <a className="point" style={{'color': 'inherit'}} onClick={()=>handleFollowModal(1)}>
+            <a className={`${scuserinfo.followingcount!==0?'point':''}`} style={{'color': 'inherit'}} onClick={()=>scuserinfo.followingcount!==0 && handleFollowModal(1)}>
               <span>팔로우<br/>
                 <span className="fontcolor_black fontbold">
                   <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>

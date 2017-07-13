@@ -24,7 +24,7 @@ class Login extends Component {
     componentDidMount() {
       const {setLoading} = this.props;
       setLoading({name:"login", value:true});
-      setTimeout(()=>{ setLoading({name:"login", value:false}) }, 400);
+      setTimeout(()=>{ setLoading({name:"login", value:false}) }, 500);
     }
     componentWillMount(){
       this.timerID = setInterval(

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from 'react-dnd';
 
 import noimg from '../../img/noimg.jpg';
 
@@ -10,7 +10,6 @@ const removeTag = (reply) => {
 	return reply.replace(/(<([^>]+)>)/gi, "");
 }
 
-@DragDropContext(HTML5Backend)
 class Postwrite extends Component {
     handleChangeContent = (e) =>{
       const {post, changeFormData} = this.props;
@@ -140,4 +139,4 @@ class Postwrite extends Component {
     }
 }
 
-export default Postwrite;
+export default DragDropContext(HTML5Backend) (Postwrite);

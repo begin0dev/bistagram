@@ -43,7 +43,7 @@ class SearchUser extends Component {
   }
 
   handleUserInfo = async() =>{
-    const {search, searchUser, setLoading, setModalInit, setLoadingInitial} = this.props;
+    const {search, searchUser, setLoading, setLoadingInitial} = this.props;
     if(this.state.keyword !== this.props.match.params.keyword){
       if(search.modalState.modal){
         this.handleSearchModal(-1);
@@ -140,7 +140,7 @@ class SearchUser extends Component {
   }
 
   handleFollowModal = (navi) =>{
-    const {search, setModalInit} = this.props;
+    const {search} = this.props;
     let userinfo = search.posts.userinfo;
     let doc = document.documentElement;
     if(!this.state.follower && !this.state.following){
