@@ -9,7 +9,7 @@ import Followbtns from './Followbtns';
 
 import noimg from '../../img/noimg.jpg';
 
-const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollowClick, handleLogoutModal}) => {
+const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollowClick, handleLogoutModal, handleFollowModal}) => {
 
     let logusername=auth.userinfo.user.username;
     let scuserinfo=search.posts.userinfo;
@@ -70,18 +70,22 @@ const Userpage = ({search, ui, auth, addUserPost, handleSearchModal, handleFollo
             </span>
           </li>
           <li className="user_mobile_li">
-            <span>팔로워<br/>
-              <span className="fontcolor_black fontbold">
-                <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
+            <a className="point" style={{'color': 'inherit'}} onClick={()=>handleFollowModal(0)}>
+              <span>팔로워<br/>
+                <span className="fontcolor_black fontbold">
+                  <NumberFormat value={scuserinfo.followercount} displayType={'text'} thousandSeparator={true}/>
+                </span>
               </span>
-            </span>
+            </a>
           </li>
           <li className="user_mobile_li">
-            <span>팔로우<br/>
-              <span className="fontcolor_black fontbold">
-                <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>
+            <a className="point" style={{'color': 'inherit'}} onClick={()=>handleFollowModal(1)}>
+              <span>팔로우<br/>
+                <span className="fontcolor_black fontbold">
+                  <NumberFormat value={scuserinfo.followingcount} displayType={'text'} thousandSeparator={true}/>
+                </span>
               </span>
-            </span>
+            </a>
           </li>
         </ul>
 

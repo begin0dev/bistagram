@@ -4,7 +4,6 @@ import { withRouter } from 'react-router';
 
 import * as search from '../actions/search';
 import * as ui from '../actions/ui';
-import * as auth from '../actions/auth';
 
 import Loading from '../components/Loading';
 

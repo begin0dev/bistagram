@@ -22,14 +22,14 @@ class Innermodal extends Component {
                     ref={(node) => { this.innermodal_list = node }}>
 
                     <li className="modal_LiStyle">
-                       <button className="modal_listBtn" onClick={()=>handleSearchModal(-1)}>
-                         게시물 닫기
+                       <button className="modal_listBtn">
+                         퍼가기
                        </button>
                     </li>
 
                     <li className="modal_LiStyle">
-                       <button className="modal_listBtn">
-                         삭제
+                       <button className="modal_listBtn" onClick={()=>handleSearchModal(-1)}>
+                         게시물 닫기
                        </button>
                     </li>
 

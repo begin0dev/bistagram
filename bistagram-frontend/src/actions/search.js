@@ -74,6 +74,8 @@ export const modalPostDeleteReply = (params) => ({
   }
 })
 
+export const setInnerModal = createAction(SEARCH.SET_INNER_MODAL);
+
 export const getUserFollower = (params) => ({
   type: SEARCH.GET_USER_FOLLOWER,
   payload: {
@@ -87,5 +89,3 @@ export const getUserFollowing = (params) => ({
     promise: service.getUserFollowing(params)
   }
 })
-
-export const setInnerModal = createAction(SEARCH.SET_INNER_MODAL);

@@ -42,20 +42,20 @@ export const getModalPost = ({atcnum}) => request({
     }
 });
 
-export const searchUserFollower = ({searchUser, start}) => request({
-    url: '/api/follow/searchUserFollower',
+export const getUserFollower = ({username, start}) => request({
+    url: '/api/follow/getUserFollower',
     method: 'post',
     data: {
-      searchUser,
+      username,
       start
     }
 });
 
-export const searchUserFollowing = ({searchUser, start}) => request({
-    url: '/api/follow/searchUserFollowing',
+export const getUserFollowing = ({username, start}) => request({
+    url: '/api/follow/getUserFollowing',
     method: 'post',
     data: {
-      searchUser,
+      username,
       start
     }
 });

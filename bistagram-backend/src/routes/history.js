@@ -15,12 +15,11 @@ const DBpool  = mysql.createPool({
   database : 'bistagram'
 });
 
-
 router.get('/getHistory', (req, res) => {
   DBpool.getConnection((err, con) => {
       if (err) {
         callback(error => {
-            throw new Error('에러 발생')
+            return res.status(500).json({message: error});
         });
       }
       let username=req.user.username;
@@ -29,7 +28,7 @@ router.get('/getHistory', (req, res) => {
                 "(select * from history where username=? order by hisnum desc limit ?)x "+
                 "join member on x.who=member.username)y "+
                 "left join media on y.atcnum=media.atcnum group by y.hisnum order by null";
-      let params = [username, 25];
+      let params = [username, 35];
       con.query(sql, params,(err, history) =>{
         if(err) {
           return res.status(500).json({message: err.message});

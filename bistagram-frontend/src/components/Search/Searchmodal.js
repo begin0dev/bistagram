@@ -25,8 +25,8 @@ class Searchmodal extends Component {
     handleClickOutside = (e) =>{
       const {search, handleSearchModal} = this.props;
       const {modaldiv, bfmodalbtn, afmodalbtn} = this;
-      if (!search.modalState.innermodal && modaldiv && !modaldiv.contains(e.target) && bfmodalbtn!==e.target && afmodalbtn!==e.target) {
-          handleSearchModal(-1);
+      if (!search.modalState.innerModal && modaldiv && !modaldiv.contains(e.target) && bfmodalbtn!==e.target && afmodalbtn!==e.target) {
+			    handleSearchModal(-1);
       }
     }
     handleChangeReply = (e) =>{

@@ -72,11 +72,11 @@ router.delete('/unfollow', (req, res) => {
   });
 });
 
-router.post('/searchUserFollower', (req, res) => {
+router.post('/getUserFollower', (req, res) => {
   let sql = "select m.username, m.name, m.nickname, m.profileimgname, m.state "+
             "from follower fw join member m on fw.follower=m.username "+
             "where fw.username=? limit ?, ?";
-  let params = [req.body.searchUser, req.body.start, 25];
+  let params = [req.body.username, req.body.start, 25];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
@@ -88,11 +88,11 @@ router.post('/searchUserFollower', (req, res) => {
 });
 
 
-router.post('/searchUserFollowing', (req, res) => {
+router.post('/getUserFollowing', (req, res) => {
   let sql = "select m.username, m.name, m.nickname, m.profileimgname, m.state "+
             "from following fw join member m on fw.following=m.username "+
             "where fw.username=? limit ?, ?";
-  let params = [req.body.searchUser, req.body.start, 25];
+  let params = [req.body.username, req.body.start, 25];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});

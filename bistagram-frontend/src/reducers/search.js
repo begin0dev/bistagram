@@ -22,7 +22,10 @@ const modalState = {
   modal: false,
   likeLoading: false,
   replyLoading: false,
-  innermodal: false
+  innerModal: false,
+  followLoading: false,
+  followerStart: 0,
+  followingStart: 0
 }
 
 const initialState = {
@@ -59,6 +62,9 @@ const initialState = {
         ...request
     },
     modalPostDeleteReply: {
+        ...request
+    },
+    getUserFollower: {
         ...request
     }
   }
@@ -186,7 +192,11 @@ function search(state=initialState, action) {
         posts: {
           ...state.posts,
           atccount: payload.data.atccount,
-          userinfo: payload.data.userinfo,
+          userinfo: {
+            ...payload.data.userinfo,
+            follower: [],
+            following: []
+          },
           userAtcs: payload.data.posts,
           isMore: payload.data.posts.length===12 && payload.data.atccount>payload.data.posts.length?true:false
         },
@@ -562,9 +572,56 @@ function search(state=initialState, action) {
         ...state,
         modalState: {
           ...state.modalState,
-          innermodal: !state.modalState.innermodal
+          innerModal: !state.modalState.innerModal
         }
       };
+
+    case SEARCH.GET_USER_FOLLOWER + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          followModal: true,
+          followLoading: true
+        },
+        requests: {
+            ...state.requests,
+            getUserFollower: { ...pending }
+        }
+      }
+    case SEARCH.GET_USER_FOLLOWER + '_FULFILLED':
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          userinfo: {
+            ...state.posts.userinfo,
+            follower: payload.data
+          }
+        },
+        modalState: {
+          ...state.modalState,
+          followLoading: false,
+          followerStart: payload.data.length
+        },
+        requests: {
+          ...state.requests,
+          getUserFollower: { ...fulfilled }
+        }
+      }
+    case SEARCH.GET_USER_FOLLOWER + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          followLoading: false,
+        },
+        requests: {
+          ...state.requests,
+          getUserFollower: { ...rejected, error: payload }
+        }
+      };
+
 
     default:
       return state;

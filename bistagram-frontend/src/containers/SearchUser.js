@@ -12,6 +12,7 @@ import Userpage from '../components/Search/Userpage';
 import Searchmodal from '../components/Search/Searchmodal';
 import Innermodal from '../components/Search/Innermodal';
 import LogoutModal from '../components/Search/LogoutModal';
+import PollowModal from '../components/Search/PollowModal';
 
 import '../css/search.css';
 
@@ -22,7 +23,9 @@ class SearchUser extends Component {
   constructor(props) {
       super(props);
       this.state={
-        keyword: ''
+        keyword: '',
+        follower: false,
+        following: false
       }
   }
 
@@ -135,9 +138,49 @@ class SearchUser extends Component {
   handleInnerModal = () =>{
     this.props.setInnerModal();
   }
+
+  handleFollowModal = (navi) =>{
+    let doc = document.documentElement;
+    if(!this.state.follower && !this.state.following){
+      position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+      document.body.style.position= 'fixed';
+      document.body.style.top= -position+'px';
+      document.body.style.width= '100%';
+      if(navi===0){
+        this.setState({
+          follower: true,
+        });
+        this.handleGetFollower();
+      }else{
+        this.setState({
+          following: true,
+        });
+      }
+    }
+    else{
+      document.body.style.position= '';
+      document.body.style.top= 0;
+      document.body.style.width= '';
+      window.scrollTo(0, position);
+      this.setState({
+        follower: false,
+        following: false,
+      })
+    }
+  }
+
+  handleGetFollower = () =>{
+    const {search, getUserFollower} = this.props;
+    let userinfo = search.posts.userinfo;
+    if(userinfo.followercount>userinfo.follower.length){
+      getUserFollower({username: userinfo.username, start: search.modalState.followerStart});
+    }
+  }
+
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply,
           handleFollowClick,modalPostDeleteReply} = this.props;
+    const {follower, following} = this.state;
 		return(
         <main className="search_body">
 
@@ -150,6 +193,7 @@ class SearchUser extends Component {
             handleFollowClick={handleFollowClick}
             handleSearchModal={this.handleSearchModal}
             handleLogoutModal={this.handleLogoutModal}
+            handleFollowModal={this.handleFollowModal}
           />
 
           {ui.loading.search && <Loading />}
@@ -169,12 +213,24 @@ class SearchUser extends Component {
               getModalPost={getModalPost}
             />
           }
-          {search.modalState.innermodal&&
+
+          {search.modalState.innerModal&&
             <Innermodal
               handleInnerModal={this.handleInnerModal}
               handleSearchModal={this.handleSearchModal}
             />
           }
+
+          {follower || following ?
+            <PollowModal
+              auth={auth}
+              follow={search.posts.userinfo.follower}
+              handleFollowModal={this.handleFollowModal}
+            />
+            :
+            null
+          }
+
           {ui.logoutModal &&
             <LogoutModal
               handleLogoutModal={this.handleLogoutModal}
@@ -203,6 +259,7 @@ const mapDispatchToProps = (dispatch) => ({
   modalPostDeleteReply: (params) => dispatch(search.modalPostDeleteReply(params)),
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
+  getUserFollower: (params) => dispatch(search.getUserFollower(params)),
 
 	logout: () => dispatch(auth.logout()),
 
