@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {storage} from '../helpers';
 
 import Historymodal from './Historymodal';
 
 const TopInfoPart = ({ui, auth, handleFollowClick, handleHeaderModal}) => {
+  let session = storage.get('session');
   return (
 		<div className="top_menuwrapper">
-      {!auth.userinfo.user.username ?
+      {!session.logged ?
         <div className="top_menu">
           <Link to="/" className="login_Link">로그인</Link>
         </div>
