@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {storage} from '../../helpers';
 
 const regex ={
   regemail: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
@@ -105,7 +106,10 @@ class Register extends Component {
       setSubmitStatus({name: 'signup', value: false})
     }
     else{
-      await signUp(form.register).then(()=>this.props.form.submitStatus.logged?document.location.reload():setSubmitStatus({name: 'signup', value: false}))
+      await signUp(form.register).then(()=>{
+        storage.set('session', {logged: this.props.form.submitStatus.logged});
+        this.props.form.submitStatus.logged?document.location.reload():setSubmitStatus({name: 'signup', value: false})
+      })
     }
   }
 

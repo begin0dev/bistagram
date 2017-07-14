@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import {storage} from '../helpers';
+
 import Header from '../components/Header/Header';
 import Login from './Login';
 import Posts from './Posts';
@@ -23,17 +25,47 @@ import '../css/modal.css';
 
 class App extends React.Component{
 
+	constructor(props) {
+			super(props);
+			let session = storage.get('session');
+			if (!session) {
+					storage.set('session', {
+							logged: false
+					});
+			}
+	}
+
 	async componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
 		const { checkSession } = this.props;
+		let session = storage.get('session');
 
 		try{
 			await checkSession().then(()=>{
-				if(!this.props.auth.userinfo.logged && window.location.pathname === "/explore"){
-					document.location = "/"
+				if(!this.props.auth.userinfo.logged){
+					if (session.logged) {
+							storage.set('session', {
+									logged: false
+							});
+					}
+					if(window.location.pathname === "/explore"){
+						document.location = "/"
+					}
+				}else{
+					if (!session.logged) {
+							storage.set('session', {
+									logged: true
+							});
+							document.location.reload();
+					}
 				}
 			});
 		}catch(e){
+			if (session.logged) {
+					storage.set('session', {
+							logged: false
+					});
+			}
 			document.location = "/"
 		}
   }
@@ -105,10 +137,11 @@ class App extends React.Component{
 
 	render(){
 		const {auth, ui, form} = this.props;
+		let session = storage.get('session');
 		return(
 			<Router>
 				<section className="react-body">
-					{(auth.userinfo.logged && window.location.pathname === "/") ||
+					{(session.logged && window.location.pathname === "/") ||
 						(window.location.pathname !== "/")?
 						<Header
 							ui={ui}
@@ -123,7 +156,7 @@ class App extends React.Component{
 						null
 					}
 					<Switch>
-						<Route exact path="/"	component={auth.userinfo.logged?Posts:Login}/>
+						<Route exact path="/"	component={session.logged?Posts:Login}/>
 						<Route path="/auth/:result" component={Fblogged}/>
 						<Route path="/explore"
 							render={()=>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
+import {storage} from '../helpers';
+
 import * as search from '../actions/search';
 import * as ui from '../actions/ui';
 import * as auth from '../actions/auth';
@@ -69,7 +71,10 @@ class SearchUser extends Component {
 
   handleLogout = async () =>{
 		const {logout} = this.props;
-		await logout().then(() => document.location = "/");
+		await logout().then(() => {
+      storage.set('session', { logged: false });
+      document.location = "/"
+    });
 	}
 
   handleScroll = () => {

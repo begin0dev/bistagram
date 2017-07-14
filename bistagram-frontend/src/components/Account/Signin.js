@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {storage} from '../../helpers';
 
 class Signin extends Component {
 
@@ -9,7 +10,10 @@ class Signin extends Component {
   handleSubmit = async () =>{
     const {form, signIn, setSubmitStatus} = this.props;
     setSubmitStatus({name: 'signin', value: true});
-    await signIn(form.login).then(()=>this.props.form.submitStatus.logged?document.location.reload():setSubmitStatus({name: 'signin', value: false}))
+    await signIn(form.login).then(()=>{
+      storage.set('session', {logged: this.props.form.submitStatus.logged});
+      this.props.form.submitStatus.logged?document.location.reload():setSubmitStatus({name: 'signin', value: false})
+    })
   }
 
   handleKeyPress = (e) => {

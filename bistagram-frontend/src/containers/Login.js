@@ -11,7 +11,11 @@ import Loading from '../components/Loading';
 import Signin from '../components/Account/Signin';
 import Signup from '../components/Account/Signup';
 
-let imgPath=[require('../img/img_1.jpg'),require('../img/img_2.jpg'),require('../img/img_3.jpg'),require('../img/img_4.jpg'),require('../img/img_5.jpg')];
+let imgPath=[require('../img/img_1.jpg'),
+            require('../img/img_2.jpg'),
+            require('../img/img_3.jpg'),
+            require('../img/img_4.jpg'),
+            require('../img/img_5.jpg')];
 
 class Login extends Component {
     constructor(props) {
@@ -24,7 +28,7 @@ class Login extends Component {
     componentDidMount() {
       const {setLoading} = this.props;
       setLoading({name:"login", value:true});
-      setTimeout(()=>{ setLoading({name:"login", value:false}) }, 500);
+      setTimeout(()=>{ setLoading({name:"login", value:false}) }, 300);
     }
     componentWillMount(){
       this.timerID = setInterval(
