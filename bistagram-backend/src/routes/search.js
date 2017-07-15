@@ -167,7 +167,6 @@ router.post('/searchUser', async (req, res) => {
           return res.status(500).json({message: err.message})
         }
         posts=getposts;
-        console.log({...userdata, posts})
         return res.json({...userdata, posts})
       })
     }
