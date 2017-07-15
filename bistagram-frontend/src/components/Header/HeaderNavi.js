@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {storage} from '../helpers';
+import {storage} from '../../helpers';
 
 import Historymodal from './Historymodal';
 

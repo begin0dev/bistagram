@@ -23,14 +23,14 @@ app.use(bodyParser.json()); // parses json
 // SERVE STATIC FILES
 app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 
-const options ={
+const options = {
   host     : 'localhost',
   user     : 'root',
   password : '',
   port     : 3306,
   database : 'bistagram',
   expiration: 3 * 24 * 60 * 60 * 1000
-}
+};
 
 app.use(session({
     secret: process.env.SECRET_KEY,
