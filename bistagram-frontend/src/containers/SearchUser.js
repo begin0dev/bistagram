@@ -25,36 +25,29 @@ class SearchUser extends Component {
   constructor(props) {
       super(props);
       this.state={
-        keyword: '',
-        follower: false,
-        following: false
+        keyword: ''
       }
   }
-
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     this.handleUserInfo();
   }
-
-  componentWillUnmount() {
-		window.removeEventListener("scroll", this.handleScroll);
-	}
-
   componentDidUpdate() {
     this.handleUserInfo();
   }
-
+  componentWillUnmount() {
+		window.removeEventListener("scroll", this.handleScroll);
+	}
   handleUserInfo = async() =>{
-    const {search, searchUser, setLoading, setLoadingInitial} = this.props;
+    const {search, searchUser, setLoading, setLoadingInitial, setFollowModalInitial} = this.props;
     if(this.state.keyword !== this.props.match.params.keyword){
       if(search.modalState.modal){
         this.handleSearchModal(-1);
       }
       setLoading({name:"search", value:true});
+      setFollowModalInitial();
       this.setState({
-        keyword: this.props.match.params.keyword,
-        follower: false,
-        following: false
+        keyword: this.props.match.params.keyword
       });
       await searchUser({nickname: this.props.match.params.keyword}).then(()=>{
         if(!this.props.search.posts.userinfo.username){
@@ -66,7 +59,7 @@ class SearchUser extends Component {
   }
 
   handleLogoutModal = (value) =>{
-    this.props.setMypageModal({name:'logoutModal', value: value})
+    this.props.setUiModal({name:'logoutModal', value: value});
   }
 
   handleLogout = async () =>{
@@ -76,7 +69,6 @@ class SearchUser extends Component {
       document.location = "/"
     });
 	}
-
   handleScroll = () => {
     const { search } = this.props;
     const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
@@ -91,12 +83,10 @@ class SearchUser extends Component {
       }
     }
   }
-
   addUserPost = () =>{
     const { search, addUserPost } = this.props;
     addUserPost({username:search.posts.userinfo.username, atcnum: search.posts.userAtcs[search.posts.userAtcs.length-1].atcnum})
   }
-
   handleSearchModal = (index) =>{
     const { setModalInit, search, getModalPost, setModalPostIndex } = this.props;
     let doc = document.documentElement;
@@ -145,25 +135,21 @@ class SearchUser extends Component {
   }
 
   handleFollowModal = (navi) =>{
-    const {search} = this.props;
+    const {ui, search, setUiModal, setFollowModalInitial} = this.props;
     let userinfo = search.posts.userinfo;
     let doc = document.documentElement;
-    if(!this.state.follower && !this.state.following){
+    if(!ui.followerModal && !ui.followingModal){
       position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
       document.body.style.position= 'fixed';
       document.body.style.top= -position+'px';
       document.body.style.width= '100%';
       if(navi===0){
-        this.setState({
-          follower: true,
-        });
+        setUiModal({name:'followerModal', value: true})
         if(userinfo.follower.length===0){
           this.handleGetFollower();
         }
       }else{
-        this.setState({
-          following: true,
-        });
+        setUiModal({name:'followingModal', value: true})
         if(userinfo.following.length===0){
           this.handleGetFollowing();
         }
@@ -174,10 +160,7 @@ class SearchUser extends Component {
       document.body.style.top= 0;
       document.body.style.width= '';
       window.scrollTo(0, position);
-      this.setState({
-        follower: false,
-        following: false,
-      })
+      setFollowModalInitial();
     }
   }
 
@@ -188,7 +171,6 @@ class SearchUser extends Component {
       getUserFollower({username: userinfo.username, start: search.modalState.followerStart});
     }
   }
-
   handleGetFollowing = () =>{
     const {search, getUserFollowing} = this.props;
     let userinfo = search.posts.userinfo;
@@ -200,7 +182,6 @@ class SearchUser extends Component {
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply,
           handleFollowClick,modalPostDeleteReply} = this.props;
-    const {follower, following} = this.state;
 		return(
         <main className="search_body">
 
@@ -241,12 +222,16 @@ class SearchUser extends Component {
             />
           }
 
-          {follower || following ?
+          {ui.followerModal || ui.followingModal ?
             <PollowModal
               auth={auth}
-              follow={this.state.follower?search.posts.userinfo.follower:search.posts.userinfo.following}
+              ui={ui}
+              follow={ui.followerModal?search.posts.userinfo.follower:search.posts.userinfo.following}
               loading={search.modalState.followLoading}
               handleFollowModal={this.handleFollowModal}
+              handleFollowScroll={this.handleFollowScroll}
+              handleGetFollower={this.handleGetFollower}
+              handleGetFollowing={this.handleGetFollowing}
               handleFollowClick={handleFollowClick}
             />
             :
@@ -287,9 +272,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 	logout: () => dispatch(auth.logout()),
 
+  setFollowModalInitial: () => dispatch(ui.setFollowModalInitial()),
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params)),
-  setMypageModal: (params) => dispatch(ui.setMypageModal(params))
+  setUiModal: (params) => dispatch(ui.setUiModal(params))
 });
 
 

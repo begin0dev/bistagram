@@ -89,7 +89,9 @@ function search(state=initialState, action) {
         modalState: {
           ...modalState
         },
-        modalpost: {}
+        modalpost: {
+
+        }
       };
 
     case SEARCH.SET_MODAL_POST_INDEX:
@@ -189,6 +191,9 @@ function search(state=initialState, action) {
     case SEARCH.SEARCH_USER + '_FULFILLED':
       return {
         ...state,
+        modalState: {
+          ...modalState
+        },
         posts: {
           ...state.posts,
           atccount: payload.data.atccount,
@@ -595,7 +600,10 @@ function search(state=initialState, action) {
           ...state.posts,
           userinfo: {
             ...state.posts.userinfo,
-            follower: payload.data
+            follower: [
+              ...state.posts.userinfo.follower,
+              ...payload.data
+            ]
           }
         },
         modalState: {
@@ -640,7 +648,10 @@ function search(state=initialState, action) {
           ...state.posts,
           userinfo: {
             ...state.posts.userinfo,
-            following: payload.data
+            following: [
+              ...state.posts.userinfo.following,
+              ...payload.data
+            ]
           }
         },
         modalState: {

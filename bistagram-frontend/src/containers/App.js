@@ -125,7 +125,7 @@ class App extends React.Component{
 			result=true;
 		}else if(scrollTop > 90){
 			result=false;
-		}else if(post.status.modal || search.modalState.modal){
+		}else if(post.status.modal || search.modalState.modal || ui.followerModal || ui.followingModal){
 			result=false;
 		}else{
 			result=true;

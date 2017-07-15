@@ -4,6 +4,25 @@ import FollowUl from './FollowUl'
 import Loading from '../Loading'
 
 class PollowModal extends Component {
+    componentDidMount() {
+      this.followScrollDiv.addEventListener("scroll", this.handleFollowScroll);
+    }
+    componentWillUnmount() {
+      this.followScrollDiv.removeEventListener("scroll", this.handleFollowScroll);
+    }
+    handleFollowScroll = () => {
+      const {ui, loading, handleGetFollower, handleGetFollowing} = this.props;
+      const scrollHeight = this.followScrollDiv.scrollHeight;
+      const height = this.followScrollDiv.clientHeight;
+      const maxScrollTop = scrollHeight - height;
+      if(this.followScrollDiv.scrollTop === maxScrollTop && !loading){
+        if(ui.followerModal){
+          handleGetFollower();
+        }else{
+          handleGetFollowing();
+        }
+      }
+    }
     handleClickOutside = (e) =>{
       const { handleFollowModal } = this.props;
       if(this.follow_list && !this.follow_list.contains(e.target)){
@@ -24,15 +43,16 @@ class PollowModal extends Component {
                   <div className="follow_list_header">
                     팔로워
                   </div>
-                  <div className="follow_list_div">
-                    {loading ?
-                      <Loading />
-                      :
+                  <div className="follow_list_div" ref={(div) => { this.followScrollDiv = div }}>
+                    {!loading &&
                       <FollowUl
                         auth={auth}
                         follow={follow}
                         handleFollowClick={handleFollowClick}
                       />
+                    }
+                    {loading &&
+                      <Loading />
                     }
                   </div>
                 </div>

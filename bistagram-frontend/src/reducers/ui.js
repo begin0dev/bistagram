@@ -13,6 +13,8 @@ const initialState = {
   headerModal: false,
   profileImgModal: false,
   logoutModal: false,
+  followerModal: false,
+  followingModal: false,
   loading: {
     ...loading
   }
@@ -51,16 +53,22 @@ function ui(state=initialState, action) {
         }
       }
 
-    case UI.SET_MYPAGE_MODAL:
+    case UI.SET_UI_MODAL:
       return{
         ...state,
         [payload.name]: payload.value
+      }
+
+    case UI.SET_FOLLOW_MODAL_INITIAL:
+      return{
+        ...state,
+        followerModal: false,
+        followingModal: false
       }
 
     default:
       return state;
   }
 }
-
 
 export default ui;

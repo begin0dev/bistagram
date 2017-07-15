@@ -93,6 +93,7 @@ router.post('/getUserFollowing', (req, res) => {
             "from following fw join member m on fw.following=m.username "+
             "where fw.username=? limit ?, ?";
   let params = [req.body.username, req.body.start, 25];
+  console.log(params)
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});
