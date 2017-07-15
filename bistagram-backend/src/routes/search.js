@@ -158,7 +158,7 @@ router.post('/searchUser', async (req, res) => {
                     "(select x.*, count(atclike.username) as likecount from "+
                     "(select article.atcnum, media.medianame, media.mediatype "+
                     "from article left join media on article.atcnum=media.atcnum "+
-                    "where username=? group by article.atcnum order by article.atcnum desc limit 12)x "+
+                    "where article.username=? and media.medianame is not null group by article.atcnum order by article.atcnum desc limit 12)x "+
                     "left join atclike on x.atcnum = atclike.atcnum group by x.atcnum order by null)y "+
                     "left join reply on y.atcnum = reply.atcnum group by y.atcnum order by null"
       let postparam = [userinfo[0].username];
@@ -167,6 +167,7 @@ router.post('/searchUser', async (req, res) => {
           return res.status(500).json({message: err.message})
         }
         posts=getposts;
+        console.log({...userdata, posts})
         return res.json({...userdata, posts})
       })
     }
