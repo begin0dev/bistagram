@@ -33,6 +33,9 @@ class Fblogged extends Component {
                     회원님의 Facebook 계정과 Bistagram이 연결에 실패하였습니다.
                   </p>
                 }
+                {this.state.page === 'success' &&
+                  <Redirect to="/"/>
+                }
                 {this.state.page !== 'success' && this.state.page !== 'failure' && this.state.page !== 'register' &&
                   <Redirect to="/NotFound"/>
                 }

@@ -8,7 +8,11 @@ class Signin extends Component {
   }
 
   handleSubmit = async () =>{
-    const {form, signIn, setSubmitStatus} = this.props;
+    const {form, signIn, setSubmitStatus, setErrorMessage} = this.props;
+    if(!form.login.pw){
+      setErrorMessage({name: "login", msg:"비밀번호를 입력해주세요."});
+      return;
+    }
     setSubmitStatus({name: 'signin', value: true});
     await signIn(form.login).then(()=>{
       storage.set('session', {logged: this.props.form.submitStatus.logged});
