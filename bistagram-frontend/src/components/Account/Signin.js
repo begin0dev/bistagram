@@ -9,7 +9,7 @@ class Signin extends Component {
 
   handleSubmit = async () =>{
     const {form, signIn, setSubmitStatus, setErrorMessage} = this.props;
-    if(!form.login.pw){
+    if(!form.login.password){
       setErrorMessage({name: "login", msg:"비밀번호를 입력해주세요."});
       return;
     }
