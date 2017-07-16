@@ -15,7 +15,6 @@ import PostView from '../components/Post/PostView';
 import Postmodal from '../components/Post/Postmodal';
 
 import '../css/posts.css';
-import '../css/postview.css';
 import '../css/postwrite.css';
 
 let position =	0;

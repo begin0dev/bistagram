@@ -14,6 +14,7 @@ import * as ui from '../actions/ui';
 
 import '../css/basic.css';
 import '../css/header.css';
+import '../css/postview.css';
 import '../css/followUl.css';
 import '../css/modal.css';
 
