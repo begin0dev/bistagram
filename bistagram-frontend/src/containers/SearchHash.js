@@ -107,6 +107,7 @@ class SearchHash extends Component {
     }
 	}
   handleInnerModal = () =>{
+    console.log("작동")
     this.props.setInnerModal();
   }
   render() {
@@ -138,7 +139,7 @@ class SearchHash extends Component {
               getModalPost={getModalPost}
             />
           }
-          {search.modalState.innermodal&&
+          {search.modalState.innerModal&&
             <Innermodal
               handleInnerModal={this.handleInnerModal}
               handleSearchModal={this.handleSearchModal}

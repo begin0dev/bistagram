@@ -92,15 +92,13 @@ class Modalmedia extends Component {
                     onClick={this.playVideo}
                     role="button">play</a>
                 :null}
-
-                {search.modalpost.media.length>1&&
-                <Modalpaging
-                  index={index}
-                  search={search}
-                />
-                }
               </div>
-
+              {search.modalpost.media.length>1&&
+              <Modalpaging
+                index={index}
+                search={search}
+              />
+              }
             </div>
           </div>
         );
