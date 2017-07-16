@@ -5,14 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import {storage} from '../helpers';
 
 import Header from '../components/Header/Header';
-import Login from './Login';
-import Posts from './Posts';
-import Mypage from './Mypage';
-import SearchHash from './SearchHash';
-import SearchUser from './SearchUser';
-import Fblogged from './Fblogged';
-import Explore from './Explore';
-import NotFound from './NotFound';
+
+import { Login, Posts, Mypage, SearchHash, SearchUser, Fblogged, Explore, NotFound  } from '../containers/index.async.js';
 
 import * as auth from '../actions/auth';
 import * as form from '../actions/form';
@@ -35,8 +29,7 @@ class App extends React.Component{
 			}
 	}
 
-	async componentDidMount() {
-		window.addEventListener("scroll", this.handleScroll);
+	async componentWillMount() {
 		const { checkSession } = this.props;
 		let session = storage.get('session');
 
@@ -69,6 +62,10 @@ class App extends React.Component{
 			document.location = "/"
 		}
   }
+
+	async componentDidMount() {
+		window.addEventListener("scroll", this.handleScroll);
+	}
 
 	componentWillUnmount() {
 		window.removeEventListener("scroll", this.handleScroll);

@@ -53,7 +53,7 @@ class SearchUser extends Component {
         if(!this.props.search.posts.userinfo.username){
           document.location = "/NotFound"
         }
-        setTimeout(()=>{ setLoadingInitial() }, 700);
+        setTimeout(()=>{ setLoadingInitial() }, 400);
       })
     }
   }

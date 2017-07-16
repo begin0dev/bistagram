@@ -29,7 +29,7 @@ class Post extends Component{
 		try{
 			await recommendFollow({start:0, count:3});
 			await searchPosts({atcnum: -1});
-			setTimeout(()=>{ setLoadingInitial() }, 400);
+			setTimeout(()=>{ setLoadingInitial() }, 300);
 		}
 		catch(e){
 			document.location.reload();
@@ -111,7 +111,7 @@ class Post extends Component{
 
 		return(
 				<main className="post_body" >
-				
+
 					{ui.loading.post&&<Loading />}
 
 					<section className="post_wrapper" style={{display:`${ui.loading.post?'none':''}`}}>
