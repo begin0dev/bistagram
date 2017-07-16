@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import { Link, Redirect } from 'react-router-dom';
 
 import '../css/fblogged.css';
@@ -21,18 +22,16 @@ class Fblogged extends Component {
                 <Link to="/" className="bistatitle fb_title_mg"></Link>
               </div>
               <div className="fb_txt_pos">
-                {this.state.page === 'register' &&
-                <p>
-                  회원님의 Facebook 계정과 Bistagram이 연결에 성공하였습니다.
-                </p>
+                {this.state.page === 'register' || this.state.page === 'success'  ?
+                  <p>
+                    회원님의 Facebook 계정과 Bistagram이 연결에 성공하였습니다.
+                  </p>
+                  :null
                 }
                 {this.state.page === 'failure' &&
-                <p>
-                  회원님의 Facebook 계정과 Bistagram이 연결에 실패하였습니다.
-                </p>
-                }
-                {this.state.page === 'success' &&
-                  <Redirect to="/"/>
+                  <p>
+                    회원님의 Facebook 계정과 Bistagram이 연결에 실패하였습니다.
+                  </p>
                 }
                 {this.state.page !== 'success' && this.state.page !== 'failure' && this.state.page !== 'register' &&
                   <Redirect to="/NotFound"/>
@@ -40,7 +39,7 @@ class Fblogged extends Component {
                 <div className="fb_logged_btn_pos">
                   <span className="fb_logged_btn_sp">
                     <button className="bluebtn btnstyle point" onClick={()=>this.handlePageChange()}>
-                    {this.state.page === 'register' ?
+                    {this.state.page === 'register' || this.state.page === 'success'  ?
                       '시작하기':
                       '가입하기'
                     }
@@ -54,4 +53,4 @@ class Fblogged extends Component {
     }
 }
 
-export default Fblogged;
+export default withRouter(Fblogged);

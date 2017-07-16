@@ -97,11 +97,13 @@ class Mypage extends Component {
                       프로필 편집
                     </Link>
                   </li>
+                  {auth.userinfo.user.username && auth.userinfo.user.username.substring(0, 3)!=='fb:'&&
             			<li>
                     <Link to="/mypage/pwchange" className={`mypage_menu_li ${match.params.page==="pwchange"?"mypage_menu_li_active":"mypage_menu_li_none"}`}>
                       비밀번호 변경
                     </Link>
                   </li>
+                  }
             		</ul>
 
                 <article className="mypage_content_wrap">

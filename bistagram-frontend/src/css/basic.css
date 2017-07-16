@@ -137,6 +137,14 @@ height: 100%;
 left: 0;
 top: 0;
 }
+.bistatitle{
+margin: 22px auto 8px;
+background-image: url("../img/imgs.png");
+background-repeat: no-repeat;
+background-position: 0 0;
+height: 51px;
+width: 175px;
+}
 .fontcolor_black{color: #262626 !important;}
 .fontcolor_gray{color: #999 !important;}
 .fontcolor_blue, .fontcolor_blue:active{color: #3897f0 !important;}

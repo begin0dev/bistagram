@@ -40,14 +40,6 @@ border-radius: 1px;
 margin: 0 0 10px;
 padding: 10px 0;
 }
-.bistatitle{
-margin: 22px auto 8px;
-background-image: url("../img/imgs.png");
-background-repeat: no-repeat;
-background-position: 0 0;
-height: 51px;
-width: 175px;
-}
 .titleblock{
 display: block;
 overflow: hidden;
