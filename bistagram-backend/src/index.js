@@ -24,6 +24,10 @@ app.use(bodyParser.json()); // parses json
 app.use('/', express.static(path.join(__dirname, '../../bistagram-frontend/build/')));
 app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../bistagram-frontend/build/'));
+});
+
 const options = {
   host     : 'localhost',
   user     : 'root',
