@@ -1,2 +1,2 @@
 # bistagram
-$ npm install global babel-cli nodemon webpack-dev-server webpack cross-env
+$ npm install -g babel-cli nodemon cross-env
