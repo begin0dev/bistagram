@@ -127,9 +127,11 @@ router.post('/addHash', async (req, res) => {
 router.post('/searchUser', async (req, res) => {
   let usersql = "select y.*, count(following.username) as followingcount from "+
                 "(select x.*, count(follower.username) as followercount from "+
-                "(select member.*, count(article.username) as atccount "+
-                "from member left join article on member.username=article.username "+
-                "where member.nickname=?)x join follower on "+
+                "(select n.*, count(n.username) as atccount from "+
+                "(select member.* from member left join article on member.username=article.username "+
+                "left join media on article.atcnum=media.atcnum "+
+                "where member.nickname=? and media.medianame is not null "+
+                "group by article.atcnum order by null)n)x join follower on "+
                 "x.username=follower.username)y join following on y.username=following.username";
   let userparam = [req.body.nickname];
   conn.query(usersql, userparam, (err, userinfo) =>{
