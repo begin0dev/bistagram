@@ -56,7 +56,7 @@ class Mypage extends Component {
       profileImgDelete({preprofilename: auth.userinfo.user.profileimgname});
     }
     handleProfileModal = (value) =>{
-      this.props.setMypageModal({name: 'profileImgModal', value: value});
+      this.props.setUiModal({name: 'profileImgModal', value: value});
     }
     handleProfileUpdate = async () =>{
       const {form, checkSession, profileUpdate, setProfileError}= this.props;
@@ -178,7 +178,7 @@ const mapDispatchToProps = (dispatch) => ({
   profileImgDelete: (params) => dispatch(auth.profileImgDelete(params)),
   checkSession: () => dispatch(auth.checkSession()),
 
-  setMypageModal: (params) => dispatch(ui.setMypageModal(params))
+  setUiModal: (params) => dispatch(ui.setUiModal(params))
 })
 
 

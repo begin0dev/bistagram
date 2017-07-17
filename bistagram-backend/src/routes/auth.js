@@ -89,6 +89,7 @@ router.get('/check', async (req, res) => {
         res.json({sessionID: req.sessionID, user, followInfo, hiscount: hiscount, logged: true});
     }
     else{
+
       res.json({logged: false});
     }
 });
