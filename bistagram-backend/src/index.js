@@ -27,7 +27,7 @@ app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 const options = {
   host     : 'localhost',
   user     : 'root',
-  password : '',
+  password : process.env.DB_PASSWORD,
   port     : 3306,
   database : 'bistagram',
   expiration: 3 * 24 * 60 * 60 * 1000
