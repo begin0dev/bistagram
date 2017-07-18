@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 button:active, button:disabled{opacity: 0.6;}
-.post_body{
+.main_body{
 background-color: #fafafa;
 -webkit-box-flex: 1;
 -webkit-flex-grow: 1;

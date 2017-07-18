@@ -7,7 +7,7 @@ class NotFound extends Component {
 
   render() {
 		return(
-        <main className="post_body">
+        <main className="main_body">
           <div className="notfound_div">
             <h2 className="basic_h2">죄송합니다. 페이지를 사용할 수 없습니다.</h2>
             <p>

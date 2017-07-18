@@ -124,8 +124,6 @@ end//
 
 delimiter ;
 
-
-
 create table following
 (
 username varchar(25) not null,
@@ -133,7 +131,6 @@ following varchar(25) not null,
 primary key(username, following),
 foreign key(username) references member(username)
 );
-
 create table follower
 (
 username varchar(25) not null,

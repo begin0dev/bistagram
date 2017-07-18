@@ -28,7 +28,7 @@ class Explore extends Component {
   render() {
     const {auth, handleFollowClick} = this.props;
 		return(
-        <main className="post_body">
+        <main className="main_body">
 			    <section className="post_wrapper">
           {this.props.ui.loading.explore?
             <FollowLoader />
