@@ -22,7 +22,7 @@ const Historymodal = ({ui, auth, handleFollowClick}) => {
             <Historyli
               auth={auth}
               handleFollowClick={handleFollowClick}
-              history={contact}
+              modalHistory={contact}
               key={i}
             />
           )}
