@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import noimg from '../../img/noimg.jpg';
@@ -51,69 +51,82 @@ const changeTag = (text) =>{
   return text;
 }
 
-const Historyli = ({modalHistory, auth, history, handleFollowClick}) => {
-  return (
-    <li className="history_li point" onClick={()=>history.push(modalHistory.type==='follow'?'/search/'+modalHistory.nickname:'/post/'+modalHistory.atcnum)}>
-  		<div className="history_img_div">
-        <div className="inlineblock">
-          <Link to={`/search/${modalHistory.nickname}`} className="history_img_a" style={imgsize}>
-            <img
-              src={!modalHistory.profileimgname ? noimg : '/upload/profile/'+modalHistory.profileimgname}
-              className="img_100" alt="">
-            </img>
-          </Link>
-        </div>
-  		</div>
-      <div className="history_message_div">
-        <Link to={`/search/${modalHistory.nickname}`} className="history_id_size history_id_bold">
-          {modalHistory.nickname}
-        </Link>
-        {`${modalHistory.type==='follow'?'님이 회원님을 팔로우하기 시작했습니다':''}`}
-        {`${modalHistory.type==='call'?'님이 댓글에서 회원님을 언급했습니다: ':''}`}
-        {`${modalHistory.type==='atclike'&&!modalHistory.mediatype?'님이 회원님의 게시물을 좋아합니다.':''}`}
-        {`${modalHistory.type==='reply'?'님이 댓글을 남겼습니다:':''}`}
-        {modalHistory.type==='call' || modalHistory.type==='reply'?
-          <span dangerouslySetInnerHTML={{__html: changeTag(modalHistory.content)}}></span>:
-        ''}
-        {`${modalHistory.type==='atclike' && modalHistory.mediatype && modalHistory.mediatype.match('video')?'님이 회원님의 동영상을 좋아합니다.':''}`}
-        {`${modalHistory.type==='atclike' && modalHistory.mediatype && modalHistory.mediatype.match('image')?'님이 회원님의 사진을 좋아합니다.':''}`}
-        <time className="history_time history_time_media"
-        dateTime={new Date(modalHistory.updateday)}
-        title={DayTitle(modalHistory.updateday)}>
-        {DayView(modalHistory.updateday)}
-        </time>
-      </div>
-      <div className="history_right_div">
-        {modalHistory.type==='follow'?
-          <span className="history_button_span">
-            {auth.userinfo.followInfo.following.indexOf(modalHistory.who)!==-1 ?
-              <button className="whitebtn btnstyle point"
-                disabled={modalHistory.who===auth.recommend.clickUser ?true:''}
-                onClick={(e)=>handleFollowClick(modalHistory.who)}>
-                팔로잉
-              </button>:
-              <button className={`bluebtn btnstyle point ${modalHistory.who===auth.recommend.clickUser ? 'bluebtn_disable':''}`}
-                disabled={modalHistory.who===auth.recommend.clickUser ?true:''}
-                onClick={(e)=>handleFollowClick(modalHistory.who)}>
-              팔로우
-              </button>
-            }
-            {modalHistory.who===auth.recommend.clickUser &&
-              <div className='loding_div loding_img'></div>
-            }
-          </span>
-        :
-          <a className="inlineblock">
-            {modalHistory.mediatype&&modalHistory.mediatype.match("image")&&
-            <img className="history_imgsize" src={`/upload/thumb/${changeFileName(modalHistory.medianame)}.png`} alt=""></img>}
-            {modalHistory.mediatype&&modalHistory.mediatype.match("video")&&
-            <img className="history_imgsize" src={`/upload/thumb/${changeFileName(modalHistory.medianame)}.png`} alt=""></img>
-            }
-          </a>
+class Historyli extends Component {
+    handleNotLink = (e) =>{
+      const {history, modalHistory} = this.props;
+      if(e.target.dataset.txt!=='link' && !this.circleImg.contains(e.target)){
+        if(modalHistory.type==='follow'){
+          history.push('/search/'+modalHistory.nickname);
+        }else{
+          history.push('/post/'+modalHistory.atcnum);
         }
-      </div>
-    </li>
-  );
+      }
+    }
+    render() {
+        const {modalHistory, auth, handleFollowClick} = this.props;
+        return(
+          <li className="history_li point" onClick={this.handleNotLink}>
+            <div className="history_img_div" ref={(div) => { this.circleImg = div }}>
+              <div className="inlineblock">
+                <Link to={`/search/${modalHistory.nickname}`} className="history_img_a" style={imgsize}>
+                  <img
+                    src={!modalHistory.profileimgname ? noimg : '/upload/profile/'+modalHistory.profileimgname}
+                    className="img_100" alt="">
+                  </img>
+                </Link>
+              </div>
+            </div>
+            <div className="history_message_div">
+              <Link to={`/search/${modalHistory.nickname}`}
+                className="history_id_size history_id_bold" data-txt="link">
+                {modalHistory.nickname}
+              </Link>
+              {`${modalHistory.type==='follow'?'님이 회원님을 팔로우하기 시작했습니다':''}`}
+              {`${modalHistory.type==='call'?'님이 댓글에서 회원님을 언급했습니다: ':''}`}
+              {`${modalHistory.type==='atclike'&&!modalHistory.mediatype?'님이 회원님의 게시물을 좋아합니다.':''}`}
+              {`${modalHistory.type==='reply'?'님이 댓글을 남겼습니다:':''}`}
+              {modalHistory.type==='call' || modalHistory.type==='reply'?
+                <span dangerouslySetInnerHTML={{__html: changeTag(modalHistory.content)}}></span>:
+              ''}
+              {`${modalHistory.type==='atclike' && modalHistory.mediatype && modalHistory.mediatype.match('video')?'님이 회원님의 동영상을 좋아합니다.':''}`}
+              {`${modalHistory.type==='atclike' && modalHistory.mediatype && modalHistory.mediatype.match('image')?'님이 회원님의 사진을 좋아합니다.':''}`}
+              <time className="history_time history_time_media"
+              dateTime={new Date(modalHistory.updateday)}
+              title={DayTitle(modalHistory.updateday)}>
+              {DayView(modalHistory.updateday)}
+              </time>
+            </div>
+            <div className="history_right_div">
+              {modalHistory.type==='follow'?
+                <span className="history_button_span">
+                  {auth.userinfo.followInfo.following.indexOf(modalHistory.who)!==-1 ?
+                    <button className="whitebtn btnstyle point"
+                      disabled={modalHistory.who===auth.recommend.clickUser ?true:''}
+                      onClick={(e)=>handleFollowClick(modalHistory.who)}>
+                      팔로잉
+                    </button>:
+                    <button className={`bluebtn btnstyle point ${modalHistory.who===auth.recommend.clickUser ? 'bluebtn_disable':''}`}
+                      disabled={modalHistory.who===auth.recommend.clickUser ?true:''}
+                      onClick={(e)=>handleFollowClick(modalHistory.who)}>
+                    팔로우
+                    </button>
+                  }
+                  {modalHistory.who===auth.recommend.clickUser &&
+                    <div className='loding_div loding_img'></div>
+                  }
+                </span>
+              :
+                <a className="inlineblock">
+                  {modalHistory.mediatype&&modalHistory.mediatype.match("image")&&
+                  <img className="history_imgsize" src={`/upload/thumb/${changeFileName(modalHistory.medianame)}.png`} alt=""></img>}
+                  {modalHistory.mediatype&&modalHistory.mediatype.match("video")&&
+                  <img className="history_imgsize" src={`/upload/thumb/${changeFileName(modalHistory.medianame)}.png`} alt=""></img>
+                  }
+                </a>
+              }
+            </div>
+          </li>
+        );
+    }
 }
-
 export default withRouter(Historyli);

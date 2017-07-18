@@ -72,10 +72,10 @@ class Modalmedia extends Component {
                       videoRef={video => this.videoRef = video}
                     />
                   }
+                  {post.media && post.media[index].mediatype.match("video") ?
+                    <a className="videoPlay_a" role="button" onClick={this.playVideo}> </a>:null
+                  }
                 </div>
-                {post.media && post.media[index].mediatype.match("video") ?
-                  <a className="videoPlay_a" role="button" onClick={this.playVideo}> </a>:null
-                }
                 {post.media && post.media.length > 1 && index !== 0 ?
                     <a className="imgs media_afterbefore_btn media_before_btn"
                     ref={ref => this.bfbtn = ref} role="button"
