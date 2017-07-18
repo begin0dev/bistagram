@@ -50,11 +50,11 @@ class MediaView extends Component {
           <div className="mediaview">
           <div className="postview_bodywraper">
             <div className="postview_body"
-              style={post.media[post.mdindex].mediatype && post.media[post.mdindex].mediatype.match("image")?
+              style={post.media && post.media[post.mdindex].mediatype.match("image")?
               this.state.style:
               videostyle}
             >
-              {post.media[post.mdindex].mediatype && post.media[post.mdindex].mediatype.match("image") ?
+              {post.media && post.media[post.mdindex].mediatype.match("image") ?
               <Imgview
                 media={post.media[post.mdindex]}
                 handleImgLoad={this.handleImgLoad}
@@ -65,7 +65,7 @@ class MediaView extends Component {
                 videoRef={video => this.videoRef = video}
               />}
 
-              {post.media[post.mdindex].mediatype && post.media[post.mdindex].mediatype.match("video") ?
+              {post.media && post.media[post.mdindex].mediatype.match("video") ?
                 <a className="videoPlay_a" role="button" onClick={this.playVideo}> </a>:null
               }
 
@@ -88,7 +88,7 @@ class MediaView extends Component {
                 </a>:
                 null
             }
-            {post.media[post.mdindex].mediatype && post.media[post.mdindex].mediatype.match('video') ?
+            {post.media && post.media[post.mdindex].mediatype.match('video') ?
                 <a className={`media_play_btn media_play_btn_img ${post.play?'':'media_play_btn_hover'}`}
                   onClick={this.playVideo}
                   role="button">

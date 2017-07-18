@@ -32,6 +32,9 @@ class Post extends Component {
     componentDidUpdate() {
       this.handlePostInfo();
     }
+		componentWillUnmount() {
+			this.props.postsReset();
+		}
     handlePostInfo = async() =>{
       const {getPostDetailInfo} = this.props;
       if(this.state.atcnum !== this.props.match.params.atcnum){
@@ -102,7 +105,7 @@ class Post extends Component {
 
               <div className="postdetailview_pos">
                 <div className="postdetailview_wrap">
-                  {post.post.atcnum ?
+                  {post.post.atcnum && !post.status.loading?
                   <article className="postdetailview_body postdetailview_body_media">
 
                     <Modalheader
@@ -163,6 +166,7 @@ const mapDispatchToProps = (dispatch) => ({
   postDetailNotlike: (parmas) => dispatch(post.postDetailNotlike(parmas)),
   postDetailInsertReply: (parmas) => dispatch(post.postDetailInsertReply(parmas)),
   postDetailDeleteReply: (parmas) => dispatch(post.postDetailDeleteReply(parmas)),
+	postsReset: () => dispatch(post.postsReset())
 });
 
 Post = connect(mapStateToProps, mapDispatchToProps)(Post)

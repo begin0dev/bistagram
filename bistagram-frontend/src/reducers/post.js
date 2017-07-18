@@ -97,7 +97,8 @@ function post(state=initialState, action) {
     case POST.POSTS_RESET:
       return{
         ...state,
-        posts:[]
+        posts:[],
+        post:{}
       }
 
     case POST.SET_MEDIA_INDEX:
