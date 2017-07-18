@@ -206,8 +206,10 @@ const getModalData = (atcnum, user) =>{
         })
       },
       function(arg1, callback){
-        let sql = "select member.username, member.nickname, reply.replynum, reply.content "+
-                  "from reply join member on reply.username=member.username where atcnum=?";
+        let sql = "select * from "+
+                  "(select member.username, member.nickname, reply.replynum, reply.content "+
+                  "from reply join member on reply.username=member.username where atcnum=? "+
+                  "order by reply.replynum desc limit 10)x order by x.replynum asc";
         let params = [atcnum];
         conn.query(sql, params, function(err, rows){
           let replies=JSON.stringify(rows);

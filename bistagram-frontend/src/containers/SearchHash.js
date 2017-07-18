@@ -107,12 +107,11 @@ class SearchHash extends Component {
     }
 	}
   handleInnerModal = () =>{
-    console.log("작동")
     this.props.setInnerModal();
   }
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply,
-          handleFollowClick, modalPostDeleteReply} = this.props;
+          handleFollowClick, modalPostDeleteReply, modalPostGetAllReplies} = this.props;
 		return(
         <main className="search_body">
           <Hashpage
@@ -136,6 +135,7 @@ class SearchHash extends Component {
               handleInnerModal={this.handleInnerModal}
               modalPostInsertReply={modalPostInsertReply}
               modalPostDeleteReply={modalPostDeleteReply}
+              modalPostGetAllReplies={modalPostGetAllReplies}
               getModalPost={getModalPost}
             />
           }
@@ -165,6 +165,7 @@ const mapDispatchToProps = (dispatch) => ({
   modalPostNotLike: (params) => dispatch(search.modalPostNotLike(params)),
   modalPostInsertReply: (params) => dispatch(search.modalPostInsertReply(params)),
   modalPostDeleteReply: (params) => dispatch(search.modalPostDeleteReply(params)),
+  modalPostGetAllReplies: (params) => dispatch(search.modalPostGetAllReplies(params)),
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
 

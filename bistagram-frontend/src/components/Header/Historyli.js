@@ -7,7 +7,6 @@ const imgsize = {
   width: '34px',
   height: '34px'
 }
-
 const DayTitle = (date) => {
   let actiondate = new Date(date);
   date = actiondate.getFullYear()+'년 '+(actiondate.getMonth()+1)+'월 '+actiondate.getDate()+'일';
@@ -46,7 +45,6 @@ const changeFileName = (filename) =>{
   let imgfilename = filename.substring(0, _lastDot)
   return imgfilename;
 }
-
 const changeTag = (text) =>{
   text=text.replace(/#([a-z0-9가-힣][a-z0-9가-힣\-_]*)/ig,'<a href="search/#$1">#$1</a>');
   text=text.replace(/@([a-z0-9][a-z0-9\-_]*)/ig,'<a href="search/@$1">@$1</a>');
@@ -55,7 +53,7 @@ const changeTag = (text) =>{
 
 const Historyli = ({history, auth, handleFollowClick}) => {
   return (
-    <li className="history_li point">
+    <li className="history_li point" onClick={()=>console.log("안된다...")}>
   		<div className="history_img_div">
         <div className="inlineblock">
           <Link to={`/search/${history.nickname}`} className="history_img_a" style={imgsize}>

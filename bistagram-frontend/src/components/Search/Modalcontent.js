@@ -13,7 +13,7 @@ const changeNick = (text) =>{
   return text;
 }
 
-const Modalcontent = ({post, auth, handleReplyDelete}) => {
+const Modalcontent = ({post, auth, handleReplyDelete, handleGetReplies}) => {
     let logusername=auth.userinfo.user.username;
     return (
       <div className="modal_content_section">
@@ -24,17 +24,28 @@ const Modalcontent = ({post, auth, handleReplyDelete}) => {
             </Link>
             <span dangerouslySetInnerHTML={{__html: changeTag(post.content)}}></span>
           </li>
-
+          {post.replycount>10 && post.replycount!==post.replies.length ?
+            <li className="modal_content_li">
+              <a className="reply_morebtn point" role="button" onClick={()=>handleGetReplies(post.atcnum, post.replies[0].replynum)}>
+                댓글 더 보기
+              </a>
+            </li>
+            :null
+          }
           {post.replies.map((contact, i) => {
             return(
               <li className="modal_content_li" key={"reply"+i}>
                 {(logusername && logusername === contact.username) || (logusername &&logusername===post.username)?
-                <button className="reply_delbtn" title="댓글 삭제" onClick={()=>handleReplyDelete(contact.replynum, i)}>
+                <button className="reply_delbtn" title="댓글 삭제"
+                  onClick={()=>handleReplyDelete(contact.replynum, i)}
+                >
                   댓글 삭제
                 </button>
                 :null}
 
-                <Link to={`/search/${contact.nickname}`} className="reply_li_id fontcolor_black">{contact.nickname}</Link>
+                <Link to={`/search/${contact.nickname}`} className="reply_li_id fontcolor_black">
+                  {contact.nickname}
+                </Link>
                 <span>
                   <span dangerouslySetInnerHTML={{__html: changeNick(contact.content)}}></span>
                 </span>

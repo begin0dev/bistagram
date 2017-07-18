@@ -15,7 +15,7 @@ class Footer extends Component {
     handleGetReplies = () =>{
       const { post, getAllReplies, setPostIndex, index} = this.props;
       setPostIndex({index: index, replyindex: -1});
-      getAllReplies({atcnum:post.atcnum, count:post.repliescount - post.replies.length});
+      getAllReplies({atcnum:post.atcnum, replynum:post.replies[0].replynum});
     }
 
     hanedleDeleteReply = (replyindex) => {

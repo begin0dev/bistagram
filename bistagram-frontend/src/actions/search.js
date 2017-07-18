@@ -73,6 +73,12 @@ export const modalPostDeleteReply = (params) => ({
     replyindex: params.replyindex
   }
 })
+export const modalPostGetAllReplies = (params) => ({
+  type: SEARCH.MODAL_POST_GET_ALL_REPLIES,
+  payload: {
+    promise: postservice.getAllReplies(params)
+  }
+})
 
 export const setInnerModal = createAction(SEARCH.SET_INNER_MODAL);
 

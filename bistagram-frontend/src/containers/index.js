@@ -1,5 +1,6 @@
 export { default as Explore } from './Explore';
 export { default as Login } from './Login';
+export { default as Post } from './Post';
 export { default as Posts } from './Posts';
 export { default as Mypage } from './Mypage';
 export { default as Fblogged } from './Fblogged';

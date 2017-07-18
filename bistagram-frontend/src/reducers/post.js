@@ -5,19 +5,22 @@ const request = {
     fetched: false,
     error: null
 }
+const status ={
+  modal: false,
+  post: false,
+  like: false,
+  reply: false,
+  uploadPost: false,
+  loading: false
+}
 const initialState = {
-  posts: [
-
-  ],
+  posts: [],
+  post:{},
   isMore: true,
   index: -1,
   replyindex: -1,
   status: {
-    modal: false,
-    post: false,
-    like: false,
-    reply: false,
-    uploadPost: false
+    ...status
   },
   requests: {
     searchPosts:{
@@ -43,6 +46,24 @@ const initialState = {
     },
     uploadPost: {
       ...request
+    },
+    getPostDetailInfo: {
+      ...request
+    },
+    getPostDetailReplies: {
+      ...request
+    },
+    postDetailLike: {
+      ...request
+    },
+    postDetailNotlike: {
+      ...request
+    },
+    postDetailInsertReply: {
+      ...request
+    },
+    postDetailDeleteReply: {
+      ...request
     }
   }
 }
@@ -53,6 +74,7 @@ const rejected = {fetching: false, fetched: false}
 
 function post(state=initialState, action) {
   const payload = action.payload;
+  const meta = action.meta;
   switch (action.type) {
 
     case POST.SET_POST_INDEX:
@@ -334,7 +356,7 @@ function post(state=initialState, action) {
         },
         requests: {
           ...state.requests,
-          deleteReply: { ...rejected, error: payload }
+          insertReply: { ...rejected, error: payload }
         }
       };
 
@@ -373,7 +395,7 @@ function post(state=initialState, action) {
         },
         requests: {
           ...state.requests,
-          insertReply: { ...fulfilled }
+          deleteReply: { ...fulfilled }
         }
       }
     case POST.DELETE_REPLY + '_REJECTED':
@@ -476,9 +498,275 @@ function post(state=initialState, action) {
         },
         requests: {
           ...state.requests,
-          searchPosts: { ...rejected, error: payload }
+          uploadPost: { ...rejected, error: payload }
         }
       };
+
+
+    case POST.GET_POST_DETAIL_INFO + "_PENDING":
+      return{
+        ...state,
+        status:{
+          ...state.status,
+          loading: true
+        },
+        requests: {
+          ...state.requests,
+          getPostDetailInfo: { ...pending }
+        }
+      }
+    case POST.GET_POST_DETAIL_INFO + '_FULFILLED':
+      return {
+        ...state,
+        post:{
+          ...payload.data
+        },
+        status:{
+          ...state.status,
+          loading: false
+        },
+        requests: {
+          ...state.requests,
+          getPostDetailInfo: { ...fulfilled }
+        }
+      }
+    case POST.GET_POST_DETAIL_INFO + '_REJECTED':
+      return {
+        ...state,
+        status:{
+          ...state.status,
+          loading: false
+        },
+        requests: {
+          ...state.requests,
+          getPostDetailInfo: { ...rejected, error: payload }
+        }
+      };
+
+    case POST.GET_POST_DETAIL_REPLIES + "_PENDING":
+      return{
+        ...state,
+        status: {
+          ...state.status,
+          reply: true
+        },
+        requests: {
+          ...state.requests,
+          getPostDetailReplies: { ...pending }
+        }
+      }
+    case POST.GET_POST_DETAIL_REPLIES + '_FULFILLED':
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          replies: [
+            ...payload.data.rows,
+            ...state.post.replies
+          ]
+        },
+        status: {
+          ...state.status,
+          reply: false
+        },
+        requests: {
+          ...state.requests,
+          getPostDetailReplies: { ...fulfilled }
+        }
+      }
+    case POST.GET_POST_DETAIL_REPLIES + '_REJECTED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          reply: false
+        },
+        requests: {
+          ...state.requests,
+          getPostDetailReplies: { ...rejected, error: payload }
+        }
+      };
+
+
+    case POST.POST_DETAIL_LIKE + "_PENDING":
+      return{
+        ...state,
+        status: {
+          ...state.status,
+          like: true
+        },
+        requests: {
+          ...state.requests,
+          postDetailLike: { ...pending }
+        }
+      }
+    case POST.POST_DETAIL_LIKE + '_FULFILLED':
+      return {
+        ...state,
+        post:{
+          ...state.post,
+          atclike: {
+            like: payload?1:0,
+            likecount: state.post.atclike.likecount + (payload?1:0)
+          }
+        },
+        status: {
+          ...state.status,
+          like: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailLike: { ...fulfilled }
+        }
+      }
+    case POST.POST_DETAIL_LIKE + '_REJECTED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          like: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailLike: { ...rejected, error: payload }
+        }
+      };
+
+    case POST.POST_DETAIL_NOTLIKE + "_PENDING":
+      return{
+        ...state,
+        status: {
+          ...state.status,
+          like: true
+        },
+        requests: {
+          ...state.requests,
+          postDetailNotlike: { ...pending }
+        }
+      }
+    case POST.POST_DETAIL_NOTLIKE + '_FULFILLED':
+      return {
+        ...state,
+        post:{
+          ...state.post,
+          atclike: {
+            like: payload?0:1,
+            likecount: state.post.atclike.likecount - (payload?1:0)
+          }
+        },
+        status: {
+          ...state.status,
+          like: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailNotlike: { ...fulfilled }
+        }
+      }
+    case POST.POST_DETAIL_NOTLIKE + '_REJECTED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          like: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailNotlike: { ...rejected, error: payload }
+        }
+      };
+
+
+    case POST.POST_DETAIL_INSERT_REPLY + "_PENDING":
+      return{
+        ...state,
+        status: {
+          ...state.status,
+          reply: true
+        },
+        requests: {
+          ...state.requests,
+          postDetailInsertReply: { ...pending }
+        }
+      }
+    case POST.POST_DETAIL_INSERT_REPLY + '_FULFILLED':
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          replies: [
+            ...state.post.replies,
+            !payload.data.message&&payload.data
+          ],
+          replycount: state.post.replycount + (!payload.data.message?1:0)
+        },
+        status: {
+          ...state.status,
+          reply: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailInsertReply: { ...fulfilled }
+        }
+      }
+    case POST.POST_DETAIL_INSERT_REPLY + '_REJECTED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          reply: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailInsertReply: { ...rejected, error: payload }
+        }
+      };
+
+    case POST.POST_DETAIL_DELETE_REPLY + "_PENDING":
+      return{
+        ...state,
+        status: {
+          ...state.status,
+          reply: true
+        },
+        requests: {
+          ...state.requests,
+          postDetailDeleteReply: { ...pending }
+        }
+      }
+    case POST.POST_DETAIL_DELETE_REPLY + '_FULFILLED':
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          replies: [
+            ...state.post.replies.slice(0, meta.replyindex),
+            ...state.post.replies.slice(meta.replyindex+1, state.post.replies.length)
+          ],
+          replycount: state.post.replycount - (!payload.data.message?1:0)
+        },
+        status: {
+          ...state.status,
+          reply: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailDeleteReply: { ...fulfilled }
+        }
+      }
+    case POST.POST_DETAIL_DELETE_REPLY + '_REJECTED':
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          reply: false
+        },
+        requests: {
+          ...state.requests,
+          postDetailDeleteReply: { ...rejected, error: payload }
+        }
+      };
+
 
     default:
       return state;

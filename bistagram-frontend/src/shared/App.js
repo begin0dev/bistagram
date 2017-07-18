@@ -6,7 +6,7 @@ import {storage} from '../helpers';
 
 import Header from '../components/Header/Header';
 
-import { Login, Posts, Mypage, SearchHash, SearchUser, Fblogged, Explore, NotFound  } from '../containers/index.async.js';
+import { Login, Posts, Mypage, SearchHash, SearchUser, Fblogged, Explore, NotFound, Post  } from '../containers/index.async.js';
 
 import * as auth from '../actions/auth';
 import * as form from '../actions/form';
@@ -133,6 +133,7 @@ class App extends React.Component{
 		}
 	}
 
+
 	render(){
 		const {auth, ui, form} = this.props;
 		let session = storage.get('session');
@@ -170,6 +171,11 @@ class App extends React.Component{
 						<Route path="/Search/:keyword"
 							render={()=>
 								<SearchUser	handleFollowClick={this.handleFollowClick}/>
+							}
+						/>
+						<Route path="/post/:atcnum"
+							render={()=>
+								<Post	handleFollowClick={this.handleFollowClick}/>
 							}
 						/>
 						<Route component={NotFound}/>

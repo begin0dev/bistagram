@@ -53,50 +53,51 @@ class Modalmedia extends Component {
       });
     }
     render() {
-        const {search} = this.props;
+        const {post} = this.props;
         const {index, play} = this.state;
         return(
           <div className="modal_media_body">
             <div>
-
               <div className="modal_media_frame">
                 <div className="postview_body" style={this.state.style}>
-                  {search.modalpost.media[index].mediatype && search.modalpost.media[index].mediatype.match("image") ?
-                  <Imgview
-                    media={search.modalpost.media[index]}
-                    handleImgLoad={this.handleImgLoad}
-                  />
+                  {post.media && post.media[index].mediatype.match("image") ?
+                    <Imgview
+                      media={post.media[index]}
+                      handleImgLoad={this.handleImgLoad}
+                    />
                   :
-                  <Videoview
-                    media={search.modalpost.media[index]}
-                    videoRef={video => this.videoRef = video}
-                  />}
+                    post.media &&
+                    <Videoview
+                      media={post.media[index]}
+                      videoRef={video => this.videoRef = video}
+                    />
+                  }
                 </div>
-                {search.modalpost.media[index].mediatype && search.modalpost.media[index].mediatype.match("video") ?
+                {post.media && post.media[index].mediatype.match("video") ?
                   <a className="videoPlay_a" role="button" onClick={this.playVideo}> </a>:null
                 }
-                {search.modalpost.media.length > 1 && index !== 0 ?
+                {post.media && post.media.length > 1 && index !== 0 ?
                     <a className="imgs media_afterbefore_btn media_before_btn"
                     ref={ref => this.bfbtn = ref} role="button"
                     onClick={this.handleAftBfClick}>before</a>:
                     null
                 }
-                {search.modalpost.media.length > 1 && index !== search.modalpost.media.length-1 ?
+                {post.media && post.media.length > 1 && index !== post.media.length-1 ?
                     <a className="imgs media_afterbefore_btn media_after_btn"
                     ref={ref => this.aftbtn = ref} role="button"
                     onClick={this.handleAftBfClick}>after</a>:
                     null
                 }
-                {search.modalpost.media[index].mediatype && search.modalpost.media[index].mediatype.match('video') ?
+                {post.media && post.media[index].mediatype.match('video') ?
                     <a className={`media_play_btn media_play_btn_img ${play?'':'media_play_btn_hover'}`}
                     onClick={this.playVideo}
                     role="button">play</a>
                 :null}
               </div>
-              {search.modalpost.media.length>1&&
+              {post.media && post.media.length>1&&
               <Modalpaging
                 index={index}
-                search={search}
+                post={post}
               />
               }
             </div>

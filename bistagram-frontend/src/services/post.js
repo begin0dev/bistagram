@@ -58,11 +58,11 @@ export const deleteReply = ({replynum}) => request({
     }
 });
 
-export const getAllReplies = ({atcnum, count}) => request({
+export const getAllReplies = ({atcnum, replynum}) => request({
     url: '/api/post/getAllReplies',
     method: 'post',
     data: {
       atcnum,
-      count
+      replynum
     }
 });

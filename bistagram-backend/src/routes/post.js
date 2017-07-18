@@ -211,9 +211,9 @@ router.delete('/deleteReply', async (req, res) => {
 });
 
 router.post('/getAllReplies', async (req, res) => {
-  let sql = "select replynum, member.username, nickname, content from reply join member on reply.username = member.username where atcnum=? "+
-            "order by replynum asc limit 0, ?";
-  let params = [req.body.atcnum, req.body.count];
+  let sql = "select replynum, member.username, nickname, content from reply join member on reply.username = member.username "+
+            "where atcnum=? and replynum<?";
+  let params = [req.body.atcnum, req.body.replynum];
   conn.query(sql, params, function(err, rows) {
     if(err) {
       return res.status(500).json({message: err.message});

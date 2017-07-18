@@ -343,7 +343,6 @@ function search(state=initialState, action) {
         modalpost: {
           ...state.modalpost,
           atclike:{
-            ...state.modalpost.atclike,
             like: payload?1:0,
             likecount: state.modalpost.atclike.likecount + (payload?1:0)
           }
@@ -411,7 +410,6 @@ function search(state=initialState, action) {
         modalpost: {
           ...state.modalpost,
           atclike:{
-            ...state.modalpost.atclike,
             like: payload?0:1,
             likecount: state.modalpost.atclike.likecount - (payload?1:0)
           }
@@ -569,6 +567,50 @@ function search(state=initialState, action) {
         requests: {
           ...state.requests,
           modalPostDeleteReply: { ...rejected, error: payload }
+        }
+      };
+
+    case SEARCH.MODAL_POST_GET_ALL_REPLIES + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: true
+        },
+        requests: {
+          ...state.requests,
+          modalPostGetAllReplies: { ...pending }
+        }
+      }
+    case SEARCH.MODAL_POST_GET_ALL_REPLIES + '_FULFILLED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: false
+        },
+        modalpost: {
+          ...state.modalpost,
+          replies:[
+              ...payload.data.rows,
+              ...state.modalpost.replies
+          ]
+        },
+        requests: {
+          ...state.requests,
+          modalPostGetAllReplies: { ...fulfilled }
+        }
+      }
+    case SEARCH.MODAL_POST_GET_ALL_REPLIES + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          replyLoading: false
+        },
+        requests: {
+          ...state.requests,
+          modalPostGetAllReplies: { ...rejected, error: payload }
         }
       };
 

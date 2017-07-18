@@ -16,11 +16,11 @@ class Searchmodal extends Component {
         }
     }
     componentDidMount() {
-        document.addEventListener('mousedown', this.handleClickOutside);
+      document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleClickOutside);
+      document.removeEventListener('mousedown', this.handleClickOutside);
     }
     handleClickOutside = (e) =>{
       const {search, handleSearchModal} = this.props;
@@ -57,9 +57,14 @@ class Searchmodal extends Component {
     }
 		handleReplyDelete = (replynum, index) =>{
 			const {modalPostDeleteReply}=this.props;
-			modalPostDeleteReply({replynum: replynum, replyindex: index})
+			modalPostDeleteReply({replynum: replynum, replyindex: index});
 		}
-
+		handleGetReplies = (atcnum, replynum) =>{
+			this.props.modalPostGetAllReplies({atcnum: atcnum, replynum: replynum});
+		}
+		handleTaCursor = () =>{
+			this.replyTa._rootDOMNode.focus();
+		}
     render() {
         const modalstyle={
           position: 'relative',
@@ -97,23 +102,28 @@ class Searchmodal extends Component {
 
                     <Modalheader
                       auth={auth}
-                      search={search}
+                      post={search.modalpost}
                       handleFollowClick={handleFollowClick}
                     />
 
                     <Modalmedia
-                      search={search}
+                      post={search.modalpost}
                     />
 
                     <Modalfooter
-                      search={search}
 											auth={auth}
+                      post={search.modalpost}
                       reply={this.state.reply}
-                      handleModalLikeClick={handleModalLikeClick}
+											likeLoading={search.modalState.likeLoading}
+											replyLoading={search.modalState.replyLoading}
                       handleKeyPress={this.handleKeyPress}
                       handleChangeReply={this.handleChangeReply}
                       handleReplySubmit={this.handleReplySubmit}
 											handleReplyDelete={this.handleReplyDelete}
+											handleGetReplies={this.handleGetReplies}
+											handleTaCursor={this.handleTaCursor}
+											handleModalLikeClick={handleModalLikeClick}
+											replyTa={textarea => this.replyTa = textarea}
                     />
 
                     <div className="modal_more_div">

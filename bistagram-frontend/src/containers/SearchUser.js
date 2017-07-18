@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 import {storage} from '../helpers';
 
@@ -25,7 +26,8 @@ class SearchUser extends Component {
   constructor(props) {
       super(props);
       this.state={
-        keyword: ''
+        keyword: '',
+        redirect: ''
       }
   }
   componentDidMount() {
@@ -51,7 +53,9 @@ class SearchUser extends Component {
       });
       await searchUser({nickname: this.props.match.params.keyword}).then(()=>{
         if(!this.props.search.posts.userinfo.username){
-          document.location = "/NotFound"
+          this.setState({
+            redirect: '/NotFound'
+          });
         }
         setTimeout(()=>{ setLoadingInitial() }, 400);
       })
@@ -181,10 +185,10 @@ class SearchUser extends Component {
 
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply,
-          handleFollowClick,modalPostDeleteReply} = this.props;
+          handleFollowClick,modalPostDeleteReply, modalPostGetAllReplies} = this.props;
 		return(
         <main className="search_body">
-
+          {this.state.redirect && <Redirect to={this.state.redirect}/>}
           <Userpage
             ui={ui}
             auth={auth}
@@ -211,6 +215,7 @@ class SearchUser extends Component {
               handleInnerModal={this.handleInnerModal}
               modalPostInsertReply={modalPostInsertReply}
               modalPostDeleteReply={modalPostDeleteReply}
+              modalPostGetAllReplies={modalPostGetAllReplies}
               getModalPost={getModalPost}
             />
           }
@@ -265,6 +270,7 @@ const mapDispatchToProps = (dispatch) => ({
   modalPostNotLike: (params) => dispatch(search.modalPostNotLike(params)),
   modalPostInsertReply: (params) => dispatch(search.modalPostInsertReply(params)),
   modalPostDeleteReply: (params) => dispatch(search.modalPostDeleteReply(params)),
+  modalPostGetAllReplies: (params) => dispatch(search.modalPostGetAllReplies(params)),
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
   getUserFollower: (params) => dispatch(search.getUserFollower(params)),

@@ -109,7 +109,7 @@ class Post extends Component{
 			setMediaIndex, setMediaPlay, setPostReply} = this.props;
 
 		return(
-				<main className="main_body" >
+				<main className="main_body">
 
 					{ui.loading.post&&<Loading />}
 
