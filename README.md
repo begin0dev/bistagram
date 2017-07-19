@@ -11,3 +11,8 @@ $ sudo apt install mysql-client
 
 $ sudo apt-get install git
 $ git clone https://github.com/prosonic1/bistagram.git
+
+
+#etc program
+- GraphicsMagick
+- ffmpeg
