@@ -17,6 +17,8 @@ const removeTag = (reply) => {
 	return reply.replace(/(<([^>]+)>)/gi, "");
 }
 
+let position =	0;
+
 class Post extends Component {
     constructor(props) {
         super(props);
@@ -97,6 +99,23 @@ class Post extends Component {
     handleTaCursor = () =>{
       this.replyTa._rootDOMNode.focus();
     }
+		handleInnerModal = () =>{
+			const {post, setModal} = this.props;
+			let doc = document.documentElement;
+			if(!post.status.modal){
+				position = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+				document.body.style.position= 'fixed';
+				document.body.style.top= -position+'px';
+				document.body.style.width= '100%';
+			}
+			else{
+				document.body.style.position= '';
+				document.body.style.top= 0;
+				document.body.style.width= '';
+				window.scrollTo(0, position);
+			}
+			setModal({index: -1})
+		}
     render() {
         const { auth, post, handleFollowClick } = this.props;
         return(
@@ -135,7 +154,7 @@ class Post extends Component {
                     />
 
                     <div className="modal_more_div">
-                      <button className="imgs more_btn more_btn_img more_btn_display">
+                      <button className="imgs more_btn more_btn_img more_btn_display" onClick={this.handleInnerModal}>
                         옵션 더 보기
                       </button>
                     </div>
@@ -148,6 +167,7 @@ class Post extends Component {
               </div>
               {post.status.modal&&
                 <Innermodal
+									handleInnerModal={this.handleInnerModal}
                 />
               }
             </main>
@@ -166,7 +186,8 @@ const mapDispatchToProps = (dispatch) => ({
   postDetailNotlike: (parmas) => dispatch(post.postDetailNotlike(parmas)),
   postDetailInsertReply: (parmas) => dispatch(post.postDetailInsertReply(parmas)),
   postDetailDeleteReply: (parmas) => dispatch(post.postDetailDeleteReply(parmas)),
-	postsReset: () => dispatch(post.postsReset())
+	postsReset: () => dispatch(post.postsReset()),
+	setModal: (parmas) => dispatch(post.setModal(parmas))
 });
 
 Post = connect(mapStateToProps, mapDispatchToProps)(Post)

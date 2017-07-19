@@ -3,5 +3,6 @@ module.exports = {
   user     : 'root',
   password : process.env.DB_PASS,
   port     : 3306,
-  database : 'bistagram'
+  database : 'bistagram',
+  connectionLimit: 50
 };

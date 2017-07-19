@@ -183,6 +183,10 @@ class SearchUser extends Component {
     }
   }
 
+  handlePostDelete = () =>{
+
+  }
+
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply,
           handleFollowClick,modalPostDeleteReply, modalPostGetAllReplies} = this.props;

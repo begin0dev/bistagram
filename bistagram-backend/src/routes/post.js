@@ -7,6 +7,7 @@ import gm from 'gm';
 import ffmpeg from 'fluent-ffmpeg';
 
 import dbconfig from '../dbinfo/database';
+import dbpoolconfig from '../dbinfo/dbpool';
 
 const router = new express.Router();
 
@@ -229,17 +230,7 @@ router.post('/getAllReplies', async (req, res) => {
   });
 });
 
-
-const DBpool  = mysql.createPool({
-  connectionLimit : 30,
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  port     : 3306,
-  database : 'bistagram'
-});
-
-
+const DBpool  = mysql.createPool(dbpoolconfig);
 
 const getHashTag = params =>{
   let tagString=params.content;

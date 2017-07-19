@@ -26,13 +26,13 @@ class Innermodal extends Component {
                          퍼가기
                        </button>
                     </li>
-
+                    {handleSearchModal&&
                     <li className="modal_LiStyle">
                        <button className="modal_listBtn" onClick={()=>handleSearchModal(-1)}>
                          게시물 닫기
                        </button>
                     </li>
-
+                    }
                     <li className="modal_LiStyle" ref={(li) => { this.innermodal_cancle = li }}>
                        <button className="modal_listBtn">취소</button>
                     </li>
