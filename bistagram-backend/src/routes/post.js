@@ -147,7 +147,7 @@ router.delete('/deletePost', async (req, res) => {
         return res.json({result: false});
       }
       else{
-        deletefiles(req.body.media)
+        deletefiles(req.body.media);
         return res.json({result: true});
       }
     }

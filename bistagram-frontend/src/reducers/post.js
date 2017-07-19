@@ -190,7 +190,7 @@ function post(state=initialState, action) {
       return {
         ...state,
         posts:
-        (payload.data?
+        (payload.data.result?
           [ ...state.posts.slice(0, state.index),
             ...state.posts.slice((state.index+1), state.posts.length)]:
           [...state.posts]),

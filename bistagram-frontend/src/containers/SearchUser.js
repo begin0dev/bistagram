@@ -183,8 +183,15 @@ class SearchUser extends Component {
     }
   }
 
-  handlePostDelete = () =>{
-
+  handlePostDelete = async() =>{
+    const {search,deleteModalPost} = this.props;
+    let post=search.modalpost;
+    await deleteModalPost({atcnum: post.atcnum, media: post.media}).then(()=>{
+      document.body.style.position= '';
+      document.body.style.top= 0;
+      document.body.style.width= '';
+      window.scrollTo(0, position);
+    });
   }
 
   render() {
@@ -228,6 +235,7 @@ class SearchUser extends Component {
             <Innermodal
               handleInnerModal={this.handleInnerModal}
               handleSearchModal={this.handleSearchModal}
+              handlePostDelete={this.handlePostDelete}
             />
           }
 
@@ -279,6 +287,7 @@ const mapDispatchToProps = (dispatch) => ({
   setInnerModal: () => dispatch(search.setInnerModal()),
   getUserFollower: (params) => dispatch(search.getUserFollower(params)),
   getUserFollowing: (params) => dispatch(search.getUserFollowing(params)),
+  deleteModalPost: (params) => dispatch(search.deleteModalPost(params)),
 
 	logout: () => dispatch(auth.logout()),
 
@@ -287,7 +296,6 @@ const mapDispatchToProps = (dispatch) => ({
   setLoading: (params) => dispatch(ui.setLoading(params)),
   setUiModal: (params) => dispatch(ui.setUiModal(params))
 });
-
 
 SearchUser = connect(mapStateToProps, mapDispatchToProps)(SearchUser)
 export default withRouter(SearchUser);

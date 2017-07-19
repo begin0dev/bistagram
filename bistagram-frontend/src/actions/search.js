@@ -95,3 +95,10 @@ export const getUserFollowing = (params) => ({
     promise: service.getUserFollowing(params)
   }
 })
+
+export const deleteModalPost = (params) => ({
+  type: SEARCH.DELETE_MODAL_POST,
+  payload: {
+    promise: postservice.deletePost(params)
+  }
+})

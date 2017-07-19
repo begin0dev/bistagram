@@ -109,6 +109,16 @@ class SearchHash extends Component {
   handleInnerModal = () =>{
     this.props.setInnerModal();
   }
+  handlePostDelete = async() =>{
+    const {search,deleteModalPost} = this.props;
+    let post=search.modalpost;
+    await deleteModalPost({atcnum: post.atcnum, media: post.media}).then(()=>{
+      document.body.style.position= '';
+      document.body.style.top= 0;
+      document.body.style.width= '';
+      window.scrollTo(0, position);
+    });
+  }
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply,
           handleFollowClick, modalPostDeleteReply, modalPostGetAllReplies} = this.props;
@@ -143,6 +153,7 @@ class SearchHash extends Component {
             <Innermodal
               handleInnerModal={this.handleInnerModal}
               handleSearchModal={this.handleSearchModal}
+              handlePostDelete={this.handlePostDelete}
             />
           }
         </main>
@@ -168,6 +179,7 @@ const mapDispatchToProps = (dispatch) => ({
   modalPostGetAllReplies: (params) => dispatch(search.modalPostGetAllReplies(params)),
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
+  deleteModalPost: (params) => dispatch(search.deleteModalPost(params)),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))

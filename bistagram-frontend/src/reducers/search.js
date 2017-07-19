@@ -23,6 +23,7 @@ const modalState = {
   likeLoading: false,
   replyLoading: false,
   innerModal: false,
+  innerDelete: false,
   followLoading: false,
   followerStart: 0,
   followingStart: 0
@@ -65,6 +66,9 @@ const initialState = {
         ...request
     },
     getUserFollower: {
+        ...request
+    },
+    deleteModalPost: {
         ...request
     }
   }
@@ -719,6 +723,68 @@ function search(state=initialState, action) {
         }
       };
 
+
+    case SEARCH.DELETE_MODAL_POST + "_PENDING":
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          innerDelete: true
+        },
+        requests: {
+          ...state.requests,
+          deleteModalPost: { ...pending }
+        }
+      }
+    case SEARCH.DELETE_MODAL_POST + '_FULFILLED':
+      if(state.posts.userAtcs.length>0){
+        atcctgname="userAtcs";
+        targetindex=state.posts.atcindex;
+      }
+      else if(state.posts.popular.length>0 && state.posts.atcindex<9){
+        atcctgname="popular";
+        targetindex=state.posts.atcindex;
+      }else{
+        atcctgname="recent";
+        targetindex=state.posts.atcindex-9;
+      }
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          atccount: state.posts.atccount - (payload.data.result?1:0),
+          atcindex: -1,
+          [atcctgname]:
+          payload.data.result?
+          [
+            ...state.posts[atcctgname].slice(0, targetindex),
+            ...state.posts[atcctgname].slice(targetindex+1, state.posts[atcctgname].length)
+          ]
+          :
+          [...state.posts[atcctgname]]
+        },
+        modalState: {
+          ...modalState
+        },
+        modalpost: {
+        },
+        requests: {
+          ...state.requests,
+          deleteModalPost: { ...fulfilled }
+        }
+      }
+    case SEARCH.DELETE_MODAL_POST + '_REJECTED':
+      return {
+        ...state,
+        modalState: {
+          ...state.modalState,
+          innerDelete: false
+        },
+        requests: {
+          ...state.requests,
+          deleteModalPost: { ...rejected, error: payload }
+        }
+      };
 
     default:
       return state;
