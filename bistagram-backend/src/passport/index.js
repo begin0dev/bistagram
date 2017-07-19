@@ -3,8 +3,8 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy }  from 'passport-facebook';
 import crypto from 'crypto';
 import sha512 from 'sha512';
-
 import mysql from 'mysql';
+
 import dbconfig from '../dbinfo/database';
 import fbConfig from './fb';
 

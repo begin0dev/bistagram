@@ -1,5 +1,6 @@
 PORT=3001
 DEVPORT=3000
-DB_PASSWORD=""
-SECRET_KEY=""
-FACEBOOK_SECRET=""
+DB_HOST=localhost
+DB_PASS="sdfgdfgsdfg"
+SECRET_KEY="asdfsadfsdf"
+FACEBOOK_SECRET="zsfsdfsdf"

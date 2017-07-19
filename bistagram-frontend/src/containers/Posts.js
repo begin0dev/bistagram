@@ -19,7 +19,7 @@ import '../css/postwrite.css';
 
 let position =	0;
 
-class Post extends Component{
+class Posts extends Component{
 
 	async componentDidMount() {
 		window.addEventListener("scroll", this.handleScroll);
@@ -28,10 +28,10 @@ class Post extends Component{
 		try{
 			await recommendFollow({start:0, count:3});
 			await searchPosts({atcnum: -1});
-			setTimeout(()=>{ setLoadingInitial() }, 300);
+			setTimeout(()=>{ setLoadingInitial(); }, 300);
 		}
 		catch(e){
-			
+			setTimeout(()=>{ document.location.reload(); }, 1000);			
 		}
 	}
 
@@ -216,5 +216,5 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-Post = connect(mapStateToProps, mapDispatchToProps)(Post)
-export default Post;
+Posts = connect(mapStateToProps, mapDispatchToProps)(Posts)
+export default Posts;
