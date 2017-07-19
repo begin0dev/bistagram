@@ -16,3 +16,12 @@ $ git clone https://github.com/prosonic1/bistagram.git
 #etc program
 - GraphicsMagick
 - ffmpeg
+
+$ sudo add-apt-repository ppa:mc3man/trusty-media
+
+$ sudo apt-get update
+$ sudo apt-get dist-upgrade
+
+$ sudo apt-get install ffmpeg
+
+$ sudo apt-get install graphicsmagick

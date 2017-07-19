@@ -30,9 +30,14 @@ class Postwrite extends Component {
       e.preventDefault();
 			const {post} = this.props;
       let files = e.target.files;
+			let maxSize = 10 * 1024 * 1024;
       for(let i=0; i<files.length; i++){
 				if(post.media.length<7 && post.media.length+i+1<7){
-					this.handleMedieRender(files[i]);
+					if(files[i].size<maxSize){
+						this.handleMedieRender(files[i]);
+					}else{
+						alert("첨부 파일의 최대 사이즈는 10MB입니다.")
+					}
 				}else{
 					alert("최대 업로드 갯수는 6개입니다.")
 				}
