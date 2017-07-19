@@ -1,5 +1,7 @@
 ﻿mysql -u root --default-character-set=utf8
 
+ALTER TABLE member MODIFY COLUMN gender enum('male', 'female') default 'male'
+
 create table member
 (
 username varchar(30) primary key not null,
@@ -15,9 +17,6 @@ gender enum('male', 'female') default 'male',
 intro text,
 website varchar(50)
 );
-
-ALTER TABLE member MODIFY COLUMN gender enum('male', 'female') default 'male'
-
 
 delimiter //
 
@@ -178,12 +177,12 @@ foreign key(atcnum) references article(atcnum),
 foreign key(replynum) references reply(replynum)
 );
 
+
 select y.*, media.medianame, media.mediatype from
 (select x.*, member.nickname, member.profileimgname from
 (select * from history where username='test1@naver.com' order by hisnum desc limit 20)x
 join member on x.who=member.username)y
 left join media on y.atcnum=media.atcnum group by y.hisnum order by null;
-
 
 
 //post count

@@ -31,7 +31,7 @@ class Post extends Component{
 			setTimeout(()=>{ setLoadingInitial() }, 300);
 		}
 		catch(e){
-			document.location.reload();
+			
 		}
 	}
 

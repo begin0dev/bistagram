@@ -14,6 +14,7 @@ require('./passport');
 
 import path from 'path';
 import api from './routes';
+import dbconfig from './dbinfo/database';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,11 +26,7 @@ app.use('/', express.static(path.join(__dirname, '../../bistagram-frontend/build
 app.use('/upload', express.static(path.join(__dirname, '../upload/')));
 
 const options = {
-  host     : process.env.DB_IP,
-  user     : 'root',
-  password : process.env.DB_PASS,
-  port     : 3306,
-  database : 'bistagram',
+  ...dbconfig,
   expiration: 3 * 24 * 60 * 60 * 1000
 };
 

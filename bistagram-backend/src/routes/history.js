@@ -1,11 +1,11 @@
 import express from 'express';
 import mysql from 'mysql';
 
-import dbpoolconfig from '../dbinfo/dbpool';
+import dbconfig from '../dbinfo/database';
 
 const router = new express.Router();
 
-const DBpool  = mysql.createPool(dbpoolconfig);
+const DBpool  = mysql.createPool({...dbconfig, connectionLimit:50});
 
 router.get('/getHistory', (req, res) => {
   DBpool.getConnection((err, con) => {
