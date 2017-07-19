@@ -12,7 +12,7 @@ class Innermodal extends Component {
           position: 'relative',
           zIndex: 3
         }
-        const {handleSearchModal, handlePostDelete} = this.props;
+        const {handleSearchModal, deletePossible, handlePostDelete} = this.props;
         return(
           <div style={style}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -33,7 +33,7 @@ class Innermodal extends Component {
                        </button>
                     </li>
                     }
-                    {handlePostDelete &&
+                    {handlePostDelete && deletePossible &&
                       <li className="modal_LiStyle">
                          <button className="modal_listBtn" onClick={()=>handlePostDelete()}>
                            삭제

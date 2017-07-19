@@ -154,6 +154,9 @@ class SearchHash extends Component {
               handleInnerModal={this.handleInnerModal}
               handleSearchModal={this.handleSearchModal}
               handlePostDelete={this.handlePostDelete}
+              deletePossible={auth.userinfo.user.username===search.modalpost.username
+                              && search.modalpost.replycount===0
+                              && search.modalpost.atclike.likecount===0?true:false}
             />
           }
         </main>
