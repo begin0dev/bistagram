@@ -324,7 +324,8 @@ router.post('/profileUpdate', async (req, res) => {
     }
   }
   let sql ="update member set name=?, nickname=?, phone=?, email=?, gender=?, intro=?, website=? where username=? ";
-  let params = [user.name, user.nickname, user.phone, user.email, user.gender, user.intro.replace('\r\n', '<br />'), user.website, req.user.username];
+  let params = [user.name, user.nickname, user.phone, user.email, user.gender,
+                user.intro?user.intro.replace('\r\n', '<br />'):null, user.website, req.user.username];
   conn.query(sql, params, (err, rows) =>{
     if(err) {
       console.log(err)
