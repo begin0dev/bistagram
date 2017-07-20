@@ -44,18 +44,11 @@ class Fblogged extends Component {
         }
       });
     }
-    componentDidMount (){
-      const { history } = this.props;
-      if(!this.props.auth.userinfo.facebook){
-        history.push("/NotFound");
-      }
-    }
     render() {
-      const {auth, form} = this.props;
+      const {form} = this.props;
       const pagename=this.props.match.params.result;
         return(
           <div className="fb_logged_body">
-
 
             {pagename === 'success' &&
               <Redirect to="/"/>
