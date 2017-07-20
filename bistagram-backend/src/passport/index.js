@@ -85,7 +85,7 @@ passport.use('local-login',
 const downloadIMG = async (options) =>{
   try {
     const { filename, image } = await download.image(options);
-    console.log("success")
+    console.log("success image download")
   } catch (e) {
     console.log(e)
   }
@@ -120,7 +120,7 @@ passport.use(
                     'gender': profile.gender
                   };
                   let insertsql = "insert into member(username, email, gender) values(?, ?, ?)";
-                  let insertparams = [newUser.username,newUser.email, newUser.gender];
+                  let insertparams = [newUser.username, newUser.email, newUser.gender];
                   conn.query(insertsql, insertparams, (err, user) => {
                       if(err) {return done(err);}
                       done(null, newUser);

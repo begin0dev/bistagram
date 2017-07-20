@@ -104,8 +104,7 @@ function auth(state=initialState, action) {
                 followInfo: {
                   ...payload.data.followInfo
                 },
-                logged: payload.data.logged,
-                facebook: payload.data.facebook
+                logged: payload.data.logged
             }
         }
     case AUTH.CHECK_SESSION + "_REJECTED":

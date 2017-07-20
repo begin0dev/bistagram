@@ -14,18 +14,17 @@ router.post('/RecommedFollow', (req, res) => {
   let sql = "select member.username, name, nickname, profileimgname, state, convert(recommend.type using utf8) as type from member join "+
 					  "(select * from ("+
 						"(select follower as username, '나를 팔로우중인 사람' as type, 1 as rank  from follower where username = ?) "+
-						"UNION (select following as username, concat('함께 아는 사람 ', count(following)) as type, 2 as rank from following where username in "+
-            "(select following from following where username=?) group by following order by null) "+
+						"UNION (select following as username, concat('함께 아는 사람 ', count(following)) as type, 2 as rank from following "+
+            "where username in (select following from following where username=?) group by following order by null) "+
 						"UNION (select username, count(username) as type, 3 as rank from follower group by username order by null) "+
-						"UNION (select username, '' as type, 4 as rank from member)) as x "+
-						"where username != ? "+
-						"and username not in (select following from following where username=?) "+
-						"group by username order by null) as recommend "+
-						"on member.username=recommend.username "+
+						"UNION (select username, '' as type, 4 as rank from member))x "+
+						"where username != ? and username not in (select following from following where username=?) "+
+						"group by username order by null) as recommend on member.username=recommend.username and member.nickname is not null "+
 						"order by rank asc, type desc limit ?, ?";
   let params = [username, username, username, username, req.body.start, req.body.count];
   conn.query(sql, params, function(err, rows) {
     if(err) {
+      console.log(err)
       return res.status(400).json({code: 1, message: err.message});
     }
     else{
@@ -40,6 +39,7 @@ router.post('/following', (req, res) => {
   let params = [username, req.body.username];
   conn.query(sql, params, function(err, rows) {
     if(err) {
+      console.log(err)
       return res.status(500).json({message: err.message});
     }
     else{
@@ -59,6 +59,7 @@ router.delete('/unfollow', (req, res) => {
   let params = [username, req.body.username];
   conn.query(sql, params, function(err, rows) {
     if(err) {
+      console.log(err)
       return res.status(500).json({message: err.message});
     }
     else{
@@ -79,6 +80,7 @@ router.post('/getUserFollower', (req, res) => {
   let params = [req.body.username, req.body.start, 25];
   conn.query(sql, params, function(err, rows) {
     if(err) {
+      console.log(err)
       return res.status(500).json({message: err.message});
     }
     else{
@@ -94,6 +96,7 @@ router.post('/getUserFollowing', (req, res) => {
   let params = [req.body.username, req.body.start, 25];
   conn.query(sql, params, function(err, rows) {
     if(err) {
+      console.log(err)
       return res.status(500).json({message: err.message});
     }
     else{

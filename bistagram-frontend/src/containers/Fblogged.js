@@ -15,15 +15,14 @@ const regex ={
 }
 
 class Fblogged extends Component {
-
-    handleChange = (e) =>{
-      this.props.changeFormData({form:'register', name: e.target.name, value: e.target.value})
+    componentWillUnmount() {
+      this.props.formDataReset();
     }
-    handleBlur = (e) => {
-      const {changeCheck, checkNickName} = this.props;
+    handleChange = (e) =>{
+      const {changeCheck, checkNickName, changeFormData} = this.props;
       let target=e.target.name;
       let value=e.target.value;
-
+      changeFormData({form:'register', name: target, value: value});
       if(value.length === 0){
         changeCheck({name:target, value:false});
         return;

@@ -89,7 +89,7 @@ router.get('/check', async (req, res) => {
         res.json({user, followInfo, hiscount: hiscount, logged: true});
     }
     else{
-      res.json({logged: false, facebook:req.user.username?true:false});
+      res.json({logged: false});
     }
 });
 
@@ -351,12 +351,14 @@ router.post('/facebookSetNickname', async (req, res) => {
     if(rows.affectedRows===0){
       return res.status(500).json({code: 1, message: "다른 사람이 이용 중인 사용자 이름입니다."});
     }else{
-      let beforefile='upload/profile/'+user.username.substring(3, user.username.length)+'.png';
-      let afterfile='upload/profile/'+nickname+'.png';
-      fs.rename(beforefile, afterfile, (err)=>{
-        if(err) console.log(err)
-        console.log('filename change')
-      })
+      if(user.profileimgname){
+        let beforefile='upload/profile/'+user.username.substring(3, user.username.length)+'.png';
+        let afterfile='upload/profile/'+nickname+'.png';
+        fs.rename(beforefile, afterfile, (err)=>{
+          if(err) console.log(err)
+          console.log('filename change')
+        })
+      }
       res.json({code: 3, message: "프로필이 저장되었습니다!"});
     }
   });
