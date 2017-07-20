@@ -81,7 +81,8 @@ const password = {
 const submitStatus = {
   signup: false,
   signin: false,
-  logged: false
+  logged: false,
+  facebookPage: false
 }
 
 const initialState = {
@@ -120,6 +121,9 @@ const initialState = {
         ...request
     },
     passwordUpdate: {
+        ...request
+    },
+    facebookSetNickname: {
         ...request
     }
   },
@@ -593,6 +597,61 @@ function form(state=initialState, action) {
           signin: { ...rejected, error: payload }
         }
       };
+
+    case FORM.FACEBOOK_SET_NICKNAME + "_PENDING":
+      return {
+        ...state,
+        submitStatus: {
+          ...state.submitStatus,
+          facebookPage: true
+        },
+        requests: {
+          ...state.requests,
+          facebookSetNickname: { ...pending  }
+        }
+      }
+    case FORM.FACEBOOK_SET_NICKNAME + '_FULFILLED':
+      return {
+        ...state,
+        register: {
+          ...state.register,
+          status:{
+            ...state.register.status,
+            error: payload.data.code!==3?true:false,
+            message:  payload.data.code!==3?payload.data.message:''
+          }
+        },
+        submitStatus: {
+          ...state.submitStatus,
+          logged: payload.data.code!==3?false:true,
+          facebookPage: false
+        },
+        requests: {
+          ...state.requests,
+          facebookSetNickname: { fulfilled }
+        }
+      }
+    case FORM.FACEBOOK_SET_NICKNAME + '_REJECTED':
+      return {
+        ...state,
+        register: {
+          ...state.register,
+          status:{
+            ...state.register.status,
+            error: true,
+            message: payload.data.message
+          }
+        },
+        submitStatus: {
+          ...state.submitStatus,
+          facebookPage: false
+        },
+        requests: {
+          ...state.requests,
+          facebookSetNickname: { ...rejected, error: payload }
+        }
+      };
+
     default:
       return state;
   }

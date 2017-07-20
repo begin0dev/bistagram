@@ -101,3 +101,11 @@ export const unfollow = ({username}) => request({
       username
     }
 });
+
+export const facebookSetNickname = ({nickname}) => request({
+    url: '/api/auth/facebookSetNickname',
+    method: 'post',
+    data: {
+      nickname
+    }
+});

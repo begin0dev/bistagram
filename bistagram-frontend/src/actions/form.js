@@ -63,3 +63,10 @@ export const passwordUpdate = (params) => ({
     promise: service.passwordUpdate(params)
   }
 })
+
+export const facebookSetNickname = (params) => ({
+  type: FORM.FACEBOOK_SET_NICKNAME,
+  payload: {
+    promise: service.facebookSetNickname(params)
+  }
+})

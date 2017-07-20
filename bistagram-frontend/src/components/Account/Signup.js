@@ -55,7 +55,6 @@ class Register extends Component {
         changeCheck({name:target, value:true});
       }
     }
-
   }
 
   handleSubmit = async() =>{

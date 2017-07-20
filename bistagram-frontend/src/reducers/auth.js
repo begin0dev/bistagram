@@ -25,7 +25,8 @@ const userinfo ={
   },
   hiscount: -1,
   histories:[ ],
-  logged: false
+  logged: false,
+  facebook: false
 }
 
 const initialState ={
@@ -103,7 +104,8 @@ function auth(state=initialState, action) {
                 followInfo: {
                   ...payload.data.followInfo
                 },
-                logged: payload.data.logged
+                logged: payload.data.logged,
+                facebook: payload.data.facebook
             }
         }
     case AUTH.CHECK_SESSION + "_REJECTED":

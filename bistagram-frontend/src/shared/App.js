@@ -33,7 +33,6 @@ class App extends React.Component{
 	async componentWillMount() {
 		const { checkSession } = this.props;
 		let session = storage.get('session');
-
 		try{
 			await checkSession().then(()=>{
 				if(!this.props.auth.userinfo.logged){
@@ -103,14 +102,15 @@ class App extends React.Component{
 
 	handleFollowClick = (username) => {
 		const {auth, setFollowUser, following, unfollow} = this.props;
-    if(auth.userinfo.user.username===null){
-      document.location = "/"
-    }
-		setFollowUser(username);
-		if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
-			unfollow({username: username});
-		}else{
-			following({username: username});
+    if(!auth.userinfo.user.username){
+      document.location = "/";
+    }else{
+			setFollowUser(username);
+			if(auth.userinfo.followInfo.following.indexOf(username)!==-1){
+				unfollow({username: username});
+			}else{
+				following({username: username});
+			}
 		}
 	}
 

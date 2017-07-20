@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import {storage} from '../helpers';
+
 import * as post from '../actions/post';
 import * as form from '../actions/form';
 import * as auth from '../actions/auth';
@@ -28,10 +30,20 @@ class Posts extends Component{
 		try{
 			await recommendFollow({start:0, count:3});
 			await searchPosts({atcnum: -1});
-			setTimeout(()=>{ setLoadingInitial(); }, 300);
+			setTimeout(()=>{
+				setLoadingInitial();
+			}, 300);
 		}
 		catch(e){
-			setTimeout(()=>{ document.location.reload(); }, 1000);			
+			let session = storage.get('session');
+			if (session.logged) {
+					storage.set('session', {
+							logged: false
+					});
+			}
+			setTimeout(()=>{
+				document.location.reload();
+			}, 300);
 		}
 	}
 

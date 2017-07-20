@@ -124,13 +124,14 @@ class SearchUser extends Component {
 
 	handleModalLikeClick = (atcnum) =>{
     const {auth, search, modalPostLike, modalPostNotLike} = this.props;
-    if(auth.userinfo.user.username===null){
+    if(!auth.userinfo.user.username){
       document.location = "/"
-    }
-    if(search.modalpost.atclike.like===1){
-      modalPostNotLike({atcnum: atcnum});
     }else{
-      modalPostLike({atcnum: atcnum});
+      if(search.modalpost.atclike.like===1){
+        modalPostNotLike({atcnum: atcnum});
+      }else{
+        modalPostLike({atcnum: atcnum});
+      }
     }
 	}
 

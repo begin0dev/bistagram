@@ -368,7 +368,7 @@ let storage = multer.diskStorage({
   filename: (req, file, cb) =>{
     let extArray = file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
-    cb(null, req.user.username + Date.now()+req.files.length+'.'+extension)
+    cb(null, req.user.nickname + Date.now()+req.files.length+'.'+extension)
   }
 })
 

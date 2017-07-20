@@ -43,17 +43,20 @@ class Searchmodal extends Component {
     }
     handleReplySubmit = (e) =>{
       const {auth, search, modalPostInsertReply}=this.props;
-			if(!auth.userinfo.user.username){
-				document.location = "/"
+			const {reply}=this.state;
+			if(e.charCode === 13){
+				if(!auth.userinfo.user.username){
+					document.location = "/"
+				}else{
+					let post=search.modalpost;
+					if(reply.length!==0 && e.charCode === 13){
+						modalPostInsertReply({atcnum: post.atcnum, content: removeTag(reply), username:post.username, nickname: post.nickname});
+						this.setState({
+							reply: ''
+						});
+					}
+				}
 			}
-      const {reply}=this.state;
-      let post=search.modalpost;
-      if(reply.length!==0 && e.charCode === 13){
-        modalPostInsertReply({atcnum: post.atcnum, content: removeTag(reply), username:post.username, nickname: post.nickname});
-        this.setState({
-          reply: ''
-        });
-      }
     }
 		handleReplyDelete = (replynum, index) =>{
 			const {modalPostDeleteReply}=this.props;

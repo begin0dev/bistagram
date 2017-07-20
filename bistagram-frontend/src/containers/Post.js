@@ -65,18 +65,21 @@ class Post extends Component {
       }
     }
     handleReplySubmit = (e) =>{
-      const {auth, post, postDetailInsertReply}=this.props;
-			if(!auth.userinfo.user.username){
-				document.location = "/"
+      const {auth, post, history, postDetailInsertReply}=this.props;
+			const {reply}=this.state;
+			if(e.charCode === 13){
+				if(!auth.userinfo.user.nickname){
+					history.push('/');
+				}else{
+					let pst=post.post;
+					if(reply.length!==0 && e.charCode === 13){
+						postDetailInsertReply({atcnum: pst.atcnum, content: removeTag(reply), username:pst.username, nickname: pst.nickname});
+						this.setState({
+							reply: ''
+						});
+					}
+				}
 			}
-      const {reply}=this.state;
-      let pst=post.post;
-      if(reply.length!==0 && e.charCode === 13){
-        postDetailInsertReply({atcnum: pst.atcnum, content: removeTag(reply), username:pst.username, nickname: pst.nickname});
-        this.setState({
-          reply: ''
-        });
-      }
     }
     handleReplyDelete = (replynum, index) =>{
 			const {postDetailDeleteReply}=this.props;
@@ -86,15 +89,16 @@ class Post extends Component {
       this.props.getPostDetailReplies({atcnum: atcnum, replynum: replynum});
     }
     handleModalLikeClick = (atcnum) =>{
-      const {auth, post, postDetailLike, postDetailNotlike} = this.props;
-      if(auth.userinfo.user.username===null){
-        document.location = "/"
-      }
-      if(post.post.atclike.like===1){
-        postDetailNotlike({atcnum: atcnum});
+      const {auth, post, history, postDetailLike, postDetailNotlike} = this.props;
+      if(!auth.userinfo.user.username){
+        history.push('/');
       }else{
-        postDetailLike({atcnum: atcnum});
-      }
+				if(post.post.atclike.like===1){
+					postDetailNotlike({atcnum: atcnum});
+				}else{
+					postDetailLike({atcnum: atcnum});
+				}
+			}
     }
     handleTaCursor = () =>{
       this.replyTa._rootDOMNode.focus();

@@ -65,7 +65,7 @@ router.get('/check', async (req, res) => {
     let user = null;
     let followInfo = null;
     let hiscount = null;
-    if (req.user) {
+    if (req.user && req.user.nickname) {
         const { username, name, nickname, profileimgname, intro, email, phone, gender, website, state} = req.user;
         user = {
             username,
@@ -86,11 +86,10 @@ router.get('/check', async (req, res) => {
           follower: follower,
           following: following
         }
-        res.json({sessionID: req.sessionID, user, followInfo, hiscount: hiscount, logged: true});
+        res.json({user, followInfo, hiscount: hiscount, logged: true});
     }
     else{
-
-      res.json({logged: false});
+      res.json({logged: false, facebook:req.user.username?true:false});
     }
 });
 
@@ -145,7 +144,7 @@ router.get('/success', (req, res) => {
     if(!req.user) {
         return res.redirect(url + '/auth/failure');
     }
-    if (req.user.username !== null) {
+    if (req.user.nickname !== null) {
         res.redirect(url + '/auth/success');
     } else {
         res.redirect(url + '/auth/register');
@@ -231,7 +230,7 @@ let storage = multer.diskStorage({
   filename: (req, file, cb) =>{
     let extArray = file.mimetype.split("/");
     let extension = extArray[extArray.length - 1];
-    cb(null, req.user.username + Date.now() + '.' + extension)
+    cb(null, req.user.nickname + Date.now() + '.' + extension)
   }
 })
 
@@ -240,7 +239,7 @@ let upload = multer({ storage: storage }).single('profileimg');
 const thumbnail = (filename) => {
   return new Promise((resolve, reject)=>{
     gm('upload/tmp/'+filename)
-      .thumb(250, 250, 'upload/profile/'+filename, (err) => {
+      .thumb(200, 200, 'upload/profile/'+filename, (err) => {
         if (err) reject(err);
         else{
           deleteTmp(filename);
@@ -334,6 +333,30 @@ router.post('/profileUpdate', async (req, res) => {
     if(rows.affectedRows===0){
       return res.status(500).json({code: 0, message: "프로필 저장에 실패하였습니다."});
     }else{
+      res.json({code: 3, message: "프로필이 저장되었습니다!"});
+    }
+  });
+})
+
+router.post('/facebookSetNickname', async (req, res) => {
+  let user = req.user;
+  let nickname = req.body.nickname;
+  let sql ="update member set nickname=?, profileimgname=? where username=?";
+  let params = [nickname, nickname+'.png', user.username];
+  conn.query(sql, params, (err, rows) =>{
+    if(err) {
+      console.log(err)
+      return res.status(500).json({code: 0, message: "Bistagram에 가입하는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요."});
+    }
+    if(rows.affectedRows===0){
+      return res.status(500).json({code: 1, message: "다른 사람이 이용 중인 사용자 이름입니다."});
+    }else{
+      let beforefile='upload/profile/'+user.username.substring(3, user.username.length)+'.png';
+      let afterfile='upload/profile/'+nickname+'.png';
+      fs.rename(beforefile, afterfile, (err)=>{
+        if(err) console.log(err)
+        console.log('filename change')
+      })
       res.json({code: 3, message: "프로필이 저장되었습니다!"});
     }
   });

@@ -5,6 +5,9 @@ import crypto from 'crypto';
 import sha512 from 'sha512';
 import mysql from 'mysql';
 
+import download from 'image-downloader';
+import Promise from 'bluebird';
+
 import dbconfig from '../dbinfo/database';
 import fbConfig from './fb';
 
@@ -24,7 +27,6 @@ passport.deserializeUser((username, done) => {
       done(null, user[0]);
   });
 });
-
 
 passport.use('local-register',
   new LocalStrategy({passReqToCallback: true}, (req, username, password, done) => {
@@ -80,6 +82,15 @@ passport.use('local-login',
 )
 
 
+const downloadIMG = async (options) =>{
+  try {
+    const { filename, image } = await download.image(options);
+    console.log("success")
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 passport.use(
     new FacebookStrategy({
         clientID: fbConfig.appID,
@@ -95,26 +106,26 @@ passport.use(
                 if(user.length>0){
                   return done(null, user[0]);
                 }
-
-                let nick='';
-                let emailExist = (profile.emails && profile.emails.length > 0) ? true : false;
-                if(emailExist){
-                  let nickarray= profile.emails[0].value.split('@');
-                  nick="fb"+nickarray[0]+profile.id.substring(0, 6);
+                else{
+                  if(profile.photos){
+                    const options ={
+                      url: profile.photos[0].value,
+                      dest: 'upload/profile/'+profile.id+'.png'
+                    };
+                    downloadIMG(options);
+                  }
+                  let newUser = {
+                    'username': "fb:"+profile.id,
+                    'email': profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null,
+                    'gender': profile.gender
+                  };
+                  let insertsql = "insert into member(username, email, gender) values(?, ?, ?)";
+                  let insertparams = [newUser.username,newUser.email, newUser.gender];
+                  conn.query(insertsql, insertparams, (err, user) => {
+                      if(err) {return done(err);}
+                      done(null, newUser);
+                  });
                 }
-
-                let newUser = {
-                  'username': "fb:"+profile.id,
-                  'nickname': emailExist ? nick : profile.id,
-                  'email': emailExist ? profile.emails[0].value : null,
-                  'gender': profile.gender
-                };
-                let insertsql = "insert into member(username, nickname, email, gender) values(?, ?, ?, ?)";
-                let insertparams = [newUser.username, newUser.nickname, newUser.email, newUser.gender];
-                conn.query(insertsql, insertparams, (err, user) => {
-                    if(err) {return done(err);}
-                    done(null, newUser);
-                });
             });
         }
     )
