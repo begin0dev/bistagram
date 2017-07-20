@@ -107,6 +107,12 @@ passport.use(
                   return done(null, user[0]);
                 }
                 else{
+                  let newUser = {
+                    'username': "fb:"+profile.id,
+                    'email': profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null,
+                    'gender': profile.gender
+                  };
+
                   if(profile.photos){
                     const options ={
                       url: profile.photos[0].value,
@@ -114,14 +120,9 @@ passport.use(
                     };
                     downloadIMG(options);
                   }
-                  let newUser = {
-                    'username': "fb:"+profile.id,
-                    'email': profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null,
-                    'gender': profile.gender
-                  };
-                  let insertsql = "insert into member(username, email, gender) values(?, ?, ?)";
-                  let insertparams = [newUser.username, newUser.email, newUser.gender];
-                  conn.query(insertsql, insertparams, (err, user) => {
+                  let sql = "insert into member(username, profileimgname, email, gender) values(?, ?, ?, ?)";
+                  let params = [newUser.username, profile.photos?profile.id+'.png':null, newUser.email, newUser.gender];
+                  conn.query(sql, params, (err, user) => {
                       if(err) {return done(err);}
                       done(null, newUser);
                   });

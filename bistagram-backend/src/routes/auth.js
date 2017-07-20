@@ -341,8 +341,10 @@ router.post('/profileUpdate', async (req, res) => {
 router.post('/facebookSetNickname', async (req, res) => {
   let user = req.user;
   let nickname = req.body.nickname;
+
   let sql ="update member set nickname=?, profileimgname=? where username=?";
-  let params = [nickname, nickname+'.png', user.username];
+  let params = [nickname, user.profileimgname?nickname+'.png':null, user.username];
+
   conn.query(sql, params, (err, rows) =>{
     if(err) {
       console.log(err)
