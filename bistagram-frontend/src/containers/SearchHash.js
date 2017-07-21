@@ -120,7 +120,7 @@ class SearchHash extends Component {
     });
   }
   render() {
-    const {search, ui, auth, getModalPost, modalPostInsertReply,
+    const {search, ui, auth, getModalPost, modalPostInsertReply, changeModalInfo,
           handleFollowClick, modalPostDeleteReply, modalPostGetAllReplies} = this.props;
 		return(
         <main className="search_body">
@@ -147,6 +147,7 @@ class SearchHash extends Component {
               modalPostDeleteReply={modalPostDeleteReply}
               modalPostGetAllReplies={modalPostGetAllReplies}
               getModalPost={getModalPost}
+              changeModalInfo={changeModalInfo}
             />
           }
           {search.modalState.innerModal&&
@@ -183,6 +184,7 @@ const mapDispatchToProps = (dispatch) => ({
   setModalPostIndex: (index) => dispatch(search.setModalPostIndex(index)),
   setInnerModal: () => dispatch(search.setInnerModal()),
   deleteModalPost: (params) => dispatch(search.deleteModalPost(params)),
+  changeModalInfo: (params) => dispatch(search.changeModalInfo(params)),
 
   setLoadingInitial: () => dispatch(ui.setLoadingInitial()),
   setLoading: (params) => dispatch(ui.setLoading(params))
