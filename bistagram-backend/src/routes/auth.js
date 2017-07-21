@@ -446,29 +446,41 @@ const dropOutUser = (username) =>{
 }
 
 router.delete('/dropOutUser', async (req, res) => {
-  const userinfo = await getPassword(req.user.username);
-  crypto.randomBytes(64, (err, buf) => {
-    crypto.pbkdf2(req.body.prepassword, userinfo.salt, 100000, 64, 'sha512', async (err, key) => {
-      if(err){
-        console.log(err)
-        return res.json({code: 0, message: "bistagram에 문제가 발생하였습니다. 나중에 시도해 주세요."});
+  let username=req.user.username;
+  const userinfo = await getPassword(username);
+  if(!req.body.prepassword){
+    const dropOut = await dropOutUser(username);
+    if(dropOut){
+      if(userinfo.profileimgname){
+        deleteProfileimg(userinfo.profileimgname);
       }
-      if(userinfo.password !== key.toString('base64')){
-        return res.json({code: 1, message: "비밀번호가 잘못 입력되었습니다. 다시 입력해주세요."});
-      }
-      const dropOut = await dropOutUser(req.user.username);
-
-      if(dropOut){
-        if(userinfo.profileimgname){
-          deleteProfileimg(userinfo.profileimgname);
+      req.logout();
+      req.session.destroy();
+      return res.json({code: 3, message: "회원탈퇴에 성공했습니다."});
+    }
+  }else{
+    crypto.randomBytes(64, (err, buf) => {
+      crypto.pbkdf2(req.body.prepassword, userinfo.salt, 100000, 64, 'sha512', async (err, key) => {
+        if(err){
+          console.log(err)
+          return res.json({code: 0, message: "bistagram에 문제가 발생하였습니다. 나중에 시도해 주세요."});
         }
-        req.logout();
-        req.session.destroy();
-        return res.json({code: 3, message: "회원탈퇴에 성공했습니다."});
-      }
-      res.json({code: 0, message: "bistagram에 문제가 발생하였습니다. 나중에 시도해 주세요."});
+        if(userinfo.password !== key.toString('base64')){
+          return res.json({code: 1, message: "비밀번호가 잘못 입력되었습니다. 다시 입력해주세요."});
+        }
+        const dropOut = await dropOutUser(username);
+        if(dropOut){
+          if(userinfo.profileimgname){
+            deleteProfileimg(userinfo.profileimgname);
+          }
+          req.logout();
+          req.session.destroy();
+          return res.json({code: 3, message: "회원탈퇴에 성공했습니다."});
+        }
+        res.json({code: 0, message: "bistagram에 문제가 발생하였습니다. 나중에 시도해 주세요."});
+      });
     });
-  });
+  }
 })
 
 module.exports = router;

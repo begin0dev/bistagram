@@ -34,10 +34,13 @@ class Dropout extends Component {
                 </div>
               </div>
               <div className="dropout_bottom_line"> </div>
+              <p>facebook 계정 연동이신분은 그냥 탈퇴하기를 누르시면 됩니다.</p>
               <div className="dropout_submit_div">
                 <span className="mypage_submit_span">
                   <button className="mypage_submit_size mypage_submit_blue mypage_submit_pd point"
-                    type="button" onClick={handleDropOutSubmit}>
+                    type="button" onClick={handleDropOutSubmit}
+                    disabled={auth.userinfo.user.username.substring(0,3)!=="fb:"
+                    &&form.password.prepassword.length===0?true:''}>
                     탈퇴하기
                   </button>
                 </span>
