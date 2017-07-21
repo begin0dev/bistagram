@@ -345,8 +345,9 @@ router.post('/facebookSetNickname', async (req, res) => {
   if(!req.user || (req.user && user.nickname)){
     return res.json({code: 0, message: "잘못된 접근 방식입니다. 다시 접속해주세요."});
   }
+  let newProfileImgname=nickname + Date.now() +'.png';
   let sql ="update member set nickname=?, profileimgname=? where username=?";
-  let params = [nickname, user.profileimgname?nickname + Date.now() +'.png':null, user.username];
+  let params = [nickname, user.profileimgname?newProfileImgname:null, user.username];
 
   conn.query(sql, params, (err, rows) =>{
     if(err) {
@@ -357,8 +358,8 @@ router.post('/facebookSetNickname', async (req, res) => {
       return res.json({code: 1, message: "다른 사람이 이용 중인 사용자 이름입니다."});
     }else{
       if(user.profileimgname){
-        let beforefile='upload/profile/'+user.username.substring(3, user.username.length)+'.png';
-        let afterfile='upload/profile/'+nickname + Date.now() +'.png';
+        let beforefile='upload/profile/'+ user.username.substring(3, user.username.length)+'.png';
+        let afterfile='upload/profile/'+ newProfileImgname;
         fs.rename(beforefile, afterfile, (err)=>{
           if(err) console.log(err)
           console.log('filename change')
