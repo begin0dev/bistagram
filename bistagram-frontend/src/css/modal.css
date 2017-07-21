@@ -223,6 +223,10 @@ width: 100%;
 -ms-flex-align: center;
 align-items: center;
 }
+.modal_paging_div{
+margin-bottom: 15px;
+margin-top: 15px;
+}
 .modal_paging_table{
 table-layout: fixed;
 border-collapse: collapse;
@@ -444,7 +448,7 @@ flex-grow: 1;
     height: 40px;
 	}
 	.modal_media_body{
-		background-color: #000;
+		background-color: #fff;
 		-webkit-box-pack: center;
 		-webkit-justify-content: center;
 		-ms-flex-pack: center;
@@ -461,12 +465,6 @@ flex-grow: 1;
 		position: absolute;
 		right: 24px;
 		top: 0;
-	}
-	.modal_paging_div{
-		bottom: 15px;
-		left: 6px;
-		position: absolute;
-		right: 6px;
 	}
 	.modal_footer_root{
 		bottom: 0;
@@ -520,10 +518,6 @@ flex-grow: 1;
 	}
 	.modal_header_position{
     border-bottom: 1px solid #efefef;
-	}
-	.modal_paging_div{
-		margin-bottom: 15px;
-    margin-top: 15px;
 	}
 	.modal_likeclick_section{
 		margin-top: 4px;

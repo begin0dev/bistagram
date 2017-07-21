@@ -34,8 +34,8 @@ class Searchmodal extends Component {
       }
     }
     handleReplySubmit = (e) =>{
-      const {auth, search, modalPostInsertReply}=this.props;
-			const {reply}=search.modalpost.reply;
+      const {auth, search, modalPostInsertReply, changeModalInfo}=this.props;
+			let reply=search.modalpost.reply;
 			if(e.charCode === 13){
 				if(!auth.userinfo.user.username){
 					document.location = "/"
@@ -43,9 +43,7 @@ class Searchmodal extends Component {
 					let post=search.modalpost;
 					if(reply.length>0){
 						modalPostInsertReply({atcnum: post.atcnum, content: removeTag(reply), username:post.username, nickname: post.nickname});
-						this.setState({
-							reply: ''
-						});
+						changeModalInfo({name: 'reply', value: ''});
 					}
 				}
 			}
