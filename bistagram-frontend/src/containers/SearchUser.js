@@ -196,7 +196,7 @@ class SearchUser extends Component {
   }
 
   render() {
-    const {search, ui, auth, getModalPost, modalPostInsertReply,
+    const {search, ui, auth, getModalPost, modalPostInsertReply, changeModalInfo,
           handleFollowClick,modalPostDeleteReply, modalPostGetAllReplies} = this.props;
 		return(
         <main className="search_body">
@@ -229,6 +229,7 @@ class SearchUser extends Component {
               modalPostDeleteReply={modalPostDeleteReply}
               modalPostGetAllReplies={modalPostGetAllReplies}
               getModalPost={getModalPost}
+              changeModalInfo={changeModalInfo}
             />
           }
 
@@ -292,6 +293,7 @@ const mapDispatchToProps = (dispatch) => ({
   getUserFollower: (params) => dispatch(search.getUserFollower(params)),
   getUserFollowing: (params) => dispatch(search.getUserFollowing(params)),
   deleteModalPost: (params) => dispatch(search.deleteModalPost(params)),
+  changeModalInfo: (params) => dispatch(search.changeModalInfo(params)),
 
 	logout: () => dispatch(auth.logout()),
 

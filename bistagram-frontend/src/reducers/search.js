@@ -29,11 +29,19 @@ const modalState = {
   followingStart: 0
 }
 
+const modalpost = {
+  play: false,
+  mdIndex: 0,
+  reply: ''
+}
+
 const initialState = {
   modalState: {
     ...modalState
   },
-  modalpost: {},
+  modalpost: {
+    ...modalpost
+  },
   posts: {
     ...posts
   },
@@ -284,7 +292,8 @@ function search(state=initialState, action) {
           modal: true,
         },
         modalpost: {
-          ...payload.data
+          ...payload.data,
+          ...modalpost
         },
         requests: {
           ...state.requests,
@@ -304,6 +313,14 @@ function search(state=initialState, action) {
         }
       };
 
+    case SEARCH.CHANGE_MODAL_INFO:
+      return {
+        ...state,
+        modalpost: {
+          ...state.modalpost,
+          [payload.name]: payload.value
+        }
+      };
 
     case SEARCH.MODAL_POST_LIKE + "_PENDING":
       return {

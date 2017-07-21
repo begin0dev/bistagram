@@ -9,34 +9,26 @@ class Modalmedia extends Component {
     constructor(props) {
         super(props);
         this.state={
-          index: 0,
-          play: false,
           style: {paddingBottom : '100%'}
         }
     }
     handleAftBfClick = (e) => {
+      const {post, changeModalInfo} = this.props;
+      let index=post.mdIndex;
       if(e.target === this.bfbtn){
-        this.setState(prevState => ({
-          ...this.state,
-          index:prevState.index-1,
-          play: false
-        }));
+        changeModalInfo({name: 'mdIndex', value: index-1});
+        changeModalInfo({name: 'play', value: false});
       }
       if(e.target === this.aftbtn){
-        this.setState(prevState => ({
-          ...this.state,
-          index:prevState.index+1,
-          play: false
-        }));
+        changeModalInfo({name: 'mdIndex', value: index+1});
+        changeModalInfo({name: 'play', value: false});
       }
     }
     playVideo = () => {
+      const {changeModalInfo} = this.props;
       let video=this.videoRef;
       video.paused ? video.play() : video.pause();
-      this.setState({
-        ...this.state,
-        play: !this.state.play
-      });
+      changeModalInfo({name: 'play', value: true});
     }
     handleImgLoad = ({target:img}) =>{
       let width = img.naturalWidth;
@@ -54,7 +46,8 @@ class Modalmedia extends Component {
     }
     render() {
         const {post} = this.props;
-        const {index, play} = this.state;
+        let index = post.mdIndex;
+        let play = post.play;
         return(
           <div className="modal_media_body">
             <div>

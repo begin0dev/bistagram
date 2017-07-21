@@ -9,16 +9,9 @@ const removeTag = (reply) => {
 }
 
 class Searchmodal extends Component {
-    constructor(props) {
-        super(props);
-        this.state={
-          reply: ''
-        }
-    }
     componentDidMount() {
       document.addEventListener('mousedown', this.handleClickOutside);
     }
-
     componentWillUnmount() {
       document.removeEventListener('mousedown', this.handleClickOutside);
     }
@@ -30,10 +23,9 @@ class Searchmodal extends Component {
       }
     }
     handleChangeReply = (e) =>{
-      if(this.state.reply.length<500){
-	      this.setState({
-	        reply: e.target.value
-	      });
+			const {search, changeModalInfo} = this.props;
+      if(search.modalpost.reply.length<500){
+				changeModalInfo({name: 'reply', value: e.target.value});
       }
     }
     handleKeyPress = (e) => {
@@ -43,13 +35,13 @@ class Searchmodal extends Component {
     }
     handleReplySubmit = (e) =>{
       const {auth, search, modalPostInsertReply}=this.props;
-			const {reply}=this.state;
+			const {reply}=search.modalpost.reply;
 			if(e.charCode === 13){
 				if(!auth.userinfo.user.username){
 					document.location = "/"
 				}else{
 					let post=search.modalpost;
-					if(reply.length!==0 && e.charCode === 13){
+					if(reply.length>0){
 						modalPostInsertReply({atcnum: post.atcnum, content: removeTag(reply), username:post.username, nickname: post.nickname});
 						this.setState({
 							reply: ''
@@ -73,7 +65,8 @@ class Searchmodal extends Component {
           position: 'relative',
           zIndex: 2
         }
-        const {search, auth, atcindex, handleBfAfModal, handleFollowClick, handleModalLikeClick, handleInnerModal} = this.props;
+        const {search, auth, atcindex, handleBfAfModal, handleFollowClick,
+							handleModalLikeClick, handleInnerModal, changeModalInfo} = this.props;
         return(
           <div style={modalstyle}>
             <div className="modal_root" role="dialog" onClick={this.handleClickOutside}>
@@ -111,12 +104,13 @@ class Searchmodal extends Component {
 
                     <Modalmedia
                       post={search.modalpost}
+											changeModalInfo={changeModalInfo}
                     />
 
                     <Modalfooter
 											auth={auth}
                       post={search.modalpost}
-                      reply={this.state.reply}
+                      reply={search.modalpost.reply}
 											likeLoading={search.modalState.likeLoading}
 											replyLoading={search.modalState.replyLoading}
                       handleKeyPress={this.handleKeyPress}

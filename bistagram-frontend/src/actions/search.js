@@ -19,6 +19,7 @@ export const searchUser = (params) => ({
 })
 
 export const setModalPostIndex = createAction(SEARCH.SET_MODAL_POST_INDEX);
+export const changeModalInfo = createAction(SEARCH.CHANGE_MODAL_INFO);
 
 export const addHash = (params) => ({
   type: SEARCH.ADD_HASH,
