@@ -28,6 +28,11 @@ passport.deserializeUser((username, done) => {
   });
 });
 
+const regex ={
+  regemail: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+  regphone: /^(?:(010\d{4})|(01[1|6|7|8|9]\d{3,4}))(\d{4})$/
+}
+
 passport.use('local-register',
   new LocalStrategy({passReqToCallback: true}, (req, username, password, done) => {
     let sql = "select username from member where username=?";
@@ -41,8 +46,9 @@ passport.use('local-register',
       }
       crypto.randomBytes(64, (err, buf) => {
         crypto.pbkdf2(password, buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
-          let insertsql = "insert into member(username, name, nickname, password, salt) values(?, ?, ?, ?, ?)";
-          let insertparams = [username, req.body.name, req.body.nickname, key.toString('base64'), buf.toString('base64')];
+          let insertsql = "insert into member(username, name, nickname, password, salt, phone, email) values(?, ?, ?, ?, ?, ?, ?)";
+          let insertparams = [username, req.body.name, req.body.nickname, key.toString('base64'), buf.toString('base64'),
+                              regex.regphone.test(username)?username:null, regex.regemail.test(username)?username:null];
           conn.query(insertsql, insertparams, function(err, rows) {
             if(err) {
               return done(err);
