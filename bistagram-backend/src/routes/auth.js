@@ -346,7 +346,7 @@ router.post('/facebookSetNickname', async (req, res) => {
     return res.json({code: 0, message: "잘못된 접근 방식입니다. 다시 접속해주세요."});
   }
   let sql ="update member set nickname=?, profileimgname=? where username=?";
-  let params = [nickname, user.profileimgname?nickname+'.png':null, user.username];
+  let params = [nickname, user.profileimgname?nickname + Date.now() +'.png':null, user.username];
 
   conn.query(sql, params, (err, rows) =>{
     if(err) {
