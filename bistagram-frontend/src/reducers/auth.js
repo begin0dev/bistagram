@@ -25,8 +25,7 @@ const userinfo ={
   },
   hiscount: -1,
   histories:[ ],
-  logged: false,
-  facebook: false
+  logged: false
 }
 
 const initialState ={

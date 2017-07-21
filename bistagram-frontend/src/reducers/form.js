@@ -642,7 +642,7 @@ function form(state=initialState, action) {
           status:{
             ...state.register.status,
             error: true,
-            message: payload.data.message
+            message: payload.response.data.message
           }
         },
         submitStatus: {

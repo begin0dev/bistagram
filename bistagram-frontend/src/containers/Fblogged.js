@@ -111,7 +111,7 @@ class Fblogged extends Component {
                   </div>
                   {form.register.status.error &&
                     <div className="alert_div">
-                      <p aria-atomic="true" role="alert">{form.register.status.msg}</p>
+                      <p aria-atomic="true" role="alert">{form.register.status.message}</p>
                     </div>
                   }
                 </form>
