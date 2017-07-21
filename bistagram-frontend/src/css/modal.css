@@ -436,6 +436,28 @@ flex-direction: column;
 -ms-flex-positive: 1;
 flex-grow: 1;
 }
+.follow_close_btn{
+background: 0 0;
+border: none;
+cursor: pointer;
+height: 36px;
+outline: none;
+overflow: hidden;
+position: absolute;
+right: 0;
+top: 0;
+z-index: 2;
+}
+.follow_close_btn::before{
+color: #000;
+content: '\00D7';
+display: block;
+font-size: 36px;
+font-weight: 600;
+line-height: 36px;
+padding: 0;
+margin: 0;
+}
 @media (min-width: 736px){
 	.modal_LiStyle {
  		min-width: 510px;

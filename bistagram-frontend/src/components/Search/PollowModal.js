@@ -25,7 +25,7 @@ class PollowModal extends Component {
     }
     handleClickOutside = (e) =>{
       const { handleFollowModal } = this.props;
-      if(this.follow_list && !this.follow_list.contains(e.target)){
+      if((this.follow_list && !this.follow_list.contains(e.target)) || this.follow_close_btn){
         handleFollowModal(-1);
       }
     }
@@ -42,6 +42,9 @@ class PollowModal extends Component {
                 <div className="follow_list_pos follow_list_style" ref={(node) => { this.follow_list = node }}>
                   <div className="follow_list_header">
                     팔로워
+                    <button className="follow_close_btn" ref={(button) => { this.follow_close_btn = button }}>
+                      닫기
+                    </button>
                   </div>
                   <div className="follow_list_div" ref={(div) => { this.followScrollDiv = div }}>
                     {!loading &&
