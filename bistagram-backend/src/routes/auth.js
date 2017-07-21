@@ -449,7 +449,7 @@ const dropOutUser = (username) =>{
 router.delete('/dropOutUser', async (req, res) => {
   let username=req.user.username;
   const userinfo = await getPassword(username);
-  if(!req.body.prepassword){
+  if(username.substring(0,3)==='fb:'){
     const dropOut = await dropOutUser(username);
     if(dropOut){
       if(userinfo.profileimgname){
