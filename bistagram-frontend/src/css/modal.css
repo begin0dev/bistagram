@@ -236,8 +236,8 @@ margin-right: 2px;
 -webkit-transition: all .2s ease-in-out;
 transition: all .2s ease-in-out;
 width: 6px;
-background: #fff;
 opacity: .4;
+background: #3897f0;
 }
 .modal_paging_selete{
 opacity: 1;
@@ -468,9 +468,6 @@ flex-grow: 1;
 		position: absolute;
 		right: 6px;
 	}
-	.modal_paging_circle{
-		background: #fff;
-	}
 	.modal_footer_root{
 		bottom: 0;
 		-webkit-box-sizing: border-box;
@@ -527,9 +524,6 @@ flex-grow: 1;
 	.modal_paging_div{
 		margin-bottom: 15px;
     margin-top: 15px;
-	}
-	.modal_paging_circle{
-		background: #3897f0;
 	}
 	.modal_likeclick_section{
 		margin-top: 4px;
