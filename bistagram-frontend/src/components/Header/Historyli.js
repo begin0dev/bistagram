@@ -54,7 +54,7 @@ const changeTag = (text) =>{
 class Historyli extends Component {
     handleNotLink = (e) =>{
       const {history, modalHistory} = this.props;
-      if(e.target.dataset.txt!=='link' && !this.circleImg.contains(e.target)){
+      if(e.target.dataset.txt!=='link' && !this.circleImg.contains(e.target) && !this.followBtnRef.contains(e.target)){
         if(modalHistory.type==='follow'){
           history.push('/search/'+modalHistory.nickname);
         }else{
@@ -98,7 +98,7 @@ class Historyli extends Component {
             </div>
             <div className="history_right_div">
               {modalHistory.type==='follow'?
-                <span className="history_button_span">
+                <span className="history_button_span" ref={(span) => { this.followBtnRef = span }}>
                   {auth.userinfo.followInfo.following.indexOf(modalHistory.who)!==-1 ?
                     <button className="whitebtn btnstyle point"
                       disabled={modalHistory.who===auth.recommend.clickUser ?true:''}

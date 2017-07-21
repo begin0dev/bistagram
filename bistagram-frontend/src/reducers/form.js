@@ -125,6 +125,9 @@ const initialState = {
     },
     facebookSetNickname: {
         ...request
+    },
+    dropOutUser: {
+        ...request
     }
   },
   submitStatus: { ...submitStatus }
@@ -651,6 +654,58 @@ function form(state=initialState, action) {
           facebookSetNickname: { ...rejected, error: payload }
         }
       };
+
+
+      case FORM.DROP_OUT_USER + "_PENDING":
+        return {
+          ...state,
+          password: {
+            ...state.password,
+            status: {
+              ...state.password.status,
+              loading: true
+            }
+          },
+          requests: {
+              ...state.requests,
+              dropOutUser: { ...pending }
+          }
+        }
+      case FORM.DROP_OUT_USER + '_FULFILLED':
+        return {
+          ...state,
+          password: {
+            ...state.password,
+            status: {
+              ...state.password.status,
+              loading: false,
+              success: payload.data.code===3?true:false,
+              message: payload.data.message
+            }
+          },
+          requests: {
+              ...state.requests,
+              dropOutUser: { ...pending }
+          }
+        }
+      case FORM.DROP_OUT_USER + '_REJECTED':
+        return {
+          ...state,
+          password: {
+            ...state.password,
+            status: {
+              ...state.password.status,
+              loading: false,
+              success: false,
+              message: payload.response.data.message
+            }
+          },
+          requests: {
+            ...state.requests,
+            dropOutUser: { ...rejected, error: payload }
+          }
+        };
+
 
     default:
       return state;

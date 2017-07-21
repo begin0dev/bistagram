@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Profilefrm = ({form, handleMypageTextChange, handleProfileUpdate}) => {
+const Profilefrm = ({form, handleDropoutLink, handleMypageTextChange, handleProfileUpdate}) => {
   return (
     <form className="mypage_frm">
       <div className="mypage_row_div">
@@ -108,6 +108,14 @@ const Profilefrm = ({form, handleMypageTextChange, handleProfileUpdate}) => {
               {form.mypage.status.loading &&
                 <div className='loding_div loding_img'></div>
               }
+            </span>
+          </div>
+          <div className="mypage_submit_div">
+            <span className="mypage_submit_span">
+              <button className="mypage_submit_size mypage_submit_blue mypage_submit_pd point"
+                type="button" onClick={()=>handleDropoutLink()}>
+                탈퇴
+              </button>
             </span>
           </div>
         </div>

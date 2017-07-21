@@ -109,3 +109,11 @@ export const facebookSetNickname = ({nickname}) => request({
       nickname
     }
 });
+
+export const dropOutUser = ({prepassword}) => request({
+    url: '/api/auth/dropOutUser',
+    method: 'delete',
+    data: {
+      prepassword
+    }
+});

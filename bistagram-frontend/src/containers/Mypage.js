@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route, Link, Redirect } from 'react-router-dom';
+import {storage} from '../helpers';
 
 import noimg from '../img/noimg.jpg';
 
@@ -12,6 +14,7 @@ import * as ui from '../actions/ui';
 
 import Profilefrm from '../components/Mypage/Profilefrm';
 import Passwordfrm from '../components/Mypage/Passwordfrm';
+import Dropout from '../components/Mypage/Dropout';
 import ProfileImgModal from '../components/Mypage/ProfileImgModal';
 
 const regex ={
@@ -23,7 +26,6 @@ const regex ={
 }
 
 class Mypage extends Component {
-
     componentDidMount() {
       const {auth, form, setMypageForm} = this.props;
       if(!form.mypage.status.change){
@@ -82,6 +84,19 @@ class Mypage extends Component {
       }
       passwordUpdate({prepassword: form.password.prepassword, changepassword:form.password.changepassword});
     }
+    handleDropoutLink = () =>{
+      const { history } = this.props;
+      history.push("/mypage/dropout");
+    }
+    handleDropOutSubmit = async() =>{
+      const {form, dropOutUser} = this.props;
+      await dropOutUser(form.password).then(()=>{
+        if(this.props.form.password.status.success){
+          storage.remove('session');
+          document.location.href = "/";
+        }
+      });
+    }
     render() {
       const { ui, auth, form, match } = this.props;
         return(
@@ -107,22 +122,25 @@ class Mypage extends Component {
             		</ul>
 
                 <article className="mypage_content_wrap">
-            		  <div className="mypage_content_header_wrap">
-                    <div className="mypage_circle_div mypage_circle_div_pos">
-              				<button className="mypage_circle_btn" title="프로필 사진 바꾸기" onClick={()=>this.handleProfileModal(true)}>
-              					<img alt="프로필 사진 바꾸기" className="user_profile_circle_img"
-                          src={!auth.userinfo.user.profileimgname ? noimg : '/upload/profile/'+auth.userinfo.user.profileimgname}>
-                        </img>
-              				</button>
-              				<form encType="multipart/form-data">
-              					<input type="file" accept="image/jpeg" className="frm_dis_none"
-                          ref={(input) => { this.ProfileInput = input }}
-                        	onChange={this.handleProfileImg}
-                        />
-              				</form>
-              			</div>
-                    <h1 className="mypage_nick_title">{form.mypage.nickname}</h1>
-                  </div>
+                  {match.params.page!=="dropout" &&
+                    <div className="mypage_content_header_wrap">
+                      <div className="mypage_circle_div mypage_circle_div_pos">
+                        <button className="mypage_circle_btn" title="프로필 사진 바꾸기" onClick={()=>this.handleProfileModal(true)}>
+                          <img alt="프로필 사진 바꾸기" className="user_profile_circle_img"
+                            src={!auth.userinfo.user.profileimgname ? noimg : '/upload/profile/'+auth.userinfo.user.profileimgname}>
+                          </img>
+                        </button>
+                        <form encType="multipart/form-data">
+                          <input type="file" accept="image/jpeg" className="frm_dis_none"
+                            ref={(input) => { this.ProfileInput = input }}
+                            onChange={this.handleProfileImg}
+                          />
+                        </form>
+                      </div>
+                      <h1 className="mypage_nick_title">{form.mypage.nickname}</h1>
+                    </div>
+                  }
+
 
                   <Route path="/mypage/profile"
                     render={()=>
@@ -130,9 +148,11 @@ class Mypage extends Component {
                         form={form}
                         handleMypageTextChange={this.handleMypageTextChange}
                         handleProfileUpdate={this.handleProfileUpdate}
+                        handleDropoutLink={this.handleDropoutLink}
                       />
                     }
                   />
+
                   <Route path="/mypage/pwchange"
                     render={()=>
                       <Passwordfrm
@@ -140,6 +160,18 @@ class Mypage extends Component {
                         postformReset={this.props.postformReset}
                         handlePwChange={this.handlePwChange}
                         handlePwUpdate={this.handlePwUpdate}
+                      />
+                    }
+                  />
+
+                  <Route path="/mypage/dropout"
+                    render={()=>
+                      <Dropout
+                        auth={auth}
+                        form={form}
+                        postformReset={this.props.postformReset}
+                        handlePwChange={this.handlePwChange}
+                        handleDropOutSubmit={this.handleDropOutSubmit}
                       />
                     }
                   />
@@ -173,6 +205,7 @@ const mapDispatchToProps = (dispatch) => ({
   profileUpdate: (params) => dispatch(form.profileUpdate(params)),
   passwordUpdate: (params) => dispatch(form.passwordUpdate(params)),
   setProfileError: (params) => dispatch(form.setProfileError(params)),
+  dropOutUser: (params) => dispatch(form.dropOutUser(params)),
 
   profileImgUpdate: (formdata) => dispatch(auth.profileImgUpdate(formdata)),
   profileImgDelete: (params) => dispatch(auth.profileImgDelete(params)),
@@ -184,4 +217,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 Mypage = connect(mapStateToProps, mapDispatchToProps)(Mypage)
 
-export default Mypage;
+export default withRouter(Mypage);

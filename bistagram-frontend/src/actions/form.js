@@ -70,3 +70,10 @@ export const facebookSetNickname = (params) => ({
     promise: service.facebookSetNickname(params)
   }
 })
+
+export const dropOutUser = (params) => ({
+  type: FORM.DROP_OUT_USER,
+  payload: {
+    promise: service.dropOutUser(params)
+  }
+})

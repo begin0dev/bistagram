@@ -1,4 +1,5 @@
 @CHARSET "UTF-8";
+button:active{opacity: .6;}
 .mypage_main_bg {
 background-color: #fafafa;
 }
@@ -252,6 +253,7 @@ align-items: center;
 -ms-flex-direction: row;
 flex-direction: row;
 margin-top: 16px;
+margin-right: 16px;
 }
 .mypage_submit_span {
 display: block;
@@ -308,9 +310,152 @@ color: #4e9f2e;
 .mypage_fail_p{
 color: #ed4956;
 }
+.dropout_title{
+font-size: 24px;
+font-weight: 400;
+line-height: 38px;
+margin: 32px 0;
+text-align: center;
+}
+.dropout_pos p{
+margin-bottom: 15px;
+line-height: 20px;
+}
+.p_top_line{
+border-bottom: 1px solid #dbdbdb;
+padding-bottom: 32px;
+}
+.dropout_form{
+-webkit-box-align: stretch;
+-webkit-align-items: stretch;
+-ms-flex-align: stretch;
+align-items: stretch;
+display: -webkit-box;
+display: -webkit-flex;
+display: -ms-flexbox;
+display: flex;
+-webkit-box-orient: vertical;
+-webkit-box-direction: normal;
+-webkit-flex-direction: column;
+-ms-flex-direction: column;
+flex-direction: column;
+margin-top: 20px;
+}
+.dropout_pwcheck_form{
+margin-bottom: 16px;
+-webkit-box-pack: start;
+-webkit-justify-content: flex-start;
+-ms-flex-pack: start;
+justify-content: flex-start;
+}
+.dropout_aside{
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+color: #262626;
+-webkit-box-flex: 0;
+font-size: 16px;
+font-weight: 600;
+line-height: 34px;
+-webkit-flex: 0 0 226px;
+-ms-flex: 0 0 226px;
+flex: 0 0 226px;
+}
+.dropout_pw_div{
+color: #262626;
+-webkit-box-flex: 1;
+-webkit-flex-grow: 1;
+-ms-flex-positive: 1;
+flex-grow: 1;
+font-size: 16px;
+-webkit-box-pack: start;
+-webkit-justify-content: flex-start;
+-ms-flex-pack: start;
+justify-content: flex-start;
+}
+.dropout_pw_input{
+-webkit-appearance: none;
+background: 0 0;
+border: 1px solid #efefef;
+border-radius: 3px;
+color: #262626;
+font-size: 16px;
+height: 32px;
+padding: 0 10px;
+}
+.dropout_bottom_line{
+border-bottom: 1px solid #dbdbdb;
+padding-top: 16px;
+margin-bottom: 32px;
+}
+.dropout_submit_div{
+-webkit-box-orient: horizontal;
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;
+-ms-flex-direction: row;
+flex-direction: row;
+padding: 18px 0;
+justify-content: center;
+}
 @media ( max-width : 965px) and (min-width: 451px) {
 	.mypage_frame {
 		max-width: calc(100% - 20px);
+	}
+}
+@media ( min-width : 736px) {
+	.mypage_circle_div_pos {
+		margin: 0 32px 0 124px;
+	}
+	.mypage_row_div {
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: row;
+		-ms-flex-direction: row;
+		flex-direction: row;
+	}
+	.mypage_col_aside {
+		padding-right: 32px;
+		text-align: right;
+	}
+	.mypage_col_aside {
+		padding-left: 32px;
+	}
+	.mypage_col_input_div {
+		-webkit-flex-basis: 355px;
+		-ms-flex-preferred-size: 355px;
+		flex-basis: 355px;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: row;
+		-ms-flex-direction: row;
+		flex-direction: row;
+		padding-right: 60px;
+	}
+	.dropout_pos{
+		padding-left: 65px;
+    padding-right: 32px;
+    padding-bottom: 32px;
+	}
+	.dropout_pwcheck_form{
+		-webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+	}
+	.dropout_aside{
+		padding-right: 32px;
+    text-align: right;
+	}
+	.dropout_pw_div{
+		-webkit-flex-basis: 355px;
+    -ms-flex-preferred-size: 355px;
+    flex-basis: 355px;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    padding-right: 60px;
 	}
 }
 @media ( max-width : 735px) {
@@ -351,35 +496,32 @@ color: #ed4956;
 		justify-content: space-between;
 		width: 100%;
 	}
-}
-@media ( min-width : 736px) {
-	.mypage_circle_div_pos {
-		margin: 0 32px 0 124px;
+	.dropout_pos{
+		padding: 0 20px;
 	}
-	.mypage_row_div {
-		-webkit-box-orient: horizontal;
-		-webkit-box-direction: normal;
-		-webkit-flex-direction: row;
-		-ms-flex-direction: row;
-		flex-direction: row;
+	.dropout_pwcheck_form{
+		-webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
 	}
-	.mypage_col_aside {
-		padding-right: 32px;
-		text-align: right;
+	.dropout_aside{
+		-webkit-flex-basis: 25px;
+    -ms-flex-preferred-size: 25px;
+    flex-basis: 25px;
+    padding: 0 20px;
 	}
-	.mypage_col_aside {
-		padding-left: 32px;
-	}
-	.mypage_col_input_div {
-		-webkit-flex-basis: 355px;
-		-ms-flex-preferred-size: 355px;
-		flex-basis: 355px;
-		-webkit-box-orient: horizontal;
-		-webkit-box-direction: normal;
-		-webkit-flex-direction: row;
-		-ms-flex-direction: row;
-		flex-direction: row;
-		padding-right: 60px;
+	.dropout_pw_div{
+		-webkit-flex-basis: auto;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    padding: 0 20px;
 	}
 }
 @media ( max-width : 450px) {
