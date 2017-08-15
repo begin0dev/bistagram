@@ -11,7 +11,7 @@ import '../css/login.css';
 import '../css/fblogged.css';
 
 const regex ={
-  regnickname: /^[0-9a-z_]{5,20}$/
+  regnickname: /^[0-9a-zA-Z_]{5,20}$/
 }
 
 class Fblogged extends Component {

@@ -4,7 +4,7 @@ import {storage} from '../../helpers';
 const regex ={
   regemail: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
   regphone: /^(?:(010\d{4})|(01[1|6|7|8|9]\d{3,4}))(\d{4})$/,
-  regnickname: /^[0-9a-z_]{5,20}$/,
+  regnickname: /^[0-9a-zA-Z_]{5,20}$/,
   regpassword: /^.{6,20}$/,
   regnum: /^[0-9]+$/
 }
