@@ -110,7 +110,7 @@ router.get('/checkUserName/:username', async (req, res) => {
 });
 
 router.get('/checkNickName/:nickname', async (req, res) => {
-    let sql = "select nickname from member where nickname=?";
+    let sql = "select nickname from member where nickname=binary(?)";
     let params = [req.params.nickname];
     conn.query(sql, params, function(err, rows) {
       if(err) {
@@ -300,7 +300,7 @@ router.delete('/profileImgDelete', (req, res) => {
 
 const checkNickname = (nickname) =>{
   return new Promise((resolve, reject)=>{
-    let sql = "select nickname from member where nickname=?";
+    let sql = "select nickname from member where nickname=binary(?)";
     let params = [nickname];
     conn.query(sql, params, (err, rows) =>{
       if(err) {
@@ -339,7 +339,7 @@ router.post('/profileUpdate', async (req, res) => {
   });
 })
 
-router.post('/facebookSetNickname', async (req, res) => {
+router.post('/facebookSetNickname', (req, res) => {
   let user = req.user;
   let nickname = req.body.nickname;
   if(!req.user || (req.user && user.nickname)){

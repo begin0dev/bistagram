@@ -131,7 +131,7 @@ router.post('/searchUser', async (req, res) => {
                 "(select article.* from article left join media "+
                 "on article.atcnum=media.atcnum where media.medianame is not null "+
                 "group by article.atcnum order by null)m "+
-                "on member.username=m.username where member.nickname=?)x join follower on "+
+                "on member.username=m.username where member.nickname=binary(?))x join follower on "+
                 "x.username=follower.username)y join following on y.username=following.username";
   let userparam = [req.body.nickname];
   conn.query(usersql, userparam, (err, userinfo) =>{
