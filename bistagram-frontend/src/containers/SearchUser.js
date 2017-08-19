@@ -197,7 +197,7 @@ class SearchUser extends Component {
 
   render() {
     const {search, ui, auth, getModalPost, modalPostInsertReply, changeModalInfo,
-          handleFollowClick,modalPostDeleteReply, modalPostGetAllReplies} = this.props;
+          handleFollowClick, modalPostDeleteReply, modalPostGetAllReplies} = this.props;
 		return(
         <main className="search_body">
           {this.state.redirect && <Redirect to={this.state.redirect}/>}

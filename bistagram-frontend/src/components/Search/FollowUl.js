@@ -33,7 +33,7 @@ const FollowUl = ({auth, follow, handleFollowClick}) => {
               </div>
               <div className="folloew_btn_div">
                 <span className="follow_btn_span">
-                  {auth.userinfo.username && auth.userinfo.followInfo.following.indexOf(contact.username) !== -1?
+                  {auth.userinfo.user.username && auth.userinfo.followInfo.following.indexOf(contact.username)!==-1?
                     <button
                       className="whitebtn btnstyle point"
                       disabled={contact.username===auth.recommend.clickUser ?true:''}

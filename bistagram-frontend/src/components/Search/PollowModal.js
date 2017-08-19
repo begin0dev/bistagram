@@ -25,7 +25,7 @@ class PollowModal extends Component {
     }
     handleClickOutside = (e) =>{
       const { handleFollowModal } = this.props;
-      if((this.follow_list && !this.follow_list.contains(e.target)) || this.follow_close_btn){
+      if((this.follow_list && !this.follow_list.contains(e.target)) || this.follow_close_btn === e.target){
         handleFollowModal(-1);
       }
     }
